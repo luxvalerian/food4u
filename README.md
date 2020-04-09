@@ -22,6 +22,3 @@ Django and Python.
 ## Features
 
 Grocery item selection, payment of items, delivery date, connection to volunteer.
-
-
-view rawREADME.md hosted with ❤ by GitHub
