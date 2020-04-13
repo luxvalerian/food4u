@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   </head>
   <body>
-    <header class="navbar-fixed">
+    <header class="navbar-fixed ">
       <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper header">
           <ul>
             <li>
               <a href="/" class="left brand-logo"
@@ -26,6 +26,10 @@
           </ul>
           <ul class="right">
             <li><a href="/about">About</a></li>
+            <li><a href="/stores">Stores</a></li>
+            <li><a href="/logout">Log Out</a></li>
+            <li><a href="/login">Log In</a></li>
+            <li><a href="/signup">Sign Up</a></li>
           </ul>
         </div>
       </nav>
@@ -33,7 +37,7 @@
     <main class="container">
       {% block content %} {% endblock %}
     </main>
-    <footer class="page-footer red">
+    <footer class="page-footer footer">
       <div class="center">
         All Rights Reserved, &copy; {% now "Y" %} Foodle &nbsp;
       </div>
