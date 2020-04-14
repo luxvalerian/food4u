@@ -4,14 +4,52 @@ body {
   flex-direction: column;
 }
 
+.foodle-logo {
+  margin-top: .2rem;
+  max-height: 64px;
+}
+
+.brand-logo {
+  max-height: 64px;
+}
+
 main {
   flex: 1 0 auto;
 }
 
-.header,
+.header, .header a {
+  background-color: #fafafa;
+  color: rgb(2, 2, 2, .7);
+}
+
+.items h5 {
+  font-size: medium;
+}
+
+.items p {
+  padding: 0;
+}
+
+.items {
+justify-content: center;
+margin: 10px auto;
+}
+
+.items:hover {
+  background-color: #fafafa;
+  opacity: .7;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1.6px #000 solid !important;
+}
+
 .footer {
-  background-color: #31708e;
-  color: #f7f9fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #8FC1E3;
+  color: #fafafa;
+  height: 4rem;
 }
 
 .footer {
