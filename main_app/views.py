@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from django.http import HttpResponse
+from . scrapper import produce_dict, logo_img, logo_svg
 
 
 def home(request):
@@ -12,7 +12,8 @@ def about(request):
 
 
 def stores(request):
-    return render(request, 'stores/index.html')
+    context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg}
+    return render(request, 'stores/index.html', context)
 
 
 def logout(request):
