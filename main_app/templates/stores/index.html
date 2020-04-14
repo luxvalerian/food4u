@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Stores Index Page</h1>
+<h1>Select a Store</h1>
+  <img src="{{logo.src}}" alt="store-name" style="max-height: 5rem;"/>
+<div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+  {% for item in product %}
+  <div class="items" style="display: flex; flex-direction: column; border: 1px #000 solid; padding: 1rem; border-radius: 1rem; width: 15rem; align-items: center;">
+  <h5 style="flex-wrap: wrap;">{{item.name}}</h5>
+    <img src="{{item.image}}" alt={{item}} style="max-height: 7rem;"/>
+  <p>{{item.price}}</p>
+  </div>
+    {% endfor %}
+
+      
+</div>
 {% endblock %}
