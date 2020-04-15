@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from . scrapper import produce_dict, logo_img, logo_svg
+from . scraper import produce_dict, logo_img, logo_svg
 
 num_of_volunteer = 5
 num_of_checkouts = 0
