@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 
 from . scraper import produce_dict, logo_img, logo_svg
 
@@ -22,10 +24,6 @@ def stores(request):
     return render(request, 'stores/index.html', context)
 
 
-def logout(request):
-    return HttpResponse('Logged Out')
-
-
 def stores_index(request):
     return render(request, 'stores/index.html')
 
@@ -34,13 +32,19 @@ def stores_detail(request):
     return render(request, 'stores/detail.html')
 
 
-def login(request):
-    return render(request, 'registration/login.html')
-
-
 def signup(request):
-    return render(request, 'registration/signup.html')
-
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('/')
+        else:
+            error_message = 'Invalid sign up - try again'
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
 
 def checkout(request, total_volunteers, total_checkouts):
     num_of_volunteer = total_volunteers
