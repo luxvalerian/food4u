@@ -7,13 +7,16 @@ from . scraper import produce_dict, logo_img, logo_svg
 num_of_volunteer = 5
 num_of_checkouts = 0
 
+
 def remove_vol(request):
     total_volunteers = num_of_volunteer - 1
     total_checkouts = num_of_checkouts + 1
-    return redirect('checkout', total_volunteers, total_checkouts) 
+    return redirect('checkout', total_volunteers, total_checkouts)
+
 
 def home(request):
     return render(request, 'home.html')
+
 
 def about(request):
     return render(request, 'about.html')
@@ -45,9 +48,17 @@ def signup(request):
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+<<<<<<< HEAD
+=======
+
+>>>>>>> ee92a683d91b0e2e2f19172ca20c665c127e59e5
 
 def checkout(request, total_volunteers, total_checkouts):
     num_of_volunteer = total_volunteers
     num_of_checkouts = total_checkouts
     context = {"volunteer": num_of_volunteer, "customer": num_of_checkouts}
+<<<<<<< HEAD
     return render(request, 'checkout.html', context)
+=======
+    return render(request, 'checkout.html', context)
+>>>>>>> ee92a683d91b0e2e2f19172ca20c665c127e59e5
