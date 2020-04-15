@@ -2,7 +2,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 
-from . scrapper import produce_dict, logo_img, logo_svg
+from . scraper import produce_dict, logo_img, logo_svg
+
+num_of_volunteer = 5
+num_of_checkouts = 0
+
+
+def remove_vol(request):
+    total_volunteers = num_of_volunteer - 1
+    total_checkouts = num_of_checkouts + 1
+    return redirect('checkout', total_volunteers, total_checkouts)
 
 
 def home(request):
@@ -39,3 +48,10 @@ def signup(request):
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+
+def checkout(request, total_volunteers, total_checkouts):
+    num_of_volunteer = total_volunteers
+    num_of_checkouts = total_checkouts
+    context = {"volunteer": num_of_volunteer, "customer": num_of_checkouts}
+    return render(request, 'checkout.html', context)
