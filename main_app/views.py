@@ -2,10 +2,16 @@ from django.shortcuts import render, redirect
 
 from . scrapper import produce_dict, logo_img, logo_svg
 
+num_of_volunteer = 5
+num_of_checkouts = 0
+
+def remove_vol(request):
+    total_volunteers = num_of_volunteer - 1
+    total_checkouts = num_of_checkouts + 1
+    return redirect('checkout', total_volunteers, total_checkouts) 
 
 def home(request):
     return render(request, 'home.html')
-
 
 def about(request):
     return render(request, 'about.html')
@@ -34,3 +40,10 @@ def login(request):
 
 def signup(request):
     return render(request, 'registration/signup.html')
+
+
+def checkout(request, total_volunteers, total_checkouts):
+    num_of_volunteer = total_volunteers
+    num_of_checkouts = total_checkouts
+    context = {"volunteer": num_of_volunteer, "customer": num_of_checkouts}
+    return render(request, 'checkout.html', context)
