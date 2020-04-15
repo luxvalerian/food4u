@@ -18,20 +18,12 @@ def stores(request):
     return render(request, 'stores/index.html', context)
 
 
-def logout(request):
-    return HttpResponse('Logged Out')
-
-
 def stores_index(request):
     return render(request, 'stores/index.html')
 
 
 def stores_detail(request):
     return render(request, 'stores/detail.html')
-
-
-def login(request):
-    return render(request, 'registration/login.html')
 
 
 def signup(request):
@@ -41,7 +33,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('index')
+            return redirect('/')
         else:
             error_message = 'Invalid sign up - try again'
     form = UserCreationForm()

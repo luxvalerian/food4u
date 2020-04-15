@@ -2,50 +2,48 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Foodle | Volunteer powered delivery</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  </head>
-  <body>
-    <header class="navbar-fixed ">
-      <nav>
-        <div class="nav-wrapper header">
-          <ul>
-            <li>
-              <a href="/" class="left brand-logo"
-                >
-                <img class="foodle-logo" src="{% static 'images/foodle_logo.png'%}" alt="logo"/>
-                <!-- <figure>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Foodle | Volunteer powered delivery</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+</head>
+
+<body>
+  <header class="navbar-fixed ">
+    <nav>
+      <div class="nav-wrapper header">
+        <ul>
+          <li>
+            <a href="/" class="left brand-logo">
+              <img class="foodle-logo" src="{% static 'images/foodle_logo.png'%}" alt="logo" />
+              <!-- <figure>
                   <embed type="image/svg+xml" src="{% static 'images/foodle_logo.svg' %}" width="75%" height="75%"/>
                 </figure> -->
-                </a
-              >
-            </li>
-          </ul>
-          <ul class="right">
-            <li><a href="/about">About</a></li>
-            <li><a href="/stores">Stores</a></li>
-            <li><a href="/logout">Log Out</a></li>
-            <li><a href="/login">Log In</a></li>
-            <li><a href="/signup">Sign Up</a></li>
-          </ul>
-        </div>
-      </nav>
-    </header>
-    <main class="container">
-      {% block content %} {% endblock %}
-    </main>
-    <footer class="page-footer footer">
-      <div class="center">
-        All Rights Reserved, &copy; {% now "Y" %} Foodle &nbsp;
+            </a>
+          </li>
+        </ul>
+        <ul class="right">
+          <li><a href="/about">About</a></li>
+          <li><a href="/stores">Stores</a></li>
+          <li><a href="{% url 'logout' %}">Log Out</a></li>
+          <li><a href="{% url 'login' %}">Log In</a></li>
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+        </ul>
       </div>
-    </footer>
-  </body>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %} {% endblock %}
+  </main>
+  <footer class="page-footer footer">
+    <div class="center">
+      All Rights Reserved, &copy; {% now "Y" %} Foodle &nbsp;
+    </div>
+  </footer>
+</body>
+
 </html>
