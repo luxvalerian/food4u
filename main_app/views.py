@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 from . scraper import produce_dict, logo_img, logo_svg
 
@@ -22,15 +23,18 @@ def about(request):
     return render(request, 'about.html')
 
 
+@login_required
 def stores(request):
     context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg}
     return render(request, 'stores/index.html', context)
 
 
+@login_required
 def stores_index(request):
     return render(request, 'stores/index.html')
 
 
+@login_required
 def stores_detail(request):
     return render(request, 'stores/detail.html')
 
@@ -50,6 +54,7 @@ def signup(request):
     return render(request, 'registration/signup.html', context)
 
 
+@login_required
 def checkout(request, total_volunteers, total_checkouts):
     num_of_volunteer = total_volunteers
     num_of_checkouts = total_checkouts
