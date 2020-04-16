@@ -28,8 +28,8 @@
           <li><a href="/about">About</a></li>
           {% if user.is_authenticated %}
           <li><a href="/stores">Stores</a></li>
+          <li><a href="{% url 'checkout' 'volunteer_id' 'cart_id' 'customer_id' 'timeslot_id' %}">Checkout</a></li>
           <li><a href="/cart">My Cart</a></li>
-          <li><a href="{% url 'checkout' '5' '0' %}">Checkout</a></li>
           <li><a href="{% url 'logout' %}">Log Out</a></li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>

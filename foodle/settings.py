@@ -68,6 +68,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'main_app.User'
+
 WSGI_APPLICATION = 'foodle.wsgi.application'
 
 
@@ -119,6 +121,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
 LOGIN_REDIRECT_URL = '/stores/'
 LOGOUT_REDIRECT_URL = '/'
