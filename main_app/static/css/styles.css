@@ -1,25 +1,68 @@
 body {
+  font-family: 'Roboto', 'sans-serif';
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   min-height: 100vh;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
-.foodle-logo {
-  margin-top: .2rem;
+body main {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+          flex: 1 0 auto;
+}
+
+body .header,
+body .header a {
+  background-color: #5085a5;
+  color: #f7f9fb;
+}
+
+body .header .brand-logo,
+body .header a .brand-logo {
   max-height: 64px;
 }
 
-.brand-logo {
+body .header .brand-logo .foodle-logo,
+body .header a .brand-logo .foodle-logo {
+  margin-top: 0.2rem;
   max-height: 64px;
 }
 
-main {
-  flex: 1 0 auto;
+body .footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: #5085a5;
+  color: #f7f9fb;
+  height: 4rem;
+  padding-top: 0;
+  text-align: center;
 }
 
-.header, .header a {
-  background-color: #fafafa;
-  color: rgb(2, 2, 2, .7);
+.items {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 10px auto;
+}
+
+.items:hover {
+  background-color: #f7f9fb;
+  opacity: 0.7;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1.6px #000 solid !important;
 }
 
 .items h5 {
@@ -29,30 +72,4 @@ main {
 .items p {
   padding: 0;
 }
-
-.items {
-justify-content: center;
-margin: 10px auto;
-}
-
-.items:hover {
-  background-color: #fafafa;
-  opacity: .7;
-  cursor: pointer;
-  font-weight: 600;
-  border: 1.6px #000 solid !important;
-}
-
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #8FC1E3;
-  color: #fafafa;
-  height: 4rem;
-}
-
-.footer {
-  padding-top: 0;
-  text-align: center;
-}
+/*# sourceMappingURL=styles.css.map */
