@@ -45,7 +45,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('/')
+            return redirect('stores')
         else:
             error_message = 'Invalid sign up - try again'
     form = UserCreationForm()
@@ -57,4 +57,3 @@ def checkout(request, total_volunteers, total_checkouts):
     num_of_checkouts = total_checkouts
     context = {"volunteer": num_of_volunteer, "customer": num_of_checkouts}
     return render(request, 'checkout.html', context)
-
