@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 from .scraper import produce_dict, logo_img, logo_svg
 from .models import Item, Cart, Volunteer, Customer, User, Timeslot
@@ -14,15 +15,18 @@ def about(request):
     return render(request, 'about.html')
 
 
+@login_required
 def stores(request):
     context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg}
     return render(request, 'stores/index.html', context)
 
 
+@login_required
 def stores_index(request):
     return render(request, 'stores/index.html')
 
 
+@login_required
 def stores_detail(request):
     return render(request, 'stores/detail.html')
 
@@ -44,11 +48,13 @@ def signup(request):
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
 
+
 def remove_vol(request, volunteer_id, cart_id, customer_id, timeslot_id):
     Timeslot.objects.get(id=timeslot_id).volunteers.remove(volunteer_id)
     
     return redirect('customer/index.html', total_volunteers, total_checkouts)
 
+@login_required
 def checkout(request, volunteer_id, cart_id, customer_id, timeslot_id):
     volunteer = Volunteer.objects.get(id=volunteer_id)
     customer = Customer.objects.get(id=customer_id)
@@ -63,3 +69,7 @@ def customer_index(request, customer_id):
 
     context = {'customer': customer}
     return render(request, 'customer/index.html', context)
+
+@login_required
+def cart(request):
+    return render(request, 'cart/cart.html')
