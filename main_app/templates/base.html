@@ -30,7 +30,7 @@
         <ul class="right">
           <li><a href="/about">About</a></li>
           <li><a href="/stores">Stores</a></li>
-          <li><a href="{% url 'checkout' '5' '0' %}">Checkout</a></li>
+          <li><a href="{% url 'checkout' 'volunteer_id' 'cart_id' 'customer_id' 'timeslot_id' %}">Checkout</a></li>
           <li><a href="{% url 'logout' %}">Log Out</a></li>
           <li><a href="{% url 'login' %}">Log In</a></li>
           <li><a href="{% url 'signup' %}">Sign Up</a></li>
