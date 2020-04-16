@@ -56,7 +56,7 @@ def signup(request):
 
 @login_required
 def cart(request):
-    return render(request, 'cart.html')
+    return render(request, 'cart/cart.html')
 
 
 @login_required
