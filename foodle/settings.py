@@ -68,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-AUTH_USER_MODEL = 'main_app.Volunteer'
+AUTH_USER_MODEL = 'main_app.User'
 
 WSGI_APPLICATION = 'foodle.wsgi.application'
 
