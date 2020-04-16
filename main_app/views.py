@@ -2,16 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 
-from . scraper import produce_dict, logo_img, logo_svg
-
-num_of_volunteer = 5
-num_of_checkouts = 0
-
-
-def remove_vol(request):
-    total_volunteers = num_of_volunteer - 1
-    total_checkouts = num_of_checkouts + 1
-    return redirect('checkout', total_volunteers, total_checkouts)
+from .scraper import produce_dict, logo_img, logo_svg
+from .models import Item, Cart, Volunteer, Customer, User, Timeslot
 
 
 def home(request):
@@ -52,8 +44,22 @@ def signup(request):
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
 
-def checkout(request, total_volunteers, total_checkouts):
-    num_of_volunteer = total_volunteers
-    num_of_checkouts = total_checkouts
-    context = {"volunteer": num_of_volunteer, "customer": num_of_checkouts}
-    return render(request, 'checkout.html', context)
+def remove_vol(request, volunteer_id, cart_id, customer_id, timeslot_id):
+    Timeslot.objects.get(id=timeslot_id).volunteers.remove(volunteer_id)
+    
+    return redirect('customer/index.html', total_volunteers, total_checkouts)
+
+def checkout(request, volunteer_id, cart_id, customer_id, timeslot_id):
+    volunteer = Volunteer.objects.get(id=volunteer_id)
+    customer = Customer.objects.get(id=customer_id)
+    timeslot = Customer.objects.get(id=timeslot_id)
+    cart = Cart.objects.get(id=cart_id)
+    
+    context = {"volunteer": volunteer, "customer": customer, "timeslot": timeslot, "cart": cart}
+    return render(request, 'checkout.html', customer_id=customer_id)
+
+def customer_index(request, customer_id):
+    customer = Customer.objects.get(id=customer_id)
+
+    context = {'customer': customer}
+    return render(request, 'customer/index.html', context)
