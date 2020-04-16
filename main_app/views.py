@@ -55,6 +55,11 @@ def signup(request):
 
 
 @login_required
+def cart(request):
+    return render(request, 'cart.html')
+
+
+@login_required
 def checkout(request, total_volunteers, total_checkouts):
     num_of_volunteer = total_volunteers
     num_of_checkouts = total_checkouts

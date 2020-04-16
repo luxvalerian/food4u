@@ -31,6 +31,7 @@
           <li><a href="/about">About</a></li>
           {% if user.is_authenticated %}
           <li><a href="/stores">Stores</a></li>
+          <li><a href="/cart">My Cart</a></li>
           <li><a href="{% url 'checkout' '5' '0' %}">Checkout</a></li>
           <li><a href="{% url 'logout' %}">Log Out</a></li>
           {% else %}
