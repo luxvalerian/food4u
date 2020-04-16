@@ -1,7 +1,16 @@
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from bs4 import BeautifulSoup as bs
 import requests
 
 urls_list = ['https://www.safeway.com/shop/product-details.184290007.html', 'https://www.safeway.com/shop/product-details.184060007.html', 'https://www.safeway.com/shop/product-details.184540027.html', 'https://www.safeway.com/shop/product-details.184450054.html', 'https://www.safeway.com/shop/product-details.184070124.html', 'https://www.safeway.com/shop/product-details.184040158.html', 'https://www.safeway.com/shop/product-details.960021862.html', 'https://www.safeway.com/shop/product-details.960015089.html', 'https://www.safeway.com/shop/product-details.196100818.html', 'https://www.safeway.com/shop/product-details.960038380.html', 'https://www.safeway.com/shop/product-details.117100189.html', 'https://www.safeway.com/shop/product-details.960078948.html', 'https://www.safeway.com/shop/product-details.960460707.html', 'https://www.safeway.com/shop/product-details.960156272.html', 'https://www.safeway.com/shop/product-details.186190041.html', 'https://www.safeway.com/shop/product-details.960109089.html', 'https://www.safeway.com/shop/product-details.188510026.html', 'https://www.safeway.com/shop/product-details.960113679.html', 'https://www.safeway.com/shop/product-details.960275246.html', 'https://www.safeway.com/shop/product-details.960028971.html']
+
+# def add_to_model_if_exists(img_url, product_name, product_price):
+#   if Item.objects.get(image_url=img_url):
+#     return Exception "Already in database"
+#   else:
+#     class ItemCreate(CreateView):
+#       model = Item
+#       fields = [product_name='name', product_price='price', img_url='image_url'] 
 
 produce_dict = []
 prices = ["$2.55/Each", "$0.41/Each", "$3.46/LB", "$0.99/Each", "$3.99/Each", "$2.50 /Each", "$2.00/Lb", "$5.00", "$3.49", "$6.49", "$4.99", "$9.99", "$34.99", "$8.99", "$13.99", "$27.96", "$11.98", "This item is not available right now", "$15.99", "$4.99"]
@@ -12,7 +21,9 @@ def search_item(url):
   product_name = soup.find("h2", {"class": "modal-heading"}).text.strip()
   product_img = soup.find("picture", {"class": "img-responsive"}).img['src']
   product_price = prices[urls_list.index(url)]
+  # add_to_model_if_exists(product_img, product_name, product_price)
   produce_dict.append({'name': product_name, 'image': 'https:'+product_img, 'price': product_price})
+
 
 for url in urls_list:
   search_item(url)
