@@ -3,29 +3,6 @@
 {% block content %}
 <h1>Checkout Page</h1>
 <div>
-  <div style="padding: 2rem; border: 1px solid #000; display: flex; align-items: center; justify-content: center; max-width: 50%; flex-direction: column;">
-    <h4>Number of Volunteers</h4>
-    <br>
-    <div style="display: flex;">
-      <h3>
-        {{volunteer}}
-      </h3>
-    </div>
-          <form action="{% url 'remove'%}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Checkout">
-          </form>
-  </div> 
-    <div style="padding: 2rem; border: 1px solid #000; display: flex; align-items: center; justify-content: center; max-width: 50%; flex-direction: column;">
-      <h4>Customer Checkouts</h4>
-      <div style="display: flex; flex-direction: column;">
-        <h3>
-          {{customer}}
-        </h3>
-        <button type="submit">
-          <a style="color: #000" href="{% url 'checkout' 'volunteer_id' 'cart_id' 'customer_id' 'timeslot_id'%}">Cancel</a>
-        </button>
-      </div>
-    </div> 
+  {{user.name}}
 </div>
 {% endblock %}
