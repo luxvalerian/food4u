@@ -38,20 +38,21 @@ class User(AbstractUser):
 
 
 #Volunteer Model
-class Volunteer(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-  is_volunteer=models.BooleanField(default=True)
+# class Volunteer(models.Model):
+#   user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+#   is_volunteer=models.BooleanField(default=True)
 
-  def __str__(self):
-    return f"{self.name}"
+#   def __str__(self):
+#     return f"{self.name}"
 
 #Customer Model
 class Customer(models.Model):
+  name = models.CharField(max_length=250)
   user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
   is_customer=models.BooleanField(default=True)
 
   def __str__(self):
-    return f"{self.name}"
+    return f"{self.user.first_name} {self.user.last_name}"
 
 #Timeslot Model
 class Timeslot(models.Model):
@@ -61,7 +62,7 @@ class Timeslot(models.Model):
     max_length=1,
     choices=TIMESLOTS,
     default=TIMESLOTS[0][0])
-  volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
+  volunteer = models.ForeignKey(User, on_delete=models.CASCADE)
   customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
   def __str__(self):  

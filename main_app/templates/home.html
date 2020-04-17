@@ -2,4 +2,12 @@
 
 {% block content %}
 <h1>Home Page</h1>
+<div>
+  <div>
+    <a href="{% url 'volunteer_signup' %}">I am Volunteer</a>
+  </div>
+  <div>
+    <a href="{% url 'customer_signup' %}">I am Customer</a>
+  </div>
+</div>
 {% endblock %}
