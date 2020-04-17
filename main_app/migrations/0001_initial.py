@@ -87,17 +87,17 @@ class Migration(migrations.Migration):
                 ('date', models.DateField()),
                 ('timeslot', models.CharField(choices=[('A', '9AM–10AM'), ('B', '10AM–11AM'), ('C', '11AM–12PM'), ('D', '12PM–1PM'), ('E', '1PM–2PM'), ('F', '2PM–3PM'), ('G', '3PM–4PM'), (
                     'H', '4PM–5PM'), ('I', '5PM–6PM'), ('J', '6PM–7PM'), ('K', '7PM–8PM'), ('L', '8PM–9PM'), ('M', '9PM–10PM')], default='A', max_length=1, verbose_name='Timeslot')),
-                << << << < HEAD
+                # << << << < HEAD
                 ('customer', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE, to='main_app.Customer')),
                 ('volunteer', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE, to='main_app.Volunteer')),
-                == == == =
+                # == == == =
                 ('volunteer', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('customer', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE, to='main_app.Customer')),
-                >>>>>> > 85cb0eff5a8913c7f78722b04af718c048468cd5
+                # >>>>>> > 85cb0eff5a8913c7f78722b04af718c048468cd5
             ],
         ),
         migrations.CreateModel(
