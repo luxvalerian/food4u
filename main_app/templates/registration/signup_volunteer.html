@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Sign Up</h1>
 
 {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
-
-<form method="POST" action="{% url 'signup' %}">
+<h2>Volunteer Sign Up</h2>
+<form method="POST" action="{% url 'volunteer_signup' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" class="btn blue" value="signup">
