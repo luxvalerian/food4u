@@ -1,15 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Select a Store</h1>
-  <img class="store-logo" src="{{logo.src}}" alt="store-name"/>
-<div class="product-container">
+<img class="store-logo" src="{{logo.src}}" alt="store-name"/>
+<div class="products-container">
   {% for item in product %}
-  <div class="items">
-  <h5>{{item.name}}</h5>
-    <img src="{{item.image}}" alt={{item}}/>
-  <p>{{item.price}}</p>
+  <div class="item-card">
+
+    <div class="item-card-inner">
+
+      <div class="item-details">
+        <h5>{{item.name}}</h5>
+        <img src="{{item.image}}" alt={{item}}/>
+        <p>{{item.price}}</p>
+        <p class="flip-forward">Quantity</p>
+      </div>
+
+      <div class="item-quantity">
+        <p>5 items</p>
+        <p class="flip-backward">Details</p>
+      </div>
+
+    </div>
+
   </div>
+  
     {% endfor %}
 </div>
 {% endblock %}

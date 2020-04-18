@@ -31,14 +31,6 @@ TIMESLOTS = (
   ("M",	"9PM–10PM")
 )
 
-#Customer Model
-class Customer(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
-  is_customer=models.BooleanField(default=True)
-
-  def __str__(self):
-    return f"{self.user.username}"
-
 #Timeslot Model
 class Timeslot(models.Model):
   date = models.DateField()
@@ -63,15 +55,12 @@ class Item(models.Model):
     default=UNITS[0][0])
   image = models.CharField(verbose_name="Image URL", max_length=1000)
   
-        # return data will need to be the item they selceted from the store not self.name
   def __str__(self):
     return f"{self.name} at ${self.unit_price}/{self.get_unit_measurement_display()}"
 
 class Cart(models.Model):
-    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    # checkout_number = Volunteer.objects.count()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(Item)
-    # timeslot = models.ForeignKey(Timeslot, on_delete=models.CASCADE)
 
     def __str__(self):
         # return data will need to be a details page of all the items in User's cart not self.name

@@ -14,6 +14,6 @@ def allowed_users(allowed_roles=[]):
         return view_func(request, *args, **kwargs)
       else:
         # print('Working', allowed_roles, group)
-        return HttpResponse(f'You are not authorized, {group}')
+        return HttpResponse(f'You are not authorized')
     return wrapper_func
   return decorator
