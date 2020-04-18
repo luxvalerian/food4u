@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from datetime import date
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 UNITS = (
   ('E', 'Each'),
@@ -31,28 +31,13 @@ TIMESLOTS = (
   ("M",	"9PM–10PM")
 )
 
-# Extending the User Model
-class User(AbstractUser):
-  is_customer=models.BooleanField(default=False)
-  is_volunteer=models.BooleanField(default=False)
-
-
-#Volunteer Model
-# class Volunteer(models.Model):
-#   user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-#   is_volunteer=models.BooleanField(default=True)
-
-#   def __str__(self):
-#     return f"{self.name}"
-
 #Customer Model
 class Customer(models.Model):
-  name = models.CharField(max_length=250)
-  user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
   is_customer=models.BooleanField(default=True)
 
   def __str__(self):
-    return f"{self.user.first_name} {self.user.last_name}"
+    return f"{self.user.username}"
 
 #Timeslot Model
 class Timeslot(models.Model):
@@ -62,8 +47,7 @@ class Timeslot(models.Model):
     max_length=1,
     choices=TIMESLOTS,
     default=TIMESLOTS[0][0])
-  volunteer = models.ForeignKey(User, on_delete=models.CASCADE)
-  customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+  user = models.ManyToManyField(User)
 
   def __str__(self):  
     return f"{self.date} - {self.get_timeslot_display()}"

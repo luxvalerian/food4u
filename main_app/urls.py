@@ -11,8 +11,6 @@ urlpatterns = [
     path('customer/', views.customer_index, name='customer'),
     path('remove/', views.remove_vol, name='remove'),
     path('accounts/signup/', views.signup, name='signup'),
-    path('cart/', views.cart, name='cart'),
-    path('accounts/signup/volunteer/', views.VolunteerSignUpView.as_view(), name='volunteer_signup'),
-    path('accounts/signup/customer/', views.customer_signup, name='customer_signup')
-    # path('accounts/signup/customer/', views.CustomerSignUpView.as_view(), name='customer_signup')
+    path('accounts/signup/volunteer', views.volunteer_signup, name='volunteer_signup'),
+    path('cart/<int:profile_id>', views.cart, name='cart')
 ]

@@ -3,11 +3,10 @@
 {% block content %}
 
 {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
-<h2>Customer Sign Up</h2>
-<form method="POST" action="{% url 'customer_signup' %}">
+<h2>Volunteer Sign Up</h2>
+<form method="POST" action="{% url 'volunteer_signup' %}">
     {% csrf_token %}
     {{ form.as_p }}
-    {{ form.name}}
     <input type="submit" class="btn blue" value="signup">
     <input type="hidden" name="next" value="{{ next }}">
 </form>
