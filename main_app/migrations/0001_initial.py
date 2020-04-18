@@ -65,6 +65,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Volunteer',
+            fields=[
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('is_volunteer', models.BooleanField(default=True)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Timeslot',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -72,6 +79,8 @@ class Migration(migrations.Migration):
                 ('timeslot', models.CharField(choices=[('A', '9AM–10AM'), ('B', '10AM–11AM'), ('C', '11AM–12PM'), ('D', '12PM–1PM'), ('E', '1PM–2PM'), ('F', '2PM–3PM'), ('G', '3PM–4PM'), ('H', '4PM–5PM'), ('I', '5PM–6PM'), ('J', '6PM–7PM'), ('K', '7PM–8PM'), ('L', '8PM–9PM'), ('M', '9PM–10PM')], default='A', max_length=1, verbose_name='Timeslot')),
                 ('volunteer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main_app.Customer')),
+                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main_app.Customer')),
+                ('volunteer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main_app.Volunteer')),
             ],
         ),
         migrations.CreateModel(

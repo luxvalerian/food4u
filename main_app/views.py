@@ -22,6 +22,9 @@ from .forms import CustomerSignUpForm, VolunteerSignUpForm
 #         login(self.request, user)
 #         return redirect('stores')
 
+from .scraper import produce_dict, logo_img, logo_svg
+from .models import Item, Cart, Volunteer, Customer, User, Timeslot
+
 
 def customer_signup(request):
     error_message = ''
@@ -102,13 +105,31 @@ def signup(request):
     return render(request, 'registration/signup.html', context)
 
 
+<< << << < HEAD
+
+
 def remove_vol(request):
     # Timeslot.objects.get(id=timeslot_id).volunteers.remove(volunteer_id)
 
     return redirect('customer/index.html')
 
 
+== == == =
+
+
+def remove_vol(request, volunteer_id, cart_id, customer_id, timeslot_id):
+    Timeslot.objects.get(id=timeslot_id).volunteers.remove(volunteer_id)
+
+    return redirect('customer/index.html', total_volunteers, total_checkouts)
+
+
+>>>>>> > 4c31c1f298d166b88db88c751111fb18bb948185
+
+
 @login_required
+<< << << < HEAD
+
+
 def checkout(request):  # volunteer_id
     # volunteer = Volunteer.objects.get(id=volunteer_id)
     # customer = Customer.objects.get(id=customer_id)
@@ -120,10 +141,31 @@ def checkout(request):  # volunteer_id
 
 
 def customer_index(request):
-    # customer = Customer.objects.get(id=customer_id)
 
-    context = {'customer': customer}
-    return render(request, 'customer/index.html')
+
+    # customer = Customer.objects.get(id=customer_id)
+== == == =
+
+
+def checkout(request, volunteer_id, cart_id, customer_id, timeslot_id):
+    volunteer = Volunteer.objects.get(id=volunteer_id)
+    customer = Customer.objects.get(id=customer_id)
+    timeslot = Customer.objects.get(id=timeslot_id)
+    cart = Cart.objects.get(id=cart_id)
+
+    context = {"volunteer": volunteer, "customer": customer,
+               "timeslot": timeslot, "cart": cart}
+    return render(request, 'checkout.html', customer_id=customer_id)
+
+
+def customer_index(request, customer_id):
+    customer = Customer.objects.get(id=customer_id)
+
+
+>>>>>> > 4c31c1f298d166b88db88c751111fb18bb948185
+
+context = {'customer': customer}
+return render(request, 'customer/index.html', context)
 
 
 @login_required
