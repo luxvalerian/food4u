@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Cart Detail Page</h1>
+{% for times in timeslot %}
+  {{times}}
+{% endfor %}
 
+<h1>Cart Detail Page</h1>
+{% if user_group == "customer" %}
+<h1>List of Times {{user_group}}</h1>
+
+{% else %}
+<h1>{{user_group}}</h1>
+{% endif %}
 {% endblock %}

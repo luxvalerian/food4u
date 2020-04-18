@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from datetime import date
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 UNITS = (
   ('E', 'Each'),
@@ -31,28 +31,6 @@ TIMESLOTS = (
   ("M",	"9PM–10PM")
 )
 
-# Extending the User Model
-class User(AbstractUser):
-  is_customer=models.BooleanField(default=False)
-  is_volunteer=models.BooleanField(default=False)
-
-
-#Volunteer Model
-class Volunteer(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-  is_volunteer=models.BooleanField(default=True)
-
-  def __str__(self):
-    return f"{self.name}"
-
-#Customer Model
-class Customer(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-  is_customer=models.BooleanField(default=True)
-
-  def __str__(self):
-    return f"{self.name}"
-
 #Timeslot Model
 class Timeslot(models.Model):
   date = models.DateField()
@@ -61,8 +39,7 @@ class Timeslot(models.Model):
     max_length=1,
     choices=TIMESLOTS,
     default=TIMESLOTS[0][0])
-  volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
-  customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+  user = models.ManyToManyField(User)
 
   def __str__(self):  
     return f"{self.date} - {self.get_timeslot_display()}"
@@ -78,15 +55,12 @@ class Item(models.Model):
     default=UNITS[0][0])
   image = models.CharField(verbose_name="Image URL", max_length=1000)
   
-        # return data will need to be the item they selceted from the store not self.name
   def __str__(self):
     return f"{self.name} at ${self.unit_price}/{self.get_unit_measurement_display()}"
 
 class Cart(models.Model):
-    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    # checkout_number = Volunteer.objects.count()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(Item)
-    # timeslot = models.ForeignKey(Timeslot, on_delete=models.CASCADE)
 
     def __str__(self):
         # return data will need to be a details page of all the items in User's cart not self.name
