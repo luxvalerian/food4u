@@ -31,6 +31,20 @@ TIMESLOTS = (
   ("M",	"9PM–10PM")
 )
 
+class Customer(models.Model):
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return f"{self.user.first_name} {self.user.last_name}"
+
+class Volunteer(models.Model):
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+  customer = models.ManyToManyField(Customer, through="Timeslot")
+
+  def __str__(self):
+    return f"{self.user.first_name} {self.user.last_name}"
+
 #Timeslot Model
 class Timeslot(models.Model):
   date = models.DateField()
@@ -39,10 +53,12 @@ class Timeslot(models.Model):
     max_length=1,
     choices=TIMESLOTS,
     default=TIMESLOTS[0][0])
-  user = models.ManyToManyField(User)
 
   def __str__(self):  
     return f"{self.date} - {self.get_timeslot_display()}"
+
+  customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+  volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
 
 class Item(models.Model):
   name = models.CharField(max_length=100)
@@ -65,6 +81,6 @@ class Cart(models.Model):
     def __str__(self):
         # return data will need to be a details page of all the items in User's cart not self.name
         if self.items.count() == 1:
-          return f"{self.user}'s' cart has {self.items.count()} item"
+          return f"{self.user.first_name}'s cart has {self.items.count()} item"
         else:
-          return f"{self.user}'s' cart has {self.items.count()} items"
+          return f"{self.user.first_name}'s cart has {self.items.count()} items"
