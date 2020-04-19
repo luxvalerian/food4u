@@ -43,7 +43,7 @@ def volunteer_signup(request):
             user.groups.add(group)
 
             login(request, user)
-            return redirect('stores')
+            return redirect('home')
         else:
             error_message = 'Invalid sign up - try again'
     form = UserCreationForm()
