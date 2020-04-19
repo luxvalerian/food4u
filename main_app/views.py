@@ -88,12 +88,12 @@ def remove_vol(request):
 
 def remove_vol(request, volunteer_id, cart_id, customer_id, timeslot_id):
     Timeslot.objects.get(id=timeslot_id).volunteers.remove(volunteer_id)
-    return redirect('customer/index.html', total_volunteers, total_checkouts)
+    return redirect('customer/index.html')
 
 
 @login_required
 @allowed_users(allowed_roles=['customer'])
-def checkout(request): 
+def checkout(request):
     return render(request, 'checkout.html')
 
 
@@ -102,11 +102,12 @@ def customer_index(request, customer_id):
     context = {'customer_id': customer_id}
     return render(request, 'customer/index.html', context)
 
+
 @login_required
 def cart(request, profile_id):
     timeslot = Timeslot.objects.filter(user=request.user)
     # timeslot = Timeslot.objects.all()
     user_group = str(request.user.groups.all()[0])
 
-    context = {'user_group' : user_group, 'timeslot': timeslot}
+    context = {'user_group': user_group, 'timeslot': timeslot}
     return render(request, 'cart/cart.html', context)
