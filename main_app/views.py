@@ -71,7 +71,8 @@ def about(request):
 @allowed_users(allowed_roles=['customer'])
 def stores(request):
     items = Item.objects.all()
-    context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg, 'items': items}
+    context = {'product': produce_dict, 'logo': logo_img,
+               'logo_svg': logo_svg, 'items': items}
     return render(request, 'stores/index.html', context)
 
 
@@ -101,7 +102,7 @@ def remove_vol(request):
 
 @login_required
 @allowed_users(allowed_roles=['customer'])
-def checkout(request): 
+def checkout(request):
     return render(request, 'checkout.html')
 
 
@@ -109,6 +110,7 @@ def customer_index(request, customer_id):
     customer_id = request.user.id
     context = {'customer_id': customer_id}
     return render(request, 'customer/index.html', context)
+
 
 @login_required
 def cart(request, profile_id):
@@ -120,5 +122,5 @@ def cart(request, profile_id):
     print(cart.all())
     user_group = str(request.user.groups.all()[0])
 
-    context = {'user_group' : user_group, 'customer': customer, 'cart': cart}
+    context = {'user_group': user_group, 'customer': customer, 'cart': cart}
     return render(request, 'cart/cart.html', context)
