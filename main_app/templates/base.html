@@ -10,6 +10,7 @@
   <title>Foodle | Volunteer powered delivery</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   <script defer src="{% static 'js/script.js'%}"></script>
 </head>
@@ -26,11 +27,12 @@
           </li>
         </ul>
         <ul class="right">
-          <li><a href="/about">About</a></li>
+          <!-- <li><a href="/about">About</a></li> -->
           {% if user.is_authenticated %}
           <li><a href="/stores">Stores</a></li>
-          <li><a href="{% url 'checkout' %}">Checkout</a></li>
-          <li><a href="{% url 'cart' user.id %}">My Cart</a></li>
+          <li>Welcome {{user}}</li>
+          <!-- <li><a href="{% url 'checkout' %}">Checkout</a></li> -->
+          <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li>
           <li><a href="{% url 'logout' %}">Log Out</a></li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>
