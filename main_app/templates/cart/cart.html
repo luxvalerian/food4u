@@ -1,15 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% for times in timeslot %}
-  {{times}}
+{% if user_group == "customer" %}
+<h1>{{user}}'s Cart</h1>
+{{timeslot}}
+{% for item in cart %}
+
+{% for product in item.items.all %}
+  
+<div>
+  <img src="{{product.image}}" alt="{{product.name}}"/>
+  <p>{{product.name}}</p>
+  <p>${{product.unit_price}}/{{product.get_unit_measurement_display}}</p>
+  
+</div>
+
+{% endfor %}
 {% endfor %}
 
-<h1>Cart Detail Page</h1>
-{% if user_group == "customer" %}
-<h1>List of Times {{user_group}}</h1>
+
+<!-- {% for times in timeslot %}
+{% if  timeslot_count == 0 %}
+<p>No timeslots selected</p>
+{% else %}
+{{times}}
+{% endif %}
+{% endfor %} -->
+
 
 {% else %}
-<h1>{{user_group}}</h1>
+<h1>{{user}} is a {{user_group}}</h1>
+
+
+
+
 {% endif %}
 {% endblock %}

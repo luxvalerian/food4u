@@ -8,23 +8,43 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  padding: 0;
+  margin: 0;
 }
 
-body main {
+body .main-container {
   -webkit-box-flex: 1;
-      -ms-flex: 1 0 auto;
-          flex: 1 0 auto;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 
 body .navbar {
   background-color: #5085a5;
   color: #f7f9fb;
-  max-height: 64px;
+  height: 70px;
+}
+
+body .navbar #openModal {
+  margin-left: 0.5rem;
+  margin-right: 1rem;
+  font-size: 2.25rem;
+}
+
+body .navbar li,
+body .navbar li a {
+  font-size: 1.2rem;
+  height: 70px;
+  cursor: pointer;
+}
+
+body .navbar li:hover,
+body .navbar li a:hover {
+  background-color: #31708e;
 }
 
 body .navbar .foodle-logo {
   max-height: 60px;
-  margin: 2px;
+  margin: 5px;
 }
 
 body .footer {
@@ -46,6 +66,7 @@ body .footer {
 
 .store-logo {
   max-height: 5rem;
+  margin-top: 1.5rem;
 }
 
 .products-container {
@@ -55,7 +76,9 @@ body .footer {
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   text-align: center;
-  margin: auto;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .products-container .flip-forward,
@@ -82,7 +105,7 @@ body .footer {
 .item-card {
   height: 20rem;
   width: 15rem;
-  margin: 10px;
+  margin: 1rem;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -92,7 +115,9 @@ body .footer {
 }
 
 .item-card .item-card-inner {
-  border: 1px black solid;
+  border: 1px solid #31708e;
+  -webkit-box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+          box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
   border-radius: 1rem;
   position: relative;
   width: 100%;
@@ -103,14 +128,6 @@ body .footer {
   transition: transform 0.6s, -webkit-transform 0.6s;
   -webkit-transform-style: preserve-3d;
           transform-style: preserve-3d;
-}
-
-.item-card .item-card-inner .item-quantity {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-transform: rotateY(180deg);
-          transform: rotateY(180deg);
 }
 
 .item-card .item-card-inner .item-details,
@@ -130,5 +147,86 @@ body .footer {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+}
+
+.item-card .item-card-inner .item-quantity {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transform: rotateY(180deg);
+          transform: rotateY(180deg);
+}
+
+.item-card .item-card-inner h5 {
+  margin: 0.5rem;
+}
+
+.cart-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.cart-modal .cart-modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  -webkit-box-shadow: 0.25rem 0.25rem 0.5rem 0.1rem #31708e;
+          box-shadow: 0.25rem 0.25rem 0.5rem 0.1rem #31708e;
+  border-radius: 1rem;
+  border: 1px solid #8fc1e3;
+  width: 50rem;
+}
+
+.cart-modal .cart-modal-content th {
+  font-size: 1.25rem;
+}
+
+.cart-modal .cart-modal-content .delete-item {
+  margin-left: 1rem;
+}
+
+.cart-modal .cart-modal-content .close {
+  float: right;
+}
+
+.cart-modal .cart-modal-content .cart-modal-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.cart-modal .cart-modal-content .cart-modal-footer .modal-button {
+  border-radius: 1rem;
+  color: #f7f9fb;
+  background-color: #687864;
+  padding: 0.5rem;
+}
+
+.cart-modal .close,
+.cart-modal .delete-item {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.cart-modal .close:hover,
+.cart-modal .close:focus,
+.cart-modal .delete-item:hover,
+.cart-modal .delete-item:hover {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 /*# sourceMappingURL=styles.css.map */
