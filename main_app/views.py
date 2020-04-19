@@ -71,8 +71,7 @@ def about(request):
 @allowed_users(allowed_roles=['customer'])
 def stores(request):
     items = Item.objects.all()
-    context = {'product': produce_dict, 'logo': logo_img,
-               'logo_svg': logo_svg, 'items': items}
+    context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg, 'items': items}
     return render(request, 'stores/index.html', context)
 
 
