@@ -6,27 +6,32 @@ from django.contrib.auth.models import Group
 
 from django.views.generic import CreateView
 from .scraper import produce_dict, logo_img, logo_svg
-
-from .models import Item, Cart, Timeslot
+from . forms import CustomerSignUpForm, VolunteerSignUpForm
+from .models import Item, Cart, Timeslot, Customer, Volunteer
 from .decorators import allowed_users
 
 
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomerSignUpForm(request.POST)
         if form.is_valid():
             group = Group.objects.get(name='customer')
-            # print(group)
-            user = form.save()
-            username = form.cleaned_data.get('username')
-            user.groups.add(group)
 
+            user = form.save()
+            customer_profile = Customer(user=user)
+            cart = Cart(user=user)
+            cart.save()
+            customer_profile.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user.groups.add(group)
+            user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('stores')
+            return redirect('home')
         else:
             error_message = 'Invalid sign up - try again'
-    form = UserCreationForm()
+    form = CustomerSignUpForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
 
@@ -34,19 +39,22 @@ def signup(request):
 def volunteer_signup(request):
     error_message = ''
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = VolunteerSignUpForm(request.POST)
         if form.is_valid():
             group = Group.objects.get(name='volunteer')
             # print(group)
             user = form.save()
+            volunteer_profile = Volunteer(user=user)
+            volunteer_profile.save()
             username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
             user.groups.add(group)
-
+            user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('stores')
+            return redirect('home')
         else:
             error_message = 'Invalid sign up - try again'
-    form = UserCreationForm()
+    form = VolunteerSignUpForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup_volunteer.html', context)
 
@@ -62,7 +70,8 @@ def about(request):
 @login_required
 @allowed_users(allowed_roles=['customer'])
 def stores(request):
-    context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg}
+    items = Item.objects.all()
+    context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg, 'items': items}
     return render(request, 'stores/index.html', context)
 
 
@@ -86,9 +95,8 @@ def remove_vol(request):
     return redirect('customer/index.html')
 
 
-def remove_vol(request, volunteer_id, cart_id, customer_id, timeslot_id):
-    Timeslot.objects.get(id=timeslot_id).volunteers.remove(volunteer_id)
-    return redirect('customer/index.html', total_volunteers, total_checkouts)
+def remove_vol(request):
+    return redirect('customer/index.html')
 
 
 @login_required
@@ -104,9 +112,13 @@ def customer_index(request, customer_id):
 
 @login_required
 def cart(request, profile_id):
-    timeslot = Timeslot.objects.filter(user=request.user)
-    # timeslot = Timeslot.objects.all()
+    customer = Customer.objects.filter(user=request.user)
+    # timeslot = Timeslot.objects.filter(customer=customer)
+    # timeslot_count = timeslot.count()
+    cart = Cart.objects.filter(user=request.user).all()
+    # items_not_in_cart = Item.objects.exclude(id__in = cart.items.all().values_list('id'))
+    print(cart.all())
     user_group = str(request.user.groups.all()[0])
 
-    context = {'user_group' : user_group, 'timeslot': timeslot}
+    context = {'user_group' : user_group, 'customer': customer, 'cart': cart}
     return render(request, 'cart/cart.html', context)
