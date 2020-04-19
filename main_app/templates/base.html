@@ -10,6 +10,7 @@
   <title>Foodle | Volunteer powered delivery</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   <script defer src="{% static 'js/script.js'%}"></script>
 </head>
@@ -20,7 +21,7 @@
       <div class="nav-wrapper navbar">
         <ul>
           <li>
-            <a href="/" class="left foodle-logo">
+            <a href="/">
               <img class="foodle-logo" src="{% static 'images/foodle_logo.svg'%}" alt="logo" />
             </a>
           </li>
@@ -30,8 +31,8 @@
           {% if user.is_authenticated %}
           <li><a href="/stores">Stores</a></li>
           <li><a href="{% url 'checkout' %}">Checkout</a></li>
-          <li><a href="{% url 'cart' user.id %}">My Cart</a></li>
           <li><a href="{% url 'logout' %}">Log Out</a></li>
+          <li><i class="large material-icons" id="openModal">shopping_cart</i></li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>
           <li><a href="{% url 'signup' %}">Sign Up</a></li>
@@ -40,9 +41,50 @@
       </div>
     </nav>
   </header>
-  <main class="container">
+<main class="main-container">
+
+<div id="cartModal" class="cart-modal">
+  <div class="cart-modal-content">
+    <span class="close">&times;</span>
+
+    <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Bananas</td>
+              <td>$1.00</td>
+              <td>1</td>
+              <td>$1.00</td>
+              <td>
+                <span class="delete-item">&times;</span>
+              </td>
+            </tr>
+          </tbody>
+
+    </table> 
+      <div class="cart-modal-footer">
+        <div>
+          <h5>Total: $1.00</h5>
+        </div>
+        <div>
+          <button class="modal-button" type="button">Checkout</button>
+        </div>
+      </div>
+  </div>
+
+</div>
+
     {% block content %} {% endblock %}
-  </main>
+</main>
   <footer class="page-footer footer">
     <div class="center">
       All Rights Reserved, &copy; {% now "Y" %} Foodle &nbsp;
