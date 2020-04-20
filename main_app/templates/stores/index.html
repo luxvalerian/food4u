@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+{% for thing in walmart %}
+  <!-- {{thing}} -->
+  {% for part in thing.products %}
+  <img src="{{part.basic.image.thumbnail}}" alt="{{part.basic.name}}"/>
+  {{part.basic.name}}
+  ${{part.store.price.list}}
+  {% endfor %}
+{% endfor %}
 <img class="store-logo" src="{{logo.src}}" alt="store-name"/>
 <div class="products-container">
   {% for item in items %}
