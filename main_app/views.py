@@ -71,7 +71,8 @@ def about(request):
 @allowed_users(allowed_roles=['customer'])
 def stores(request):
     items = Item.objects.all()
-    context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg, 'items': items}
+    context = {'product': produce_dict, 'logo': logo_img,
+               'logo_svg': logo_svg, 'items': items}
     return render(request, 'stores/index.html', context)
 
 
@@ -91,10 +92,6 @@ def logout(request):
 
 @login_required
 @allowed_users(allowed_roles=['admin'])
-def remove_vol(request):
-    return redirect('customer/index.html')
-
-
 def remove_vol(request):
     return redirect('customer/index.html')
 
