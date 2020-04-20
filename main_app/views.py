@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
 from django.views.generic import CreateView
-from .scraper import produce_dict, logo_img, logo_svg
+from .scraper import produce_dict, logo_img, logo_svg, walmart_fruit
 from . forms import CustomerSignUpForm, VolunteerSignUpForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer
 from .decorators import allowed_users
@@ -71,7 +71,7 @@ def about(request):
 @allowed_users(allowed_roles=['customer'])
 def stores(request):
     items = Item.objects.all()
-    context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg, 'items': items}
+    context = {'product': produce_dict, 'logo': logo_img, 'logo_svg': logo_svg, 'items': items, 'walmart': walmart_fruit}
     return render(request, 'stores/index.html', context)
 
 
