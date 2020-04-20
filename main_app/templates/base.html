@@ -31,9 +31,8 @@
           {% if user.is_authenticated %}
           <li><a href="/stores">Stores</a></li>
           <li>Welcome {{user}}</li>
-          <!-- <li><a href="{% url 'checkout' %}">Checkout</a></li> -->
-          <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li>
-          <li><a href="{% url 'checkout' %}">Checkout</a></li>
+          <!-- <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li>
+          <li><a href="{% url 'checkout' %}">Checkout</a></li> -->
           <li><a href="{% url 'logout' %}">Log Out</a></li>
           <li><i class="large material-icons" id="openModal">shopping_cart</i></li>
           {% else %}
