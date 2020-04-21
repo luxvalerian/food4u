@@ -96,6 +96,10 @@ def remove_vol(request):
     return redirect('customer/index.html')
 
 
+def volunteer_profile(request):
+    return render(request, 'volunteer/profile.html')
+
+
 def remove_vol(request):
     return redirect('customer/index.html')
 
