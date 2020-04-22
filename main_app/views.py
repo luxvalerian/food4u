@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
 from django.views.generic import CreateView
-from .scraper import produce_dict, logo_img, logo_svg
+from .scraper import produce_dict, logo_img, logo_svg, walmart_fruit
 from . forms import CustomerSignUpForm, VolunteerSignUpForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer
 from .decorators import allowed_users
@@ -28,7 +28,7 @@ def signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('profile')
         else:
             error_message = 'Invalid sign up - try again'
     form = CustomerSignUpForm()
@@ -68,11 +68,16 @@ def about(request):
 
 
 @login_required
+def profile(request):
+    return render(request, 'account/profile.html')
+
+
+@login_required
 @allowed_users(allowed_roles=['customer'])
 def stores(request):
     items = Item.objects.all()
     context = {'product': produce_dict, 'logo': logo_img,
-               'logo_svg': logo_svg, 'items': items}
+               'logo_svg': logo_svg, 'items': items, 'walmart': walmart_fruit}
     return render(request, 'stores/index.html', context)
 
 
@@ -92,14 +97,6 @@ def logout(request):
 
 @login_required
 @allowed_users(allowed_roles=['admin'])
-def remove_vol(request):
-    return redirect('customer/index.html')
-
-
-def volunteer_profile(request):
-    return render(request, 'volunteer/profile.html')
-
-
 def remove_vol(request):
     return redirect('customer/index.html')
 
@@ -127,4 +124,4 @@ def cart(request, profile_id):
     user_group = str(request.user.groups.all()[0])
 
     context = {'user_group': user_group, 'customer': customer, 'cart': cart}
-    return render(request, 'cart/cart.html', context)
+    return render(request, 'account/cart.html', context)

@@ -11,8 +11,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   <script defer src="{% static 'js/script.js'%}"></script>
+
 </head>
 
 <body>
@@ -27,12 +29,16 @@
           </li>
         </ul>
         <ul class="right">
-          <li><a href="/about">About</a></li>
           {% if user.is_authenticated %}
-          <li><a href="/stores">Stores</a></li>
-          <li><a href="{% url 'checkout' %}">Checkout</a></li>
-          <li><a href="{% url 'profile' %}">Profile</a></li>
-          <li><a href="{% url 'logout' %}">Log Out</a></li>
+          <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/stores">Stores</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+          </ul>
+          <!-- <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li> -->
+          <!-- <li><a href="{% url 'checkout' %}">Checkout</a></li> -->
+          <li><a class='dropdown-trigger' href='#' data-target='dropdown1'>Welcome, &nbsp;{{user}}</a></li>
           <li><i class="large material-icons" id="openModal">shopping_cart</i></li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>
@@ -42,12 +48,12 @@
       </div>
     </nav>
   </header>
-<main class="main-container">
+  <main class="main-container">
 
-<div id="cartModal" class="cart-modal">
-  <div class="cart-modal-content">
-    <span class="close">&times;</span>
-    <table>
+    <div id="cartModal" class="cart-modal">
+      <div class="cart-modal-content">
+        <span class="close">&times;</span>
+        <table>
           <thead>
             <tr>
               <th>Product</th>
@@ -68,21 +74,21 @@
               </td>
             </tr>
           </tbody>
-    </table> 
-      <div class="cart-modal-footer">
-        <div>
-          <h5>Total: $1.00</h5>
-        </div>
-        <div>
-          <button class="modal-button" type="button">Checkout</button>
+        </table>
+        <div class="cart-modal-footer">
+          <div>
+            <h5>Total: $1.00</h5>
+          </div>
+          <div>
+            <button class="modal-button" type="button">Checkout</button>
+          </div>
         </div>
       </div>
-  </div>
 
-</div>
+    </div>
 
     {% block content %} {% endblock %}
-</main>
+  </main>
   <footer class="page-footer footer">
     <div class="center">
       All Rights Reserved, &copy; {% now "Y" %} Foodle &nbsp;
