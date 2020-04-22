@@ -5,21 +5,6 @@ from django_select2 import forms as s2forms
 from multiselectfield import MultiSelectField
 from . models import Customer, Volunteer, TIMESLOTS
 
-# TIMESLOTS = (
-#   ("A",	"9AM–10AM"),
-#   ("B",	"10AM–11AM"),
-#   ("C",	"11AM–12PM"),
-#   ("D",	"12PM–1PM"),
-#   ("E",	"1PM–2PM"),
-#   ("F",	"2PM–3PM"),
-#   ("G",	"3PM–4PM"),
-#   ("H",	"4PM–5PM"),
-#   ("I",	"5PM–6PM"),
-#   ("J",	"6PM–7PM"),
-#   ("K",	"7PM–8PM"),
-#   ("L",	"8PM–9PM"),
-#   ("M",	"9PM–10PM")
-# )
 
 class CustomerSignUpForm(UserCreationForm):
   first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')

@@ -10,9 +10,8 @@ from django.contrib.auth.models import Group
 from datetime import date
 from .scraper import produce_dict, logo_img, walmart_fruit
 from . forms import CustomerSignUpForm, VolunteerSignUpForm
-from .models import Item, Cart, Timeslot, Customer, Volunteer
+from .models import Item, Cart, Timeslot, Customer, Volunteer, User
 from .decorators import allowed_users
-
 
 def signup(request):
     error_message = ''
@@ -80,7 +79,15 @@ def about(request):
 
 @login_required
 def profile(request):
-    return render(request, 'account/profile.html')
+    customer = Customer.objects.filter(id=(request.user.id-1)).first()
+    volunteer = Volunteer.objects.filter(id=(request.user.id-1)).first()
+    vol_timeslot = Timeslot.objects.filter(volunteer=volunteer)
+    cus_timeslot = Timeslot.objects.filter(customer=customer)
+    print(request.user.id-1)
+    print(customer)
+    print(volunteer)
+    context = {'customer': customer, 'volunteer': volunteer, 'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot}
+    return render(request, 'account/profile.html', context)
 
 
 @login_required
@@ -117,7 +124,7 @@ def checkout(request):
     customer = Customer.objects.filter(user=request.user)
     active_customer = customer.first()
     customer_delivery_time = active_customer.delivery_time
-    customer_delivery_date = date.today()
+    customer_delivery_date = date(2020, 4, 29)#date.today()
     timeslot = None
     customer_time = None
     customer_date = None
@@ -158,14 +165,8 @@ def checkout(request):
     return render(request, 'checkout.html', context)
 
 
-def customer_index(request, customer_id):
-    customer_id = request.user.id
-    context = {'customer_id': customer_id}
-    return render(request, 'customer/index.html', context)
-
-
 @login_required
-def cart(request, profile_id):
+def cart(request, user_id):
     customer = Customer.objects.filter(user=request.user)
     # timeslot = Timeslot.objects.filter(customer=customer)
     # timeslot_count = timeslot.count()
@@ -173,10 +174,49 @@ def cart(request, profile_id):
     # items_not_in_cart = Item.objects.exclude(id__in = cart.items.all().values_list('id'))
     print(cart.all())
     user_group = str(request.user.groups.all()[0])
-
-    context = {'user_group': user_group, 'customer': customer, 'cart': cart}
+    product_total = 0
+    for obj in cart:
+        for product in obj.items.all():
+            item = Item.objects.filter(id=product.id)
+            piece = item.first()
+            print(piece)
+            product_total += piece.unit_price
+            print(product_total)
+            
+            # product_price = (product.price * 2)
+    context = {'user_group': user_group, 'customer': customer, 'cart': cart, 'product_total': round(product_total, 2)}
     return render(request, 'account/cart.html', context)
 
-class CustomerDeliveryTimeUpdate(LoginRequiredMixin, UpdateView):
+class CustomerUpdate(LoginRequiredMixin, UpdateView):
   model = Customer
-  fields = ['delivery_time']
+  form_class = CustomerSignUpForm
+#   fields =  ['first_name', 'delivery_time']
+  
+  
+  def get_object(self, *args, **kwargs):
+        user = self.request.user
+
+        # We can also get user object using self.request.user  but that doesnt work
+        # for other models.
+
+        return user
+
+  def get_success_url(self, *args, **kwargs):
+        return reverse("profile")
+
+class VolunteerUpdate(LoginRequiredMixin, UpdateView):
+  model = Volunteer
+  form_class = VolunteerSignUpForm
+#   fields =  ['availability_date', 'availability']
+  
+  
+  def get_object(self, *args, **kwargs):
+        user = self.request.user
+        
+        # We can also get user object using self.request.user  but that doesnt work
+        # for other models.
+
+        return user
+
+  def get_success_url(self, *args, **kwargs):
+        return reverse("profile")
