@@ -15,9 +15,11 @@
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   {{ form.media.css }}
   <script defer src="{% static 'js/script.js'%}"></script>
+
 </head>
 
 <body>
@@ -32,14 +34,16 @@
           </li>
         </ul>
         <ul class="right">
-          <!-- <li><a href="/about">About</a></li> -->
           {% if user.is_authenticated %}
-          <li><a href="/stores">Stores</a></li>
-          <li>Welcome {{user.first_name}}</li>
-          <!-- <li><a href="{% url 'checkout' %}">Checkout</a></li> -->
+          <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/stores">Stores</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+          </ul>
           <!-- <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li> -->
-          <li><a href="{% url 'checkout' %}">Checkout</a></li>
-          <li><a href="{% url 'logout' %}">Log Out</a></li>
+          <!-- <li><a href="{% url 'checkout' %}">Checkout</a></li> -->
+          <li><a class='dropdown-trigger' href='#' data-target='dropdown1'>Welcome, &nbsp;{{user}}</a></li>
           <li><i class="large material-icons" id="openModal">shopping_cart</i></li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>

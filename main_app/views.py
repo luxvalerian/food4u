@@ -31,7 +31,7 @@ def signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('profile')
         else:
             error_message = 'Invalid sign up - try again'
     form = CustomerSignUpForm()
@@ -79,6 +79,11 @@ def about(request):
 
 
 @login_required
+def profile(request):
+    return render(request, 'account/profile.html')
+
+
+@login_required
 @allowed_users(allowed_roles=['customer'])
 def stores(request):
     items = Item.objects.all()
@@ -102,10 +107,6 @@ def logout(request):
 
 @login_required
 @allowed_users(allowed_roles=['admin'])
-def remove_vol(request):
-    return redirect('customer/index.html')
-
-
 def remove_vol(request):
     return redirect('customer/index.html')
 
@@ -174,7 +175,7 @@ def cart(request, profile_id):
     user_group = str(request.user.groups.all()[0])
 
     context = {'user_group': user_group, 'customer': customer, 'cart': cart}
-    return render(request, 'cart/cart.html', context)
+      return render(request, 'account/cart.html', context)
 
 class CustomerDeliveryTimeUpdate(LoginRequiredMixin, UpdateView):
   model = Customer
