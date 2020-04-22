@@ -2,15 +2,16 @@
 
 {% block content %}
 
-{% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
-<h2>Volunteer Sign Up</h2>
-<form method="POST" action="{% url 'volunteer_signup' %}" class="browser-default">
+{% if user %}
+  <h4>Edit <span class="teal-text">{{ user.first_name }} {{ user.last_name }}</span></h4>
+  {% endif %}
+<form style="margin-top: 2rem;" action="" method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" class="btn blue" value="signup">
-  <input type="hidden" name="next" value="{{ next }}">
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="Submit!" class="btn">
 </form>
-
 <script>
   let dateEl = document.getElementById("id_availability_date");
   M.Datepicker.init(dateEl, {

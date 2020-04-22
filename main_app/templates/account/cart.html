@@ -1,20 +1,46 @@
 {% extends 'base.html' %}
 {% block content %}
-<a href="{% url 'checkout' %}">Checkout</a>
 {% if user_group == "customer" %}
-<h1>{{user}}'s Cart</h1>
-{{timeslot}}
 {% for item in cart %}
 
-{% for product in item.items.all %}
-  
-<div>
-  <img src="{{product.image}}" alt="{{product.name}}"/>
-  <p>{{product.name}}</p>
-  <p>${{product.unit_price}}/{{product.get_unit_measurement_display}}</p>
-</div>
+  <div id="cartModal" class="cart-modal">
+    <div class="cart-modal-content">
+      <span class="close">&times;</span>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in item.items.all %}
+          <tr>
+            <td>{{product.name}}</td>
+            <td>${{product.unit_price}}/{{product.get_unit_measurement_display}}</td>
+            <td>1</td>
+            <td>${{product.unit_price }}</td>
+            <td>
+              <span class="delete-item">&times;</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="cart-modal-footer">
+        <div>
+          <h5>Total: ${{ product_total }}</h5>
+        </div>
+        <div>
+          <button class="modal-button" type="button">Checkout</button>
+        </div>
+      </div>
+    </div>
 
-{% endfor %}
+  </div>
 {% endfor %}
 
 

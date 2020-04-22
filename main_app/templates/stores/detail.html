@@ -1,5 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Detail Page</h1>
+{% for thing in walmart %}
+<!-- {{thing}} -->
+{% for part in thing.products %}
+<img src="{{part.basic.image.thumbnail}}" alt="{{part.basic.name}}" />
+{{part.basic.name}}
+${{part.store.price.list}}
+{% endfor %}
+{% endfor %}
+<img class="store-logo" src="{{logo.src}}" alt="store-name" />
+<div class="products-container">
+    {% for item in items %}
+    <div class="item-card">
+
+        <div class="item-card-inner">
+
+            <div class="item-details">
+                <h5>{{item.name}}</h5>
+                <img src="{{item.image}}" alt={{item}} />
+                <p>${{item.unit_price}}/{{item.get_unit_measurement_display}}</p>
+                <p class="flip-forward">Change Quantity</p>
+            </div>
+
+            <div class="item-quantity">
+                <p>5 items</p>
+                <p class="flip-backward">Details</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+</div>
 {% endblock %}

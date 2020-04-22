@@ -34,20 +34,27 @@ TIMESLOTS = (
 
 
 class Customer(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
-  delivery_time = MultiSelectField(max_length=100, null= True , choices=TIMESLOTS, max_choices=3)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    delivery_time = MultiSelectField(max_length=100, null= True , choices=TIMESLOTS, max_choices=3)
 
+    def get_absolute_url(self):
+        return reverse('checkout', kwargs={'customer_id': self.id})
 
-  def get_absolute_url(self):
-    return reverse('checkout', kwargs={ 'customer_id': self.id })
+    def get_absolute_url(self):
+        return reverse('profile')
+    
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 class Volunteer(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
-  availability_date = models.DateField(verbose_name='available date')
-  availability = MultiSelectField(max_length=100, choices=TIMESLOTS)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    availability_date = models.DateField(verbose_name='available date', null=True)
+    availability = MultiSelectField(max_length=100, choices=TIMESLOTS)
     
-  customer = models.ManyToManyField(Customer, through="Timeslot")
+    customer = models.ManyToManyField(Customer, through="Timeslot")
 
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 class Timeslot(models.Model):
     date = models.DateField()
@@ -88,3 +95,9 @@ class Cart(models.Model):
             return f"{self.user.first_name}'s cart has {self.items.count()} item"
         else:
             return f"{self.user.first_name}'s cart has {self.items.count()} items"
+
+
+class Store(models.Model):
+    name = models.CharField(max_length=50)
+    location = models.CharField(max_length=100)
+    image = models.CharField(verbose_name="Image URL", max_length=1000)
