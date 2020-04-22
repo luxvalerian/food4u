@@ -229,4 +229,18 @@ body .footer {
   text-decoration: none;
   cursor: pointer;
 }
+
+.store-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  border: 10px solid black;
+  width: 75px;
+  height: 50px;
+  margin: 10px;
+  padding: 2px;
+  background-color: #687864;
+}
 /*# sourceMappingURL=styles.css.map */
