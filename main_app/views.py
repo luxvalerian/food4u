@@ -56,7 +56,7 @@ def volunteer_signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('profile')
         else:
             error_message = 'Invalid sign up - try again'
     form = VolunteerSignUpForm()
@@ -64,13 +64,30 @@ def volunteer_signup(request):
     return render(request, 'registration/signup_volunteer.html', context)
 
 
+# def volunteer_login(request):
+#     error_message = ''
+#     if request.method == 'GET':
+#         form = VolunteerLogInForm(request.GET)
+#         # if form.is_valid():
+#         #     group = Group.objects.get(name='volunteer')
+#         #     # user = form.save()
+#         #     volunteer_profile = Volunteer(user=user)
+#         #     # volunteer_profile.save()
+#         #     username = form.cleaned_data.get('username')
+#         #     raw_password = form.cleaned_data.get('password1')
+#         #     # user.groups.add(group)
+#         user = authenticate(username=username, password=raw_password)
+#         login(request, user)
+#         return redirect('profile')
+#     else:
+#         error_message = 'Invalid sign up - try again'
+#     form = VolunteerLogInForm()
+#     context = {'form': form, 'error_message': error_message}
+#     return render(request, 'registration/login_volunteer.html', context)
+
+
 def home(request):
-    volunteer = Volunteer.objects.all()
-    context = {'volunteer': volunteer}
-    if volunteer.filter(id=request.user.id):
-        return render(request, 'home.html', context)
-    else:
-        return render(request, 'about.html', context)
+    return render(request, 'home.html')
 
 
 def about(request):
@@ -94,7 +111,8 @@ def profile(request):
 @allowed_users(allowed_roles=['customer'])
 def stores(request):
     items = Item.objects.all()
-    context = {'product': produce_dict, 'logo': logo_img, 'items': items, 'walmart': walmart_fruit}
+    context = {'product': produce_dict, 'logo': logo_img,
+               'items': items, 'walmart': walmart_fruit}
     return render(request, 'stores/index.html', context)
 
 
@@ -116,6 +134,7 @@ def logout(request):
 @allowed_users(allowed_roles=['admin'])
 def remove_vol(request):
     return redirect('customer/index.html')
+
 
 @login_required
 @allowed_users(allowed_roles=['customer'])
@@ -141,14 +160,16 @@ def checkout(request):
         for help_time in helper.availability:
             for time in customer_delivery_time:
                 if time == help_time and customer_delivery_date == helper.availability_date:
-                    available = time 
+                    available = time
                     helpers = helper
                     available_date = helper.availability_date
     error_message = ''
 
     if available in customer_delivery_time and customer_delivery_date == available_date:
-        new_timeslot = Timeslot(date=customer_delivery_date,timeslot=available,customer=active_customer,volunteer=helpers)
-        check_timeslots = Timeslot.objects.filter(date=customer_delivery_date,timeslot=available,customer=active_customer,volunteer=helpers)
+        new_timeslot = Timeslot(date=customer_delivery_date,
+                                timeslot=available, customer=active_customer, volunteer=helpers)
+        check_timeslots = Timeslot.objects.filter(
+            date=customer_delivery_date, timeslot=available, customer=active_customer, volunteer=helpers)
         if check_timeslots.exists():
             dupe_timeslot = check_timeslots.first()
             if new_timeslot.timeslot == dupe_timeslot.timeslot and new_timeslot.volunteer == dupe_timeslot.volunteer and new_timeslot.customer == dupe_timeslot.customer and new_timeslot.date == dupe_timeslot.date:
@@ -156,12 +177,13 @@ def checkout(request):
             else:
                 new_timeslot.save()
         else:
-                new_timeslot.save()
+            new_timeslot.save()
             # error_message = 'Return an Else'
     else:
         error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
         print(error_message)
-    context = {'customer': customer, 'timeslot': timeslot, 'error': error_message, 'vol_time': volunteer}
+    context = {'customer': customer, 'timeslot': timeslot,
+               'error': error_message, 'vol_time': volunteer}
     return render(request, 'checkout.html', context)
 
 

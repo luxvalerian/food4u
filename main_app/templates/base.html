@@ -37,7 +37,7 @@
           <ul id='dropdown1' class='dropdown-content' style="margin-top: 2.5rem;">
             <li><a href="{% url 'profile' %}">Profile</a></li>
             <li><a href="/about">About</a></li>
-            <li><a href="/stores">Stores</a></li>
+            <li><a href="{% url 'index' %}">Stores</a></li>
             <li><a href="{% url 'logout' %}">Log Out</a></li>
           </ul>
           <!-- <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li> -->

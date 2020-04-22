@@ -69,11 +69,19 @@ UNITS = (
 # item.save()
 
 produce_dict = []
-prices = [2.55, 0.41, 3.46, 0.99, 3.99, 2.50, 2.00, 5.00, 3.49, 6.49, 4.99, 9.99, 34.99, 9.99, 13.99, 27.96, 11.98, 8.50, 15.99, 4.99, 8.99, 7.49, 9.99, 2.99, 7.98, 4.29]
-price_units = ["Each", "Each", "LB", "Each", "Each", "Each", "LB", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each"]
+prices = [2.55, 0.41, 3.46, 0.99, 3.99, 2.50, 2.00, 5.00, 3.49, 6.49, 4.99, 9.99, 34.99,
+          9.99, 13.99, 27.96, 11.98, 8.50, 15.99, 4.99, 8.99, 7.49, 9.99, 2.99, 7.98, 4.29]
+price_units = ["Each", "Each", "LB", "Each", "Each", "Each", "LB", "Each", "Each", "Each", "Each", "Each",
+               "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each"]
 
-urls_list = ['https://www.safeway.com/shop/product-details.184290007.html', 'https://www.safeway.com/shop/product-details.184060007.html', 'https://www.safeway.com/shop/product-details.184540027.html', 'https://www.safeway.com/shop/product-details.184450054.html', 'https://www.safeway.com/shop/product-details.184070124.html', 'https://www.safeway.com/shop/product-details.184040158.html', 'https://www.safeway.com/shop/product-details.960021862.html', 'https://www.safeway.com/shop/product-details.960015089.html', 'https://www.safeway.com/shop/product-details.196100818.html', 'https://www.safeway.com/shop/product-details.960038380.html', 'https://www.safeway.com/shop/product-details.117100189.html', 'https://www.safeway.com/shop/product-details.960078948.html', 'https://www.safeway.com/shop/product-details.960460707.html','https://www.safeway.com/shop/product-details.960113677.html', 'https://www.safeway.com/shop/product-details.186190041.html', 'https://www.safeway.com/shop/product-details.960109089.html', 'https://www.safeway.com/shop/product-details.188510026.html', 'https://www.safeway.com/shop/product-details.960113679.html', 'https://www.safeway.com/shop/product-details.960275246.html', 'https://www.safeway.com/shop/product-details.960028971.html', 'https://www.safeway.com/shop/product-details.188650021.html', 'https://www.safeway.com/shop/product-details.960018494.html', 'https://www.safeway.com/shop/product-details.188100176.html?zipcode=94611', 'https://www.safeway.com/shop/product-details.960541035.html', 'https://www.safeway.com/shop/product-details.184100012.html']
+urls_list = ['https://www.safeway.com/shop/product-details.184290007.html', 'https://www.safeway.com/shop/product-details.184060007.html', 'https://www.safeway.com/shop/product-details.184540027.html', 'https://www.safeway.com/shop/product-details.184450054.html', 'https://www.safeway.com/shop/product-details.184070124.html', 'https://www.safeway.com/shop/product-details.184040158.html', 'https://www.safeway.com/shop/product-details.960021862.html', 'https://www.safeway.com/shop/product-details.960015089.html', 'https://www.safeway.com/shop/product-details.196100818.html', 'https://www.safeway.com/shop/product-details.960038380.html', 'https://www.safeway.com/shop/product-details.117100189.html', 'https://www.safeway.com/shop/product-details.960078948.html', 'https://www.safeway.com/shop/product-details.960460707.html',
+             'https://www.safeway.com/shop/product-details.960113677.html', 'https://www.safeway.com/shop/product-details.186190041.html', 'https://www.safeway.com/shop/product-details.960109089.html', 'https://www.safeway.com/shop/product-details.188510026.html', 'https://www.safeway.com/shop/product-details.960113679.html', 'https://www.safeway.com/shop/product-details.960275246.html', 'https://www.safeway.com/shop/product-details.960028971.html', 'https://www.safeway.com/shop/product-details.188650021.html', 'https://www.safeway.com/shop/product-details.960018494.html', 'https://www.safeway.com/shop/product-details.188100176.html?zipcode=94611', 'https://www.safeway.com/shop/product-details.960541035.html', 'https://www.safeway.com/shop/product-details.184100012.html']
 
+
+# for url in urls_list:
+#     search_item(url)
+#     add_items(produce_dict[urls_list.index(url)]['image'], produce_dict[urls_list.index(
+#         url)]['name'], produce_dict[urls_list.index(url)]['price'], produce_dict[urls_list.index(url)]['unit'])
 
 def search_item(url):
     page = requests.get(url).text
@@ -95,6 +103,7 @@ for url in urls_list:
 
 store_logos = []
 
+
 def find_store_logo(url, selector, class_name):
     logo_url = url
     logo_page = requests.get(logo_url).text
@@ -103,6 +112,6 @@ def find_store_logo(url, selector, class_name):
         store_logo = logo_soup.find(selector, {"class": class_name})['src']
         store_logos.append({'src': url + store_logo})
 
+
 find_store_logo("https://www.safeway.com", "img", "logo-safeway")
 logo_img = store_logos[0]
-
