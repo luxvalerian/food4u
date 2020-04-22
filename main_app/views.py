@@ -108,22 +108,16 @@ def profile(request):
 
 
 @login_required
-@allowed_users(allowed_roles=['customer'])
-def stores(request):
-    items = Item.objects.all()
-    context = {'product': produce_dict, 'logo': logo_img,
-               'items': items, 'walmart': walmart_fruit}
-    return render(request, 'stores/index.html', context)
-
-
-@login_required
 def stores_index(request):
     return render(request, 'stores/index.html')
 
 
 @login_required
 def stores_detail(request):
-    return render(request, 'stores/detail.html')
+    items = Item.objects.all()
+    context = {'product': produce_dict, 'logo': logo_img,
+               'items': items, 'walmart': walmart_fruit}
+    return render(request, 'stores/detail.html', context)
 
 
 def logout(request):
