@@ -90,3 +90,9 @@ class Cart(models.Model):
             return f"{self.user.first_name}'s cart has {self.items.count()} item"
         else:
             return f"{self.user.first_name}'s cart has {self.items.count()} items"
+
+
+class Store(models.Model):
+    name = models.CharField(max_length=50)
+    location = models.CharField(max_length=100)
+    image = models.CharField(verbose_name="Image URL", max_length=1000)
