@@ -9,9 +9,14 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Foodle | Volunteer powered delivery</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  {{ form.media.css }}
   <script defer src="{% static 'js/script.js'%}"></script>
 </head>
 
@@ -30,9 +35,9 @@
           <!-- <li><a href="/about">About</a></li> -->
           {% if user.is_authenticated %}
           <li><a href="/stores">Stores</a></li>
-          <li>Welcome {{user}}</li>
+          <li>Welcome {{user.first_name}}</li>
           <!-- <li><a href="{% url 'checkout' %}">Checkout</a></li> -->
-          <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li>
+          <!-- <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li> -->
           <li><a href="{% url 'checkout' %}">Checkout</a></li>
           <li><a href="{% url 'logout' %}">Log Out</a></li>
           <li><i class="large material-icons" id="openModal">shopping_cart</i></li>
