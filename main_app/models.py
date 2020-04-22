@@ -35,21 +35,26 @@ TIMESLOTS = (
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    delivery_time = MultiSelectField(
-        max_length=100, null=True, choices=TIMESLOTS, max_choices=3)
+    delivery_time = MultiSelectField(max_length=100, null= True , choices=TIMESLOTS, max_choices=3)
 
     def get_absolute_url(self):
         return reverse('checkout', kwargs={'customer_id': self.id})
 
+    def get_absolute_url(self):
+        return reverse('profile')
+    
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 class Volunteer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    availability_date = models.DateField(
-        verbose_name='available date', null=True)
+    availability_date = models.DateField(verbose_name='available date', null=True)
     availability = MultiSelectField(max_length=100, choices=TIMESLOTS)
-
+    
     customer = models.ManyToManyField(Customer, through="Timeslot")
 
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 class Timeslot(models.Model):
     date = models.DateField()

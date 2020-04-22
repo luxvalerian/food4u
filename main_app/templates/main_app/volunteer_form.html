@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user %}
+  <h4>Edit <span class="teal-text">{{ user.first_name }} {{ user.last_name }}</span></h4>
+  {% endif %}
+<form style="margin-top: 2rem;" action="" method="post">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="Submit!" class="btn">
+</form>
+<script>
+  let dateEl = document.getElementById("id_availability_date");
+  M.Datepicker.init(dateEl, {
+    format: "yyyy-mm-dd",
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  let selectEl = document.getElementById('id_availability');
+  M.FormSelect.init(selectEl);
+
+  document.addEventListener("DOMContentLoaded", function () {
+    let elems = document.querySelectorAll("#collapsible");
+    let instances = M.Collapsible.init(elems, {
+      popout: true
+    });
+    console.log(elems);
+  });
+</script>
+{{ form.media.js }}
+{% endblock %}

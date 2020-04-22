@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user %}
+  <h4>Edit <span class="teal-text">{{ user.first_name }} {{ user.last_name }}</span></h4>
+  {% endif %}
+<form style="margin-top: 2rem;" action="" method="post" class="container">
+  {% csrf_token %}
+  <table>
+    <div>
+      {{ form.as_p }}
+    </div>
+  </table>
+  <input type="submit" value="Submit!" class="btn">
+</form>
+<script>
+
+  // let selectEl = document.getElementById('id_delivery_time_1');
+  // M.FormSelect.init(selectEl);
+
+  // document.addEventListener("DOMContentLoaded", function () {
+  //   let elems = document.querySelectorAll("#collapsible");
+  //   let instances = M.Collapsible.init(elems, {
+  //     popout: true
+  //   });
+  //   console.log(elems);
+  // });
+</script>
+{{ form.media.js }}
+{% endblock %}
