@@ -14,13 +14,13 @@ from .models import Item, Cart, Timeslot, Customer, Volunteer
 from .decorators import allowed_users
 
 
-def login(request):
-    volunteer = Volunteer.objects.all()
-    context = {'volunteer': volunteer}
-    if volunteer.filter(id=request.user.id):
-        return render(request, 'profile.html', context)
-    else:
-        return render(request, 'stores', context)
+# def login(request):
+#     volunteer = Volunteer.objects.all()
+#     context = {'volunteer': volunteer}
+#     if volunteer.filter(id=request.user.id):
+#         return render(request, 'profile.html', context)
+#     else:
+#         return render(request, 'stores', context)
 
 
 def signup(request):
@@ -40,7 +40,7 @@ def signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('stores')
+            return redirect('profile')
         else:
             error_message = 'Invalid sign up - try again'
     form = CustomerSignUpForm()
