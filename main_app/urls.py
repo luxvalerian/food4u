@@ -13,7 +13,8 @@ urlpatterns = [
     path('volunteer/', views.volunteer_profile, name="profile"),
     path('remove/', views.remove_vol, name='remove'),
     path('accounts/signup/', views.signup, name='signup'),
-    path('accounts/signup/volunteer',
-         views.volunteer_signup, name='volunteer_signup'),
-    path('cart/<int:profile_id>', views.cart, name='cart')
+    path('accounts/signup/volunteer', views.volunteer_signup, name='volunteer_signup'),
+    path('cart/<int:profile_id>', views.cart, name='cart'),
+    path('customer/<int:pk>/update/', views.CustomerDeliveryTimeUpdate.as_view(), name="customer_time_update"),
+    # path('checkout/<int:profile_id>', views.cart, name='add_timeslot')
 ]

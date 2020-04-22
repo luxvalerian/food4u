@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<a href="{% url 'checkout' %}">Checkout</a>
 {% if user_group == "customer" %}
 <h1>{{user}}'s Cart</h1>
 {{timeslot}}
@@ -12,7 +12,6 @@
   <img src="{{product.image}}" alt="{{product.name}}"/>
   <p>{{product.name}}</p>
   <p>${{product.unit_price}}/{{product.get_unit_measurement_display}}</p>
-  
 </div>
 
 {% endfor %}
@@ -20,19 +19,19 @@
 
 
 <!-- {% for times in timeslot %}
-{% if  timeslot_count == 0 %}
-<p>No timeslots selected</p>
-{% else %}
-{{times}}
-{% endif %}
-{% endfor %} -->
-
-
-{% else %}
-<h1>{{user}} is a {{user_group}}</h1>
-
-
-
-
-{% endif %}
-{% endblock %}
+  {% if  timeslot_count == 0 %}
+  <p>No timeslots selected</p>
+  {% else %}
+  {{times}}
+  {% endif %}
+  {% endfor %} -->
+  
+  
+  {% else %}
+  <h1>{{user}} is a {{user_group}}</h1>
+  
+  
+  
+  
+  {% endif %}
+  {% endblock %}
