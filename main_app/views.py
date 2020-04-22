@@ -175,7 +175,7 @@ def cart(request, profile_id):
     user_group = str(request.user.groups.all()[0])
 
     context = {'user_group': user_group, 'customer': customer, 'cart': cart}
-      return render(request, 'account/cart.html', context)
+    return render(request, 'account/cart.html', context)
 
 class CustomerDeliveryTimeUpdate(LoginRequiredMixin, UpdateView):
   model = Customer
