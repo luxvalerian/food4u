@@ -68,10 +68,8 @@ def volunteer_signup(request):
 def home(request):
     volunteer = Volunteer.objects.all()
     context = {'volunteer': volunteer}
-    if volunteer.filter(id=request.user.id):
-        return render(request, 'home.html', context)
-    else:
-        return render(request, 'about.html', context)
+    return render(request, 'home.html', context)
+
 
 
 def about(request):
