@@ -11,6 +11,15 @@ from .models import Item, Cart, Timeslot, Customer, Volunteer
 from .decorators import allowed_users
 
 
+def login(request):
+    volunteer = Volunteer.objects.all()
+    context = {'volunteer': volunteer}
+    if volunteer.filter(id=request.user.id):
+        return render(request, 'profile.html', context)
+    else:
+        return render(request, 'stores', context)
+
+
 def signup(request):
     error_message = ''
     if request.method == 'POST':
@@ -28,7 +37,7 @@ def signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('profile')
+            return redirect('stores')
         else:
             error_message = 'Invalid sign up - try again'
     form = CustomerSignUpForm()
@@ -51,12 +60,34 @@ def volunteer_signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('profile')
         else:
             error_message = 'Invalid sign up - try again'
     form = VolunteerSignUpForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup_volunteer.html', context)
+
+
+# def volunteer_login(request):
+#     error_message = ''
+#     if request.method == 'GET':
+#         form = VolunteerLogInForm(request.GET)
+#         # if form.is_valid():
+#         #     group = Group.objects.get(name='volunteer')
+#         #     # user = form.save()
+#         #     volunteer_profile = Volunteer(user=user)
+#         #     # volunteer_profile.save()
+#         #     username = form.cleaned_data.get('username')
+#         #     raw_password = form.cleaned_data.get('password1')
+#         #     # user.groups.add(group)
+#         user = authenticate(username=username, password=raw_password)
+#         login(request, user)
+#         return redirect('profile')
+#     else:
+#         error_message = 'Invalid sign up - try again'
+#     form = VolunteerLogInForm()
+#     context = {'form': form, 'error_message': error_message}
+#     return render(request, 'registration/login_volunteer.html', context)
 
 
 def home(request):
