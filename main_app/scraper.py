@@ -39,6 +39,10 @@ UNITS = (
   ('Dozen', 'D')
 )
 
+# def add_items():
+#   pass
+
+
 def add_items(url, product_name, product_price, product_unit):
   img_url = url
   piece = ''
@@ -83,32 +87,9 @@ def search_item(url):
 for url in urls_list:
   search_item(url)
   add_items(produce_dict[urls_list.index(url)]['image'], produce_dict[urls_list.index(url)]['name'], produce_dict[urls_list.index(url)]['price'], produce_dict[urls_list.index(url)]['unit'])
-  # print(produce_dict[urls_list.index(url)]['test'])
   
 store_logos = []
 
-# url_wf = 'https://www.amazon.com/s?i=wholefoods&bbn=18473610011&rh=n%3A21121954011&pf_rd_p=0e7f104a-11fb-4088-9de1-e95d08d908c4&pf_rd_r=MXBGNT2Q1SNC7GEJAE47&ref=wf_dsk_mrk_mw_sml_WF000304'
-
-# def whole_food(url):
-#   page = requests.get(url).text
-#   soup = bs(page, 'html.parser')
-#   product_name = soup.select("div", attr={"class": "s-image-square-aspect"})
-#   product_img = soup.find("div", {"class": "aok-relative"})
-#   print(product_name) #+ " " + product_img)
-
-# whole_food(url_wf)
-
-# url_w = 'https://shop.wegmans.com/product/49557/wegmans-clementines'
-
-# def wegmans(url_w):
-#     page = requests.get(url).text
-#     soup = bs(page, 'html.parser')
-#     product_name = soup.find("div", {"class": "product-info"})
-#     product_img = soup.find("div", {"class": "product-image"})
-#     # product_price = soup.find("span", {"class": "css-1o7wxo5"}).img['src']
-#     print(product_name) #+ " " + product_img)
-    
-# wegmans(url_w)
 
 def find_store_logo(url, selector, class_name):
     logo_url = url
@@ -117,14 +98,7 @@ def find_store_logo(url, selector, class_name):
     if selector == "img":
         store_logo = logo_soup.find(selector, {"class": class_name})['src']
         store_logos.append({'src': url + store_logo})
-    else:
-        store_logo = logo_soup.find(selector, {"class": class_name}).svg
-        store_logos.append({'svg': store_logo})
-
-
-
+  
 find_store_logo("https://www.safeway.com", "img", "logo-safeway")
-find_store_logo("https://www.target.com", "a", "Link-sc-1khjl8b-0")
 
 logo_img = store_logos[0]
-logo_svg = store_logos[1]
