@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
+from multiselectfield import MultiSelectField
 
 UNITS = (
   ('E', 'Each'),
@@ -33,13 +34,19 @@ TIMESLOTS = (
 
 class Customer(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
+  delivery_time = MultiSelectField(max_length=100, null= True , choices=TIMESLOTS, max_choices=3)
 
   def __str__(self):
     return f"{self.user.first_name} {self.user.last_name}"
 
+  def get_absolute_url(self):
+    return reverse('checkout', kwargs={ 'customer_id': self.id })
+
 class Volunteer(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+  availability_date = models.DateField(verbose_name='available date')
+  availability = MultiSelectField(max_length=100, choices=TIMESLOTS)
+    
   customer = models.ManyToManyField(Customer, through="Timeslot")
 
   def __str__(self):
