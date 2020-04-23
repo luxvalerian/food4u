@@ -6,12 +6,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.models import Group
+from django.urls import reverse
 
 from datetime import date
 from .scraper import produce_dict, logo_img, walmart_fruit
 from . forms import CustomerSignUpForm, VolunteerSignUpForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User
 from .decorators import allowed_users
+
 
 def signup(request):
     error_message = ''
@@ -103,17 +105,18 @@ def profile(request):
     print(request.user.id-1)
     print(customer)
     print(volunteer)
-    context = {'customer': customer, 'volunteer': volunteer, 'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot}
+    context = {'customer': customer, 'volunteer': volunteer,
+               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot}
     return render(request, 'account/profile.html', context)
 
 
 @login_required
 @allowed_users(allowed_roles=['customer'])
-def stores(request):
+def stores_detail(request):
     items = Item.objects.all()
     context = {'product': produce_dict, 'logo': logo_img,
                'items': items, 'walmart': walmart_fruit}
-    return render(request, 'stores/index.html', context)
+    return render(request, 'stores/detail.html', context)
 
 
 @login_required
@@ -121,13 +124,8 @@ def stores_index(request):
     return render(request, 'stores/index.html')
 
 
-@login_required
-def stores_detail(request):
-    return render(request, 'stores/detail.html')
-
-
 def logout(request):
-    return render(request, 'stores/detail.html')
+    return render(request, 'home.html')
 
 
 @login_required
@@ -143,7 +141,7 @@ def checkout(request):
     customer = Customer.objects.filter(user=request.user)
     active_customer = customer.first()
     customer_delivery_time = active_customer.delivery_time
-    customer_delivery_date = date(2020, 4, 29)#date.today()
+    customer_delivery_date = date(2020, 4, 29)  # date.today()
     timeslot = None
     customer_time = None
     customer_date = None
@@ -204,18 +202,19 @@ def cart(request, user_id):
             print(piece)
             product_total += piece.unit_price
             print(product_total)
-            
+
             # product_price = (product.price * 2)
-    context = {'user_group': user_group, 'customer': customer, 'cart': cart, 'product_total': round(product_total, 2)}
+    context = {'user_group': user_group, 'customer': customer,
+               'cart': cart, 'product_total': round(product_total, 2)}
     return render(request, 'account/cart.html', context)
 
+
 class CustomerUpdate(LoginRequiredMixin, UpdateView):
-  model = Customer
-  form_class = CustomerSignUpForm
+    model = Customer
+    form_class = CustomerSignUpForm
 #   fields =  ['first_name', 'delivery_time']
-  
-  
-  def get_object(self, *args, **kwargs):
+
+    def get_object(self, *args, **kwargs):
         user = self.request.user
 
         # We can also get user object using self.request.user  but that doesnt work
@@ -223,22 +222,22 @@ class CustomerUpdate(LoginRequiredMixin, UpdateView):
 
         return user
 
-  def get_success_url(self, *args, **kwargs):
+    def get_success_url(self, *args, **kwargs):
         return reverse("profile")
 
+
 class VolunteerUpdate(LoginRequiredMixin, UpdateView):
-  model = Volunteer
-  form_class = VolunteerSignUpForm
+    model = Volunteer
+    form_class = VolunteerSignUpForm
 #   fields =  ['availability_date', 'availability']
-  
-  
-  def get_object(self, *args, **kwargs):
+
+    def get_object(self, *args, **kwargs):
         user = self.request.user
-        
+
         # We can also get user object using self.request.user  but that doesnt work
         # for other models.
 
         return user
 
-  def get_success_url(self, *args, **kwargs):
+    def get_success_url(self, *args, **kwargs):
         return reverse("profile")
