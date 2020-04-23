@@ -229,4 +229,30 @@ body .footer {
   text-decoration: none;
   cursor: pointer;
 }
+
+.store-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px;
+  padding: 2px;
+}
+
+.store-container .store-card {
+  background-color: #5085a5;
+  border: 2px solid black;
+  width: 150px;
+  height: 100px;
+  margin: 0 auto;
+  text-align: center;
+}
 /*# sourceMappingURL=styles.css.map */

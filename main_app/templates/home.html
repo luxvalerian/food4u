@@ -4,7 +4,6 @@
 <h1>Home Page</h1>
 
 <div>
-  {% now "jS F Y" as current_date%}
   {{current_date}}
   {% for time in volunteer %}
   {% if time.availability_date != current_date %}

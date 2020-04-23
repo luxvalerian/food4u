@@ -3,16 +3,16 @@
 {% now "F j, Y" as current_date%}
 {% if user.id == volunteer.user.id %}
 
-<h1>{{user.first_name}}'s Profile Page</h1>
+<h2>Profile</h2>
 <ul>
-  <li>Name: {{volunteer.user.first_name}}  {{volunteer.user.last_name}}</li>
+  <li>Name: {{volunteer.user.first_name}} {{volunteer.user.last_name}}</li>
   <li>Available Date: {{volunteer.availability_date}}</li>
   <li>Available Times: {{volunteer.availability}}</li>
-  <br/>
+  <br />
   {% for time in vol_timeslot.all %}
   <li>Requested Delivery Time: {{time.get_timeslot_display}}</li>
   <li>Requested Delivery Date: {{time.date}}</li>
-  <br/>
+  <br />
   {% endfor %}
 </ul>
 <a href="{% url 'volunteer_update' user.id %}" class="btn">Edit Account</a>
@@ -23,15 +23,15 @@
 orders they can pick to start working. -->
 <!-- {% elif user.id == customer.id %} -->
 {% else %}
-<h1>{{user.first_name}}'s Profile Page</h1>
+<h1>Profile</h1>
 <ul>
-  <li>Name: {{customer.user.first_name}}  {{customer.user.last_name}}</li>
+  <li>Name: {{customer.user.first_name}} {{customer.user.last_name}}</li>
   <li>Selected Delivery Times: {{customer.delivery_time}}</li>
-  <br/>
+  <br />
   {% for time in cus_timeslot.all %}
   <li>Delivery Time: {{time.get_timeslot_display}}</li>
   <li>Delivery Date: {{time.date}}</li>
-  <br/>
+  <br />
   {% endfor %}
 </ul>
 <a href="{% url 'customer_update' user.id %}" class="btn">Edit Account</a>
