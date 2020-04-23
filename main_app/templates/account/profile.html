@@ -3,7 +3,7 @@
 {% now "F j, Y" as current_date%}
 {% if user.id == volunteer.user.id %}
 
-<h1>{{user}}'s Profile Page</h1>
+<h2>Profile</h2>
 <ul>
   <li>Name: {{volunteer.user.first_name}} {{volunteer.user.last_name}}</li>
   <li>Available Date: {{volunteer.availability_date}}</li>
@@ -23,7 +23,7 @@
 orders they can pick to start working. -->
 <!-- {% elif user.id == customer.id %} -->
 {% else %}
-<h1>{{user}}'s Profile Page</h1>
+<h1>Profile</h1>
 <ul>
   <li>Name: {{customer.user.first_name}} {{customer.user.last_name}}</li>
   <li>Selected Delivery Times: {{customer.delivery_time}}</li>

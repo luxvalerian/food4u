@@ -35,7 +35,7 @@ TIMESLOTS = (
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    delivery_time = MultiSelectField(max_length=100, null= True , choices=TIMESLOTS, max_choices=3)
+    delivery_time = MultiSelectField(max_length=100, null=True, choices=TIMESLOTS, max_choices=3)
 
     def get_absolute_url(self):
         return reverse('checkout', kwargs={'customer_id': self.id})
@@ -71,6 +71,14 @@ class Timeslot(models.Model):
     volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
 
 
+class Store(models.Model):
+    name = models.CharField(max_length=50)
+    location = models.CharField(max_length=100, null=True)
+    image = models.CharField(verbose_name="Image URL", max_length=1000, null=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
 class Item(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=250)
@@ -81,10 +89,12 @@ class Item(models.Model):
         choices=UNITS,
         default=UNITS[0][0])
     image = models.CharField(verbose_name="Image URL", max_length=1000)
+    item_count = models.IntegerField(null=True) 
+    
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name} at ${self.unit_price}/{self.get_unit_measurement_display()}"
-
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -95,12 +105,3 @@ class Cart(models.Model):
             return f"{self.user.first_name}'s cart has {self.items.count()} item"
         else:
             return f"{self.user.first_name}'s cart has {self.items.count()} items"
-
-
-class Store(models.Model):
-    name = models.CharField(max_length=50)
-    location = models.CharField(max_length=100, null=True)
-    image = models.CharField(verbose_name="Image URL", max_length=1000, null=True)
-
-    def __str__(self):
-        return f"{self.name}"

@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% for thing in walmart %}
-<!-- {{thing}} -->
-{% for part in thing.products %}
-<img src="{{part.basic.image.thumbnail}}" alt="{{part.basic.name}}" />
-{{part.basic.name}}
-${{part.store.price.list}}
-{% endfor %}
-{% endfor %}
-<img class="store-logo" src="{{logo.src}}" alt="store-name" />
+<div style="display: flex; align-items: center; justify-content: center; margin-top: 2rem;" class="center">
+    {% if store.name == "Walmart" %}
+    <h3>{{store.name}}</h3>
+    <img src="https://{{store.image}}" style="max-height: 5rem; max-width: 7rem;" />
+    {% else %}
+    <img src="{{store.image}}" style="max-height: 5rem; max-width: 27rem;" />
+    {% endif %}
+</div>
+
 <div class="products-container">
     {% for item in items %}
     <div class="item-card">

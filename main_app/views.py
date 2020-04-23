@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 from django.urls import reverse
 
 from datetime import date
-from .scraper import produce_dict, logo_img, walmart_fruit
+from .scraper import logo_img, walmart_fruit, produce_dict
 from . forms import CustomerSignUpForm, VolunteerSignUpForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store
 from .decorators import allowed_users
@@ -98,39 +98,31 @@ def about(request):
 
 @login_required
 def profile(request):
-    customer = Customer.objects.filter(id=(request.user.id-1)).first()
-    volunteer = Volunteer.objects.filter(id=(request.user.id-1)).first()
+    customer = Customer.objects.filter(user=request.user).first()
+    volunteer = Volunteer.objects.filter(user=request.user).first()
     vol_timeslot = Timeslot.objects.filter(volunteer=volunteer)
     cus_timeslot = Timeslot.objects.filter(customer=customer)
-    print(request.user.id-1)
-    print(customer)
-    print(volunteer)
+
     context = {'customer': customer, 'volunteer': volunteer,
                'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot}
     return render(request, 'account/profile.html', context)
 
 @login_required
 def stores_index(request):
-    stores = None
-    # print(logo_img[0])
-    for store_obj in logo_img:
-        obj = Store.objects.filter(name=store_obj['store_name'])
-        if obj.exists():
-            stores = Store.objects.all()
-        else:
-            store = Store(name=store_obj['store_name'])
-            store.save()
-    if stores == None:
-        stores = Store.objects.all()
+    stores = Store.objects.all()
+    logos = logo_img
+
     context = { 'stores': stores}
     return render(request, 'stores/index.html', context)
 
 
 @login_required
-def stores_detail(request):
-    items = Item.objects.all()
+def stores_detail(request, store_name):
+    stores = Store.objects.all()
+    store = stores.filter(name=store_name).first()
+    items = Item.objects.filter(store=store)
     context = {'product': produce_dict, 'logo': logo_img,
-               'items': items, 'walmart': walmart_fruit}
+               'items': items, 'store': store}
     return render(request, 'stores/detail.html', context)
 
 
@@ -222,7 +214,7 @@ def cart(request, user_id):
 class CustomerUpdate(LoginRequiredMixin, UpdateView):
     model = Customer
     form_class = CustomerSignUpForm
-#   fields =  ['first_name', 'delivery_time']
+    # fields =  ['delivery_time']
 
     def get_object(self, *args, **kwargs):
         user = self.request.user
