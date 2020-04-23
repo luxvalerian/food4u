@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
+<h2>Volunteer Sign Up</h2>
+<form method="POST" action="{% url 'volunteer_signup' %}" class="browser-default">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" class="btn blue" value="signup">
+  <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+<script>
+  let dateEl = document.getElementById("id_availability_date");
+  M.Datepicker.init(dateEl, {
+    format: "yyyy-mm-dd",
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  // let selectEl = document.getElementById('id_availability');
+  // M.FormSelect.init(selectEl);
+
+  // document.addEventListener("DOMContentLoaded", function () {
+  //   let elems = document.querySelectorAll("#collapsible");
+  //   let instances = M.Collapsible.init(elems, {
+  //     popout: true
+  //   });
+  //   console.log(elems);
+  // });
+</script>
+{{ form.media.js }}
+{% endblock %}

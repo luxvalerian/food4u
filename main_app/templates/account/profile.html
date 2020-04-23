@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+{% now "F j, Y" as current_date%}
+{% if user.id == volunteer.user.id %}
+
+<h2>Profile</h2>
+<ul>
+  <li>Name: {{volunteer.user.first_name}} {{volunteer.user.last_name}}</li>
+  <li>Available Date: {{volunteer.availability_date}}</li>
+  <li>Available Times: {{volunteer.availability}}</li>
+  <br />
+  {% for time in vol_timeslot.all %}
+  <li>Requested Delivery Time: {{time.get_timeslot_display}}</li>
+  <li>Requested Delivery Date: {{time.date}}</li>
+  <br />
+  {% endfor %}
+</ul>
+<a href="{% url 'volunteer_update' user.id %}" class="btn">Edit Account</a>
+<!-- show user info address, saved payment info, last visited store -->
+
+<!-- if statement that says if user is in group customer show message "Hi 'user'! Where did you want to shop today?" -->
+<!-- else show the volunteer's profile page with their profile image, weekly slots to choose when they volunteer, see available customer
+orders they can pick to start working. -->
+<!-- {% elif user.id == customer.id %} -->
+{% else %}
+<h1>Profile</h1>
+<ul>
+  <li>Name: {{customer.user.first_name}} {{customer.user.last_name}}</li>
+  <li>Selected Delivery Times: {{customer.delivery_time}}</li>
+  <br />
+  {% for time in cus_timeslot.all %}
+  <li>Delivery Time: {{time.get_timeslot_display}}</li>
+  <li>Delivery Date: {{time.date}}</li>
+  <br />
+  {% endfor %}
+</ul>
+<a href="{% url 'customer_update' user.id %}" class="btn">Edit Account</a>
+{% endif %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.dropdown-trigger');
+    var instances = M.Dropdown.init(elems);
+  });
+</script>
+{% endblock %}
