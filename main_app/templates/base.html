@@ -42,7 +42,7 @@
           </ul>
           <!-- <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li> -->
           <!-- <li><a href="{% url 'checkout' %}">Checkout</a></li> -->
-          <li><a class='dropdown-trigger' href='#' data-target='dropdown1'>Welcome, &nbsp;{{user}}</a></li>
+          <li><a class='dropdown-trigger' href='#' data-target='dropdown1'>Welcome, &nbsp;{{user.first_name}}</a></li>
           <li><a href="{% url 'cart' user.id %}">Cart</a></li>
           <!-- Let's talk about this -->
           <li><i class="large material-icons" id="openModal">shopping_cart</i></li>

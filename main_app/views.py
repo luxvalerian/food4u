@@ -98,8 +98,8 @@ def about(request):
 
 @login_required
 def profile(request):
-    customer = Customer.objects.filter(id=(request.user.id-1)).first()
-    volunteer = Volunteer.objects.filter(id=(request.user.id-1)).first()
+    customer = Customer.objects.filter(user=request.user).first()
+    volunteer = Volunteer.objects.filter(user=request.user).first()
     vol_timeslot = Timeslot.objects.filter(volunteer=volunteer)
     cus_timeslot = Timeslot.objects.filter(customer=customer)
     print(request.user.id-1)
