@@ -10,9 +10,7 @@
 <form style="margin-top: 2rem;" action="" method="post" class="container">
   {% csrf_token %}
   <table>
-    <div class="browser-default">
       {{ form.as_p }}
-    </div>
   </table>
   <input type="submit" value="Submit!" class="btn">
 </form>
