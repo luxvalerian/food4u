@@ -2,11 +2,12 @@
 {% block content %}
 
 <h1>Index Page</h1>
+
 <a href="{% url 'detail' %}">Click me to see the details of the store</a>
 
-<div>
+<div class="store-container">
   {% for store in stores %}
-    <div>
+    <div class="store-card">
       {{store}}
     </div>
   {% endfor %}
