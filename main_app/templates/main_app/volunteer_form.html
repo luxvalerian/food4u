@@ -12,14 +12,15 @@
   </table>
   <input type="submit" value="Submit!" class="btn">
 </form>
+{% block javascript %}
 <script>
-  let dateEl = document.getElementById("id_availability_date");
-  M.Datepicker.init(dateEl, {
-    format: "yyyy-mm-dd",
-    defaultDate: new Date(),
-    setDefaultDate: true,
-    autoClose: true
-  });
+  // let dateEl = document.getElementById("id_availability_date");
+  // M.Datepicker.init(dateEl, {
+  //   format: "%Y-%m-%dT%H:%M",
+  //   defaultDate: new Date(),
+  //   setDefaultDate: true,
+  //   autoClose: true
+  // });
 
   let selectEl = document.getElementById('id_availability');
   M.FormSelect.init(selectEl);
@@ -33,4 +34,5 @@
   });
 </script>
 {{ form.media.js }}
+{% endblock javascript %}
 {% endblock %}

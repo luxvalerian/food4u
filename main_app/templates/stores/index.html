@@ -1,15 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Index Page</h1>
+<div class="container">
+<div class="row">
+  <h1 class="center">Stores</h1>
 
-<div class="store-container">
-  <div class="store-card">Store A</div>
-  <div class="store-card">Store B</div>
-  <div class="store-card">Store C</div>
-  <div class="store-card">Store D</div>
+{% for store in stores %}
+  <div class="col s12 m6">
+    <div class="card blue-grey darken-1">
+      <div class="card-content white-text">
+        <span class="card-title">{{store.name}}</span>
+        {% if store.name in "Walmart" %}
+        <img src="https://{{store.image}}" style="max-height: 5rem; max-width: 7rem;"/>
+        {% else %}
+        <img src="{{store.image}}" style="max-height: 5rem; max-width: 27rem;"/>
+        {% endif %}
+      </div>
+      <div class="card-action">
+        <a href="{% url 'detail' store.name %}">{{store.name}}</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
 </div>
-
-<a href="{% url 'detail' %}">Click me to see the details of the store</a>
+</div>
 
 {% endblock %}

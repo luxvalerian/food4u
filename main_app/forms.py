@@ -14,9 +14,12 @@ class CustomerSignUpForm(UserCreationForm):
         max_length=30, required=False, help_text='Optional.')
     email = forms.EmailField(
         max_length=254, help_text='Required. Inform a valid email address.')
-    delivery_time = MultiSelectField(
-        max_length=100, null=True, choices=TIMESLOTS, max_choices=3)
+    delivery_time = forms.MultipleChoiceField(choices=TIMESLOTS)
 
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email',
+                  'password1', 'password2', 'delivery_time')
 
 class VolunteerSignUpForm(UserCreationForm):
     first_name = forms.CharField(
