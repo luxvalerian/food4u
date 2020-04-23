@@ -6,11 +6,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.models import Group
+from django.urls import reverse
 
 from datetime import date
 from .scraper import produce_dict, logo_img, walmart_fruit
 from . forms import CustomerSignUpForm, VolunteerSignUpForm
-from .models import Item, Cart, Timeslot, Customer, Volunteer, User
+from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store
 from .decorators import allowed_users
 
 def signup(request):
@@ -106,24 +107,29 @@ def profile(request):
     context = {'customer': customer, 'volunteer': volunteer, 'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot}
     return render(request, 'account/profile.html', context)
 
-
 @login_required
-@allowed_users(allowed_roles=['customer'])
-def stores(request):
-    items = Item.objects.all()
-    context = {'product': produce_dict, 'logo': logo_img,
-               'items': items, 'walmart': walmart_fruit}
+def stores_index(request):
+    stores = None
+    # print(logo_img[0])
+    for store_obj in logo_img:
+        obj = Store.objects.filter(name=store_obj['store_name'])
+        if obj.exists():
+            stores = Store.objects.all()
+        else:
+            store = Store(name=store_obj['store_name'])
+            store.save()
+    if stores == None:
+        stores = Store.objects.all()
+    context = { 'stores': stores}
     return render(request, 'stores/index.html', context)
 
 
 @login_required
-def stores_index(request):
-    return render(request, 'stores/index.html')
-
-
-@login_required
 def stores_detail(request):
-    return render(request, 'stores/detail.html')
+    items = Item.objects.all()
+    context = {'product': produce_dict, 'logo': logo_img,
+               'items': items, 'walmart': walmart_fruit}
+    return render(request, 'stores/detail.html', context)
 
 
 def logout(request):

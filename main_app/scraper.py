@@ -4,8 +4,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 import urllib.request
 import json
-# page_list = ['1','2','3','4', '5']
-# for page in page_list:
+
 walmart_fruit = []
 urlreq = f'https://grocery.walmart.com/v4/api/products/search?storeId=1985&query=meat&count=200&page=1&offset=0'
 response = urllib.request.urlopen(urlreq)
@@ -39,34 +38,28 @@ UNITS = (
     ('Dozen', 'D')
 )
 
-# def add_items(url, product_name, product_price, product_unit):
-#     img_url = url
-#     piece = ''
-#     products = Item.objects.filter(image=img_url)
-#     for product in products:
-#         piece = product.image
-#     if img_url == piece:
-#         # print(img_url)
-#         pass
-#     else:
-#         img = img_url
-#         name = product_name
-#         description = name
-#         price = product_price
-#         unit = product_unit
-#         for idx in UNITS:
-#             if idx[0] == unit:
-#                 unit = idx[1]
+def add_items(url, product_name, product_price, product_unit):
+    img_url = url
+    piece = ''
+    products = Item.objects.filter(image=img_url)
+    for product in products:
+        piece = product.image
+    if img_url == piece:
+        pass
+    else:
+        img = img_url
+        name = product_name
+        description = name
+        price = product_price
+        unit = product_unit
+        for idx in UNITS:
+            if idx[0] == unit:
+                unit = idx[1]
 
-#         item = Item(name=name, unit_price=price,
-#                     description=description, unit_measurement=unit, image=img)
-#         # print(item)
-#         item.save()
+        item = Item(name=name, unit_price=price,
+                    description=description, unit_measurement=unit, image=img)
+        item.save()
 
-# item = Item(name=name, unit_price=price,
-#             description=description, unit_measurement=unit, image=img)
-# # print(item)
-# item.save()
 
 produce_dict = []
 prices = [2.55, 0.41, 3.46, 0.99, 3.99, 2.50, 2.00, 5.00, 3.49, 6.49, 4.99, 9.99, 34.99,
@@ -76,12 +69,6 @@ price_units = ["Each", "Each", "LB", "Each", "Each", "Each", "LB", "Each", "Each
 
 urls_list = ['https://www.safeway.com/shop/product-details.184290007.html', 'https://www.safeway.com/shop/product-details.184060007.html', 'https://www.safeway.com/shop/product-details.184540027.html', 'https://www.safeway.com/shop/product-details.184450054.html', 'https://www.safeway.com/shop/product-details.184070124.html', 'https://www.safeway.com/shop/product-details.184040158.html', 'https://www.safeway.com/shop/product-details.960021862.html', 'https://www.safeway.com/shop/product-details.960015089.html', 'https://www.safeway.com/shop/product-details.196100818.html', 'https://www.safeway.com/shop/product-details.960038380.html', 'https://www.safeway.com/shop/product-details.117100189.html', 'https://www.safeway.com/shop/product-details.960078948.html', 'https://www.safeway.com/shop/product-details.960460707.html',
              'https://www.safeway.com/shop/product-details.960113677.html', 'https://www.safeway.com/shop/product-details.186190041.html', 'https://www.safeway.com/shop/product-details.960109089.html', 'https://www.safeway.com/shop/product-details.188510026.html', 'https://www.safeway.com/shop/product-details.960113679.html', 'https://www.safeway.com/shop/product-details.960275246.html', 'https://www.safeway.com/shop/product-details.960028971.html', 'https://www.safeway.com/shop/product-details.188650021.html', 'https://www.safeway.com/shop/product-details.960018494.html', 'https://www.safeway.com/shop/product-details.188100176.html?zipcode=94611', 'https://www.safeway.com/shop/product-details.960541035.html', 'https://www.safeway.com/shop/product-details.184100012.html']
-
-
-# for url in urls_list:
-#     search_item(url)
-#     add_items(produce_dict[urls_list.index(url)]['image'], produce_dict[urls_list.index(
-#         url)]['name'], produce_dict[urls_list.index(url)]['price'], produce_dict[urls_list.index(url)]['unit'])
 
 def search_item(url):
     page = requests.get(url).text
@@ -97,8 +84,8 @@ def search_item(url):
 
 for url in urls_list:
     search_item(url)
-    # add_items(produce_dict[urls_list.index(url)]['image'], produce_dict[urls_list.index(
-    #     url)]['name'], produce_dict[urls_list.index(url)]['price'], produce_dict[urls_list.index(url)]['unit'])
+    add_items(produce_dict[urls_list.index(url)]['image'], produce_dict[urls_list.index(
+        url)]['name'], produce_dict[urls_list.index(url)]['price'], produce_dict[urls_list.index(url)]['unit'])
     # print(produce_dict[urls_list.index(url)]['test'])
 
 store_logos = []
@@ -108,10 +95,21 @@ def find_store_logo(url, selector, class_name):
     logo_url = url
     logo_page = requests.get(logo_url).text
     logo_soup = bs(logo_page, 'html.parser')
-    if selector == "img":
+    if "safeway" in url:
         store_logo = logo_soup.find(selector, {"class": class_name})['src']
-        store_logos.append({'src': url + store_logo})
+        store_name = logo_soup.title.text[-7:]
+        store_logos.append({'src': url + store_logo, 'store_name': store_name})
+    else:
+        store_logo = logo_soup.find(selector, {"class": class_name}).img['src'][2:]
+        store_name = logo_soup.title.text[:7]
+        store_logos.append({'src': store_logo, 'store_name': store_name})
 
+stores_url = ['https://www.safeway.com', 'https://www.walmart.com/']
 
-find_store_logo("https://www.safeway.com", "img", "logo-safeway")
-logo_img = store_logos[0]
+for url in stores_url:
+    if "safeway" in url:
+        find_store_logo(url, "img", "logo-safeway")
+    else:
+        find_store_logo(url, "div", "al_b")
+
+logo_img = store_logos

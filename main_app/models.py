@@ -99,5 +99,8 @@ class Cart(models.Model):
 
 class Store(models.Model):
     name = models.CharField(max_length=50)
-    location = models.CharField(max_length=100)
-    image = models.CharField(verbose_name="Image URL", max_length=1000)
+    location = models.CharField(max_length=100, null=True)
+    image = models.CharField(verbose_name="Image URL", max_length=1000, null=True)
+
+    def __str__(self):
+        return f"{self.name}"

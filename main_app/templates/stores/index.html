@@ -4,4 +4,12 @@
 <h1>Index Page</h1>
 <a href="{% url 'detail' %}">Click me to see the details of the store</a>
 
+<div>
+  {% for store in stores %}
+    <div>
+      {{store}}
+    </div>
+  {% endfor %}
+</div>
+
 {% endblock %}
