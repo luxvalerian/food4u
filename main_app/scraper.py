@@ -27,8 +27,7 @@ def find_store_logo(url, selector, class_name):
         store_name = logo_soup.title.text[-7:]
         store_logos.append({'src': url + store_logo, 'store_name': store_name})
     else:
-        store_logo = logo_soup.find(
-            selector, {"class": class_name}).img['src'][2:]
+        store_logo = 'i5.walmartimages.com/dfw/63fd9f59-43e0/1ed7036a-feba-43ca-8885-1d937a9aa4f2/v1/spark-yellow-spark.b43cc07989a08d84d33b0c87dd8afb1998431e48.svg'
         store_name = logo_soup.title.text[:7]
         store_logos.append({'src': store_logo, 'store_name': store_name})
 

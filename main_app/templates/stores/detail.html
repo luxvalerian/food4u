@@ -19,12 +19,16 @@
             <div class="item-details">
                 <h5>{{item.name}}</h5>
                 <img src="{{item.image}}" alt={{item}} />
-                <p>${{item.unit_price}}/{{item.get_unit_measurement_display}}</p>
+                <p>${{item.unit_price | stringformat:".2f"}}/{{item.get_unit_measurement_display}}</p>
                 <p class="flip-forward">Change Quantity</p>
             </div>
 
             <div class="item-quantity">
-                <p>{{ item.item_count }} items</p>
+                <p>{{item.item_count}} items</p>
+                <form action="{% url 'assoc_item' user.id item.id %}" method="post">
+                    {% csrf_token%}
+                    <button class="delete-item white-text btn" type="submit">Add Item</button>
+                </form>
                 <p class="flip-backward">Details</p>
             </div>
 

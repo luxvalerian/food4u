@@ -8,7 +8,10 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth.models import Group
 from django.urls import reverse
 from datetime import date
-from . forms import CustomerSignUpForm, VolunteerSignUpForm
+
+from .scraper import logo_img, walmart_fruit, produce_dict
+from . forms import CustomerSignUpForm, VolunteerSignUpForm, CustomerUpdateForm, UserUpdateForm
+
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store
 from .decorators import allowed_users
 # from .scraper import produce_dict
@@ -136,7 +139,7 @@ def remove_vol(request):
 
 @login_required
 @allowed_users(allowed_roles=['customer'])
-def checkout(request):
+def checkout(request, user_id):
 
     customer = Customer.objects.filter(user=request.user)
     active_customer = customer.first()
@@ -200,7 +203,9 @@ def cart(request, user_id):
             item = Item.objects.filter(id=product.id)
             piece = item.first()
             print(piece)
-            product_total += piece.unit_price
+            prices = round(piece.unit_price, 2)
+            product_total += piece.count_ref * prices
+            
             print(product_total)
 
             # product_price = (product.price * 2)
@@ -211,16 +216,34 @@ def cart(request, user_id):
 
 class CustomerUpdate(LoginRequiredMixin, UpdateView):
     model = Customer
-    form_class = CustomerSignUpForm
-    # fields =  ['delivery_time']
-
+    form_class = CustomerUpdateForm
+#     # fields =  ['delivery_time']
     def get_object(self, *args, **kwargs):
         user = self.request.user
 
-        # We can also get user object using self.request.user  but that doesnt work
-        # for other models.
+        if self.request.method == 'POST':
+            user_form = UserUpdateForm(self.request.POST)#, instance=self.request.user)
+            profile_form = CustomerUpdateForm(self.request.POST)#, self.request.FILES, instance=Customer.objects.get(user=self.request.user))
+            
+            # print(profile_form)
+            # We can also get user object using self.request.user  but that doesnt work
+            # for other models.
 
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+
+                messages.success(self.request, f'Your account has been updated!')
+                return reverse('profile')
+
+            else:
+                user_form = UserUpdateForm(instance=self.request.user)
+                profile_form = CustomerUpdateForm(instance=Customer.objects.get(user=self.request.user))
+
+            print(user_form.is_valid() and profile_form.is_valid())
         return user
+
+
 
     def get_success_url(self, *args, **kwargs):
         return reverse("profile")
@@ -241,3 +264,77 @@ class VolunteerUpdate(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self, *args, **kwargs):
         return reverse("profile")
+
+@login_required
+def assoc_item(request, user_id, item_id):
+    cart = Cart.objects.get(user=request.user).items
+    for item in cart.all():
+        if item_id==item.id:
+            count = item.item_count
+            product = item
+            product.item_count = count - 1
+            product.count_ref += 1 
+            product.save()
+            print(product.count_ref)
+
+    Cart.objects.get(user=request.user).items.add(item_id)    
+    store_name = Item.objects.get(id=item_id).store.name
+    return redirect('detail', store_name=store_name)
+
+@login_required
+def disassoc_item(request, user_id, item_id):
+    cart = Cart.objects.get(user=request.user).items
+    for item in cart.all():
+        if item_id==item.id:
+            count = item.item_count
+            product = item
+            product.item_count = count + 1
+            if product.count_ref > 0:
+                product.count_ref -= 1 
+            product.save()
+            print(product.count_ref)
+            if product.count_ref <= 0:
+                cart = Cart.objects.get(user=request.user).items.remove(item_id)
+    return redirect('cart', user_id=user_id)
+
+
+# @login_required
+# def update_profile(request, pk):
+#     cust = Customer.objects.get(user=request.user)
+#     pk = cust.pk
+#     if request.method == 'POST':
+#         user_form = UserUpdateForm(request.POST, instance=request.user)
+#         profile_form = CustomerUpdateForm(request.POST, request.FILES, instance=Customer.objects.get(user=request.user))
+
+    #     if user_form.is_valid() and profile_form.is_valid():
+    #         user_form.save()
+    #         profile_form.save()
+    #         messages.success(request, f'Your account has been updated!')
+    #         return redirect('customer_update')
+
+    # else:
+    #     user_form = UserUpdateForm(instance=request.user)
+    #     profile_form = CustomerUpdateForm(instance=Customer.objects.get(user=request.user))
+
+    # def get_success_url(self, *args, **kwargs):
+    #     return reverse("profile")
+
+    # context = {
+    #     'u_form': user_form,
+    #     'p_form': profile_form
+    # }
+
+    # return redirect(request, 'customer_update')
+
+
+# class CustomerUpdate(LoginRequiredMixin, UpdateView):
+#     model = Customer
+
+#     fields = '__all__'
+#     success_url = '/profile/'
+
+    # def get_object(self, *args, **kwargs):
+    #     user = Customer.objects.get(pk=self.request.user.id)
+
+    #     return user
+    

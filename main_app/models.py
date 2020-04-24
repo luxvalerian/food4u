@@ -89,7 +89,8 @@ class Item(models.Model):
         choices=UNITS,
         default=UNITS[0][0])
     image = models.CharField(verbose_name="Image URL", max_length=1000)
-    item_count = models.IntegerField(null=True) 
+    item_count = models.IntegerField(null=True)
+    count_ref = models.IntegerField(default=1, null=True) 
     
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
@@ -99,6 +100,15 @@ class Item(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(Item)
+    order_date = models.DateTimeField(auto_now=True)
+    is_ordered = models.BooleanField(default=False)
+
+
+    def get_cart_items(self):
+        return self.items.all()
+
+    def get_cart_total(self):
+        return sum([ item.unit_price for item in self.items.all()])
 
     def __str__(self):
         if self.items.count() == 1:
