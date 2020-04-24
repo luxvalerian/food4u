@@ -106,10 +106,13 @@ def profile(request):
                'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot}
     return render(request, 'account/profile.html', context)
 
+
 @login_required
 def stores_index(request):
     stores = Store.objects.all()
-    context = { 'stores': stores}
+    logos = logo_img
+
+    context = {'stores': stores}
     return render(request, 'stores/index.html', context)
 
 
