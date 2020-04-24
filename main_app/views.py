@@ -14,7 +14,6 @@ from . forms import CustomerSignUpForm, VolunteerSignUpForm, CustomerUpdateForm,
 
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store
 from .decorators import allowed_users
-# from .scraper import produce_dict
 
 
 def signup(request):
@@ -205,7 +204,7 @@ def cart(request, user_id):
             print(piece)
             prices = round(piece.unit_price, 2)
             product_total += piece.count_ref * prices
-            
+
             print(product_total)
 
             # product_price = (product.price * 2)
@@ -218,13 +217,16 @@ class CustomerUpdate(LoginRequiredMixin, UpdateView):
     model = Customer
     form_class = CustomerUpdateForm
 #     # fields =  ['delivery_time']
+
     def get_object(self, *args, **kwargs):
         user = self.request.user
 
         if self.request.method == 'POST':
-            user_form = UserUpdateForm(self.request.POST)#, instance=self.request.user)
-            profile_form = CustomerUpdateForm(self.request.POST)#, self.request.FILES, instance=Customer.objects.get(user=self.request.user))
-            
+            # , instance=self.request.user)
+            user_form = UserUpdateForm(self.request.POST)
+            # , self.request.FILES, instance=Customer.objects.get(user=self.request.user))
+            profile_form = CustomerUpdateForm(self.request.POST)
+
             # print(profile_form)
             # We can also get user object using self.request.user  but that doesnt work
             # for other models.
@@ -233,17 +235,17 @@ class CustomerUpdate(LoginRequiredMixin, UpdateView):
                 user_form.save()
                 profile_form.save()
 
-                messages.success(self.request, f'Your account has been updated!')
+                messages.success(
+                    self.request, f'Your account has been updated!')
                 return reverse('profile')
 
             else:
                 user_form = UserUpdateForm(instance=self.request.user)
-                profile_form = CustomerUpdateForm(instance=Customer.objects.get(user=self.request.user))
+                profile_form = CustomerUpdateForm(
+                    instance=Customer.objects.get(user=self.request.user))
 
             print(user_form.is_valid() and profile_form.is_valid())
         return user
-
-
 
     def get_success_url(self, *args, **kwargs):
         return reverse("profile")
@@ -265,36 +267,39 @@ class VolunteerUpdate(LoginRequiredMixin, UpdateView):
     def get_success_url(self, *args, **kwargs):
         return reverse("profile")
 
+
 @login_required
 def assoc_item(request, user_id, item_id):
     cart = Cart.objects.get(user=request.user).items
     for item in cart.all():
-        if item_id==item.id:
+        if item_id == item.id:
             count = item.item_count
             product = item
             product.item_count = count - 1
-            product.count_ref += 1 
+            product.count_ref += 1
             product.save()
             print(product.count_ref)
 
-    Cart.objects.get(user=request.user).items.add(item_id)    
+    Cart.objects.get(user=request.user).items.add(item_id)
     store_name = Item.objects.get(id=item_id).store.name
     return redirect('detail', store_name=store_name)
+
 
 @login_required
 def disassoc_item(request, user_id, item_id):
     cart = Cart.objects.get(user=request.user).items
     for item in cart.all():
-        if item_id==item.id:
+        if item_id == item.id:
             count = item.item_count
             product = item
             product.item_count = count + 1
             if product.count_ref > 0:
-                product.count_ref -= 1 
+                product.count_ref -= 1
             product.save()
             print(product.count_ref)
             if product.count_ref <= 0:
-                cart = Cart.objects.get(user=request.user).items.remove(item_id)
+                cart = Cart.objects.get(
+                    user=request.user).items.remove(item_id)
     return redirect('cart', user_id=user_id)
 
 
@@ -337,4 +342,3 @@ def disassoc_item(request, user_id, item_id):
     #     user = Customer.objects.get(pk=self.request.user.id)
 
     #     return user
-    
