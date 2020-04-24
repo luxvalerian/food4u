@@ -1,28 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Home Page</h1>
-
-<div>
+<div class="home-container">
   {{current_date}}
-  {% for time in volunteer %}
-  {% if time.availability_date != current_date %}
-  <h1>{{time.availability_date}}</h1>
-  {% for vol_time in time.availability %}
-  <button class="btn">
-    {% if vol_time == "D" %}
-    12PM - 1PM
-    {% endif%}
-  </button>
-  {% endfor%}
-  {% endif %}
-  {% endfor%}
-  <div>
-    <a href="{% url 'volunteer_signup' %}">I am Volunteer</a>
-  </div>
-  <div>
-    <a href="{% url 'signup' %}">I am Customer</a>
-  </div>
+    {% for time in volunteer %}
+    {% if time.availability_date != current_date %}
+    <h2>{{time.availability_date}}</h2>
+    {% for vol_time in time.availability %}
+    <button class="btn">
+      {% if vol_time == "D" %}
+      12PM - 1PM
+      {% endif%}
+    </button>
+    {% endfor%}
+    {% endif %}
+    {% endfor%}
+    <h2>Welcome to foodle!</h2>
+    <div class="login-choice">
+        <a href="{% url 'volunteer_signup' %}">Sign up as a Volunteer</a>
+        <a href="{% url 'signup' %}">Sign up as a Customer</a>
+    </div>
 </div>
+  
 
 {% endblock %}
