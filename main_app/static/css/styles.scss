@@ -59,8 +59,53 @@ body {
   }
 }
 
-// stores - detail.html
+// home page
+.home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+  .login-choice {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8rem;
+    a {
+      margin: 1.25rem;
+      font-size: 2rem;
+      &:hover {
+        font-size: 2.1rem;
+      }
+    }
+  }
+}
 
+// sign up pages
+.login-signup-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  form {
+    border: 1px solid color(primary-dark);
+    padding: 1rem;
+    margin: 1rem;
+    width: 50%;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+// stores - detail.html
 .store-logo {
   max-height: 5rem;
   margin-top: 1.5rem;
