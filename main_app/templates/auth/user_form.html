@@ -9,15 +9,20 @@
   {% endif %}
 <form style="margin-top: 2rem;" action="" method="post" class="container">
   {% csrf_token %}
-  <table>
-      {{ form.as_p }}
-  </table>
+  <!-- <table> -->
+      {{ form }}
+  <!-- </table> -->
   <input type="submit" value="Submit!" class="btn">
 </form>
 <script>
 
-  // let selectEl = document.getElementById('id_delivery_time_1');
+  // let selectEl = document.getElementById('id_delivery_time');
   // M.FormSelect.init(selectEl);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelector('#id_delivery_time');
+    var instances = M.FormSelect.init(elems, {});
+  });
 
   // document.addEventListener("DOMContentLoaded", function () {
   //   let elems = document.querySelectorAll("#collapsible");
@@ -26,6 +31,6 @@
   //   });
   //   console.log(elems);
   // });
-</script>
 {{ form.media.js }}
+</script>
 {% endblock %}
