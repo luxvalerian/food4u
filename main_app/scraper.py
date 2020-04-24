@@ -62,7 +62,6 @@ urlreq = f'https://grocery.walmart.com/v4/api/products/search?storeId=1985&query
 response = urllib.request.urlopen(urlreq)
 
 jresponse = json.load(response)
-
 def add_walmart_item(products):
     product_list = []
     for food in products:
@@ -116,26 +115,6 @@ def add_items(url, product_name, product_price, product_unit, product_count):
         item.save()
 
 
-def add_items(url, product_name, product_price, product_unit):
-    img_url = url
-    piece = ''
-    products = Item.objects.filter(image=img_url)
-    for product in products:
-        piece = product.image
-    if img_url == piece:
-        pass
-    else:
-        img = img_url
-        name = product_name
-        description = name
-        price = product_price
-        unit = product_unit
-        for idx in UNITS:
-            if idx[0] == unit:
-                unit = idx[1]
-        item = Item(name=name, unit_price=price,
-                    description=description, unit_measurement=unit, image=img)
-        item.save()
 produce_dict = []
 prices = [2.55, 0.41, 3.46, 0.99, 3.99, 2.50, 2.00, 5.00, 3.49, 6.49, 4.99, 9.99, 34.99,
           9.99, 13.99, 27.96, 11.98, 8.50, 15.99, 4.99, 8.99, 7.49, 9.99, 2.99, 7.98, 4.29]
