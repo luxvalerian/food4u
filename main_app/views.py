@@ -7,12 +7,11 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.models import Group
 from django.urls import reverse
-
 from datetime import date
-from .scraper import logo_img, walmart_fruit, produce_dict
 from . forms import CustomerSignUpForm, VolunteerSignUpForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store
 from .decorators import allowed_users
+# from .scraper import produce_dict
 
 
 def signup(request):
@@ -111,7 +110,6 @@ def profile(request):
 @login_required
 def stores_index(request):
     stores = Store.objects.all()
-    logos = logo_img
 
     context = {'stores': stores}
     return render(request, 'stores/index.html', context)
@@ -122,8 +120,7 @@ def stores_detail(request, store_name):
     stores = Store.objects.all()
     store = stores.filter(name=store_name).first()
     items = Item.objects.filter(store=store)
-    context = {'product': produce_dict, 'logo': logo_img,
-               'items': items, 'store': store}
+    context = {'items': items, 'store': store}
     return render(request, 'stores/detail.html', context)
 
 
