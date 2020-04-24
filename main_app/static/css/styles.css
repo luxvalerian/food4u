@@ -64,6 +64,91 @@ body .footer {
   text-align: center;
 }
 
+.home-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2rem;
+}
+
+.home-container h1 {
+  margin-bottom: 0.5rem;
+}
+
+.home-container .login-choice {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 8rem;
+}
+
+.home-container .login-choice a {
+  margin: 1.25rem;
+  font-size: 2rem;
+}
+
+.home-container .login-choice a:hover {
+  font-size: 2.1rem;
+}
+
+.login-signup-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.login-signup-container form {
+  border: 1px solid #31708e;
+  padding: 1rem;
+  margin: 1rem;
+  width: 50%;
+  border-radius: 1rem;
+  -webkit-box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+          box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+}
+
+.login-signup-container form .button-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .store-logo {
   max-height: 5rem;
   margin-top: 1.5rem;
