@@ -38,8 +38,8 @@ stores_url = ['https://www.safeway.com', 'https://www.walmart.com/']
 for url in stores_url:
     if "safeway" in url:
         find_store_logo(url, "img", "logo-safeway")
-    # elif url != None:
-    #     find_store_logo(url, "div", "al_b")
+    elif url != None:
+        find_store_logo(url, "div", "al_b")
 
 logo_img = store_logos
 st_name = []

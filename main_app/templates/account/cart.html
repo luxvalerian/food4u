@@ -2,6 +2,7 @@
 {% block content %}
 {% if user_group == "customer" %}
 {% for item in cart %}
+{% load l10n %}
 
   <!-- <div id="cartModal" class="cart-modal">
     <div class="cart-modal-content">
@@ -34,9 +35,9 @@
           {% for product in item.items.all %}
           <tr>
             <td>{{product.name}}</td>
-            <td>${{product.unit_price}}/{{product.get_unit_measurement_display}}</td>
+            <td>${{product.unit_price | stringformat:".2f"}}/{{product.get_unit_measurement_display}}</td>
             <td>{{product.count_ref}}</td>
-            <td>${{product.unit_price }}</td>
+            <td>${% widthratio product.unit_price 1 product.count_ref %} </td>
             <td>
               <form action="{% url 'disassoc_item' user.id product.id %}" method="post">
                 {% csrf_token%}

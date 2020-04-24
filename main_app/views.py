@@ -203,7 +203,9 @@ def cart(request, user_id):
             item = Item.objects.filter(id=product.id)
             piece = item.first()
             print(piece)
-            product_total += piece.unit_price
+            prices = round(piece.unit_price, 2)
+            product_total += piece.count_ref * prices
+            
             print(product_total)
 
             # product_price = (product.price * 2)
