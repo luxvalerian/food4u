@@ -2,57 +2,39 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Foodle | Volunteer powered delivery</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    {% block css %}
-    <!-- Compiled and minified CSS -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-      rel="stylesheet"
-    />
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/css/materialize.min.css"
-      integrity="sha256-qj3p6P1fJIV+Ndv7RW1ovZI2UhOuboj9GcODzcNFIN8="
-      crossorigin="anonymous"
-    />
-    {% endblock css %}
 
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    {{ form.media.css }}
-    <script defer src="{% static 'js/script.js'%}"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Foodle | Volunteer powered delivery</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  {% block css %}
+  <!-- Compiled and minified CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/css/materialize.min.css"
+    integrity="sha256-qj3p6P1fJIV+Ndv7RW1ovZI2UhOuboj9GcODzcNFIN8=" crossorigin="anonymous" />
+  {% endblock css %}
 
-  <body>
-    {% block javascript %}
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.min.js"
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"
-    ></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  {{ form.media.css }}
+  <script defer src="{% static 'js/script.js'%}"></script>
+</head>
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/js/materialize.min.js"
-      integrity="sha256-SrBfGi+Zp2LhAvy9M1bWOCXztRU9Ztztxmu5BcYPcPE="
-      crossorigin="anonymous"
-    ></script>
+<body>
+  {% block javascript %}
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-    <script>
-      $(document).ready(function () {
-      for (let i = 0; i >= 12; i++){
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/js/materialize.min.js"
+    integrity="sha256-SrBfGi+Zp2LhAvy9M1bWOCXztRU9Ztztxmu5BcYPcPE=" crossorigin="anonymous"></script>
+
+  <script>
+    $(document).ready(function () {
+      for (let i = 0; i >= 12; i++) {
         $(`#id_delivery_time_${i}`).formSelect();
       }
       });
@@ -149,18 +131,19 @@
 
     </div> -->
 
-      {% block content %} {% endblock %}
-    </main>
-    <footer class="page-footer footer">
-      <div class="center">
-        All Rights Reserved, &copy; {% now "Y" %} Foodle &nbsp;
-      </div>
-    </footer>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        var elems = document.querySelectorAll(".dropdown-trigger");
-        var instances = M.Dropdown.init(elems);
-      });
-    </script>
-  </body>
+    {% block content %} {% endblock %}
+  </main>
+  <footer class="page-footer footer">
+    <div class="center">
+      All Rights Reserved, &copy; {% now "Y" %} Foodle &nbsp;
+    </div>
+  </footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var elems = document.querySelectorAll(".dropdown-trigger");
+      var instances = M.Dropdown.init(elems);
+    });
+  </script>
+</body>
+
 </html>
