@@ -110,7 +110,6 @@ def profile(request):
 @login_required
 def stores_index(request):
     stores = Store.objects.all()
-    logos = logo_img
 
     context = {'stores': stores}
     return render(request, 'stores/index.html', context)
