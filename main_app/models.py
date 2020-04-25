@@ -35,7 +35,8 @@ TIMESLOTS = (
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    delivery_time = MultiSelectField(	
+        max_length=100, null=True, choices=TIMESLOTS, max_choices=3)
         # MultiSelectField(max_length=100, null=True, choices=TIMESLOTS, max_choices=3)
 
     def get_absolute_url(self):
@@ -48,7 +49,7 @@ class Customer(models.Model):
         return f"{self.user.first_name} {self.user.last_name}"
 
 class CustomerDelivery(models.Model):
-  date = models.DateField('Delivery date')
+  date = models.DateField(verbose_name='Delivery date', default=date.today())
   delivery_time = models.CharField(
         max_length=1,
         choices=TIMESLOTS,
@@ -83,7 +84,7 @@ class Timeslot(models.Model):
         default=TIMESLOTS[0][0])
 
     def __str__(self):
-        return f"{self.date} - {self.get_timeslot_display()}"
+        return f"{self.date} at {self.get_timeslot_display()}"
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
