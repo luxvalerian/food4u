@@ -23,7 +23,7 @@
                 <form action="{% url 'assoc_item' user.id item.id %}" method="post">
                     {% csrf_token%}
                     {% if item.item_count == 0 %}
-                    <button class="delete-item white-text btn" type="submit" value="upload" disabled>Out of
+                    <button class="flip-forward delete-item white-text btn" type="submit" value="upload" disabled>Out of
                         Stock</button>
                     <p style="pointer-events:none; font-style:italic; text-decoration:line-through; color:lightgray">Change Quantity</p>
                     {% else %}
@@ -69,7 +69,7 @@
           </tr>
         </thead>
       </table>
-      <div style="margin-bottom: 3rem; max-height: 50vh; overflow: scroll;">
+      <div style="margin-bottom: 3rem; max-height: 50vh; overflow-y: auto;">
         <table class="highlight">
           <!-- <thead>
               <tr>
@@ -90,7 +90,9 @@
                 {% if product.store == store %}<td>
                <form action="{% url 'disassoc_item_in_store' store.name user.id product.id %}" method="post">
                   {% csrf_token%}
-                  <button class="delete-item white-text btn" type="submit">&times;</button>
+                  <div class="delete-button">
+                    <button class="delete-item white-text btn-small" type="submit">&times;</button>
+                  </div>
                 </form>
               </td>{% endif %}
             </tr>
@@ -99,7 +101,7 @@
         </table>
       </div>
     </div>
-    <div class="cart-modal-footer right" style="margin-bottom: 2rem;">
+    <div class="cart-modal-footer center" style="margin-bottom: 2rem;">
       <div>
         <h5>Subtotal: ${{ product_total }}</h5>
       </div>

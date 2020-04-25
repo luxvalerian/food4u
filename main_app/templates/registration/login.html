@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<div class="login-signup-container" style="height: inherit;" >
+<div class="login-signup-container">
     <h2>Log In</h2>
-    <form method="POST" action="{% url 'login' %}" style="padding: 2rem; width: 100%;">
+    <form method="POST" action="{% url 'login' %}" >
         {% csrf_token %}
         {{ form }}
         <div class="button-container">
-            <input type="submit" class="btn blue" value="login" style="height: 4rem; width: 40%; font-size: large; border-radius: 7px;">
+            <input type="submit" class="btn blue" value="login">
             <input type="hidden" name="next" value="{{ next }}">
         </div>
     </form>
