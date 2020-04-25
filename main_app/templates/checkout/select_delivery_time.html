@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block content %}
+
+<div style="margin-top: 3rem;">
+  <h3 style="text-align: center;">Select Delivery Time for {% now "F j, Y" %}</h3>
+  <div>
+    <p class="red-text">{{error_message}}</p>
+    <form method="post">
+      {% csrf_token %}
+      {{form.as_p}}
+      <button type="submit" class="btn">Submit</button>
+    </form>
+  </div>
+</div>
+<script>
+
+let selectEl = document.getElementById('id_delivery_time');
+M.FormSelect.init(selectEl);
+
+
+</script>
+{{ form.media.js }}
+{% endblock %}

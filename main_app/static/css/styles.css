@@ -30,6 +30,10 @@ body .navbar #openModal {
   font-size: 2.25rem;
 }
 
+body .navbar .right {
+  top: 3.5rem !important;
+}
+
 body .navbar li,
 body .navbar li a {
   font-size: 1.2rem;
@@ -64,6 +68,103 @@ body .footer {
   text-align: center;
 }
 
+.home-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2rem;
+}
+
+.home-container h1 {
+  margin-bottom: 0.5rem;
+}
+
+.home-container .login-choice {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 8rem;
+}
+
+.home-container .login-choice a {
+  margin: 1.25rem;
+  font-size: 2rem;
+}
+
+.home-container .login-choice a:hover {
+  font-size: 2.1rem;
+}
+
+.login-signup-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.login-signup-container form {
+  border: 1px solid #31708e;
+  padding: 1rem;
+  margin: 1rem;
+  width: 40%;
+  border-radius: 1rem;
+  -webkit-box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+          box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+}
+
+.login-signup-container .button-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.button-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .store-logo {
   max-height: 5rem;
   margin-top: 1.5rem;
@@ -84,6 +185,7 @@ body .footer {
 .products-container .flip-forward,
 .products-container .flip-backward {
   cursor: pointer;
+  color: #5085a5;
 }
 
 .products-container .flipped {
@@ -98,13 +200,13 @@ body .footer {
 
 .products-container img {
   margin: auto;
-  max-height: 7rem;
-  max-width: 7rem;
+  max-height: 8rem;
+  max-width: 8rem;
 }
 
 .item-card {
-  height: 20rem;
-  width: 15rem;
+  height: 24rem;
+  width: 17rem;
   margin: 1rem;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
@@ -178,7 +280,7 @@ body .footer {
   -webkit-box-shadow: 0.25rem 0.25rem 0.5rem 0.1rem #31708e;
           box-shadow: 0.25rem 0.25rem 0.5rem 0.1rem #31708e;
   border-radius: 1rem;
-  border: 1px solid #8fc1e3;
+  border: 1px solid #31708e;
   width: 50rem;
 }
 
@@ -254,5 +356,86 @@ body .footer {
   height: 100px;
   margin: 0 auto;
   text-align: center;
+}
+
+.profile-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.profile-container h2 {
+  text-align: center;
+}
+
+.profile-container .profile-photo-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 20rem;
+  margin: 1rem;
+}
+
+.profile-container .profile-photo-container .profile-photo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 1rem;
+  -webkit-box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+          box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+  border-radius: 50%;
+  height: 15rem;
+  width: 15rem;
+}
+
+.profile-container .profile-photo-container .upload-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 20rem;
+}
+
+.profile-container .profile-photo-container .upload-form form {
+  width: 12.5rem;
+}
+
+.profile-container .profile-photo-container .upload-form .button-container {
+  margin: 1rem;
 }
 /*# sourceMappingURL=styles.css.map */

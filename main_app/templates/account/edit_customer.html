@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="login-signup-container">
+    <h2>Edit Profile</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <div class="button-container">
+            <input type="submit" class="btn blue" value="Submit">
+        </div>
+    </form>
+    <a href="{% url 'profile' user.id %}" class="btn red">Cancel</a>
+</div>
+
+{% endblock %}

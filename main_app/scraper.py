@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup as bs
 import requests
 import urllib.request
 import json
-
 UNITS = (
     ('Each', 'E'),
     ('LB', 'L'),
@@ -28,8 +27,7 @@ def find_store_logo(url, selector, class_name):
         store_name = logo_soup.title.text[-7:]
         store_logos.append({'src': url + store_logo, 'store_name': store_name})
     else:
-        store_logo = logo_soup.find(
-            selector, {"class": class_name}).img['src'][2:]
+        store_logo = 'i5.walmartimages.com/dfw/63fd9f59-43e0/1ed7036a-feba-43ca-8885-1d937a9aa4f2/v1/spark-yellow-spark.b43cc07989a08d84d33b0c87dd8afb1998431e48.svg'
         store_name = logo_soup.title.text[:7]
         store_logos.append({'src': store_logo, 'store_name': store_name})
 
@@ -130,7 +128,6 @@ counts = [2, 41, 34, 99, 39, 25, 20, 50, 34, 64, 99, 199, 89,
           79, 139, 96, 98, 85, 15, 59, 9, 74, 16, 29, 78, 42]
 price_units = ["Each", "Each", "LB", "Each", "Each", "Each", "LB", "Each", "Each", "Each", "Each", "Each",
                "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each", "Each"]
-
 urls_list = ['https://www.safeway.com/shop/product-details.184290007.html', 'https://www.safeway.com/shop/product-details.184060007.html', 'https://www.safeway.com/shop/product-details.184540027.html', 'https://www.safeway.com/shop/product-details.184450054.html', 'https://www.safeway.com/shop/product-details.184070124.html', 'https://www.safeway.com/shop/product-details.184040158.html', 'https://www.safeway.com/shop/product-details.960021862.html', 'https://www.safeway.com/shop/product-details.960015089.html', 'https://www.safeway.com/shop/product-details.196100818.html', 'https://www.safeway.com/shop/product-details.960038380.html', 'https://www.safeway.com/shop/product-details.117100189.html', 'https://www.safeway.com/shop/product-details.960078948.html', 'https://www.safeway.com/shop/product-details.960460707.html',
              'https://www.safeway.com/shop/product-details.960113677.html', 'https://www.safeway.com/shop/product-details.186190041.html', 'https://www.safeway.com/shop/product-details.960109089.html', 'https://www.safeway.com/shop/product-details.188510026.html', 'https://www.safeway.com/shop/product-details.960113679.html', 'https://www.safeway.com/shop/product-details.960275246.html', 'https://www.safeway.com/shop/product-details.960028971.html', 'https://www.safeway.com/shop/product-details.188650021.html', 'https://www.safeway.com/shop/product-details.960018494.html', 'https://www.safeway.com/shop/product-details.188100176.html?zipcode=94611', 'https://www.safeway.com/shop/product-details.960541035.html', 'https://www.safeway.com/shop/product-details.184100012.html']
 

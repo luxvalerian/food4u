@@ -9,8 +9,8 @@
     <img src="{{store.image}}" style="max-height: 5rem; max-width: 27rem;" />
     {% endif %}
 </div>
-
-<div class="products-container">
+<div style="display: flex;">
+<div class="products-container" style="flex-grow: 4;">
     {% for item in items %}
     <div class="item-card">
 
@@ -19,12 +19,25 @@
             <div class="item-details">
                 <h5>{{item.name}}</h5>
                 <img src="{{item.image}}" alt={{item}} />
-                <p>${{item.unit_price}}/{{item.get_unit_measurement_display}}</p>
-                <p class="flip-forward">Change Quantity</p>
+                <p>${{item.unit_price | stringformat:".2f"}}/{{item.get_unit_measurement_display}}</p>
+                <form action="{% url 'assoc_item' user.id item.id %}" method="post">
+                    {% csrf_token%}
+                    {% if item.item_count == 0 %}
+                    <button class="delete-item white-text btn flip-backward" type="submit" value="upload" disabled>Out of Stock</button>
+                    <p style="pointer-events:none; font-style:italic; text-decoration:line-through; color:lightgray">Details</p>
+                    {% else %}
+                    <button class="delete-item white-text btn" type="submit" enable>Add Item</button>
+                    <p class="flip-forward">Change Quantity</p>
+                    {% endif %}
+                </form>
             </div>
 
             <div class="item-quantity">
-                <p>{{ item.item_count }} items</p>
+                <p>{{item.item_count}} items</p>
+                <form action="{% url 'assoc_item' user.id item.id %}" method="post">
+                    {% csrf_token%}
+                    <button class="delete-item white-text btn" type="submit" value="upload" enable>Add Item</button>
+                </form>
                 <p class="flip-backward">Details</p>
             </div>
 
@@ -33,5 +46,82 @@
     </div>
 
     {% endfor %}
+</div>
+
+
+<div class="left" style="width: 40rem; margin-left: 1rem; margin-right: -1rem;">
+    <div style="position: fixed; bottom: 4rem; top: 4rem;">
+    {% if user_group == "customer" %}
+    {% for item in cart %}
+    <div style="margin-top: 3rem;">
+      {% if item.items.all.count > 0 %}
+      <table>
+        <thead>
+          <tr style="display: flex;">
+            <th style="flex-grow: 40">Product</th>
+            <th style="flex-grow: 2">Price</th>
+            <th style="flex-grow: 1">Qty</th>
+            <th style="flex-grow: 1">Total</th>
+            <th style="flex-grow: 1">Delete</th>
+          </tr>
+        </thead>
+      </table>
+      <div style="margin-bottom: 3rem; max-height: 50vh; overflow-y: auto;">
+        <table class="highlight">
+          <!-- <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Delete</th>
+              </tr>
+            </thead> -->
+          <tbody>
+            {% for product in item.items.all %}
+            <tr>
+                {% if product.store == store %}<td>{{product.name}}</td>{% endif %}
+                {% if product.store == store %}<td>${{product.unit_price | stringformat:".2f"}}/{{product.get_unit_measurement_display}}</td>{% endif %}
+                {% if product.store == store %}<td>{{product.count_ref}}</td>{% endif %}
+                {% if product.store == store %}<td>${{ product.line_total | stringformat:".2f" }} </td>{% endif %}
+                {% if product.store == store %}<td>
+               <form action="{% url 'disassoc_item_in_store' store.name user.id product.id %}" method="post">
+                  {% csrf_token%}
+                  <button class="delete-item white-text btn" type="submit">&times;</button>
+                </form>
+              </td>{% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cart-modal-footer center" style="margin-bottom: 2rem;">
+      <div>
+        <h5>Subtotal: ${{ product_total }}</h5>
+      </div>
+      <div>
+        <a class="btn modal-button" href="{% url 'cart' user.id %}">Go To Cart</a>
+      </div>
+      
+      {% else %}
+      <div class="card" style="display: flex; justify-content: center; align-items: center; min-height: 10rem;">
+        <h4>
+          No Items in Cart from {{store_name}}
+        </h4>
+      </div>
+    
+      
+      {% endif %}
+    </div>
+
+    {% endfor %}
+
+    {% else %}
+    <h1>{{user}} is a {{user_group}}</h1>
+    
+    {% endif %}
+</div>
+</div>
 </div>
 {% endblock %}

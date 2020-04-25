@@ -2,22 +2,11 @@
 
 {% block content %}
 {% if error %}
+<h1 class="center">Checkout Page</h1>
 <div style="border: 2px solid #000; border-radius: 10px; background-color: rgb(238, 138, 138); width: 40rem; height: 30rem; color: #fff; margin: 10rem auto; display: flex; justify-content: center; align-items: center;">
   <h3 style="text-align: center;">
     {{error}}
   </h3>
-</div>
-<div>
-  <h1 class="center">Checkout Page</h1>
-    <h4>Volunteer's Available</h4>
-    {% for time in timeslot %}
-      <div>
-        <p>
-          {{time.volunteer}} | {{time.get_timeslot_display }} | {{time.customer}} | {{time.date}} 
-        </p>
-      </div>
-    {% endfor %}
-
 </div>
 {% endif %}
 

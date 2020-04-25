@@ -1,28 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Home Page</h1>
-
-<div>
-  {{current_date}}
-  {% for time in volunteer %}
-  {% if time.availability_date != current_date %}
-  <h1>{{time.availability_date}}</h1>
-  {% for vol_time in time.availability %}
-  <button class="btn">
-    {% if vol_time == "D" %}
-    12PM - 1PM
-    {% endif%}
-  </button>
-  {% endfor%}
-  {% endif %}
-  {% endfor%}
-  <div>
-    <a href="{% url 'volunteer_signup' %}">I am Volunteer</a>
+<div class="home-container">
+    <h2>Welcome to Foodle!</h2>
+    <div>
+      {% load static %}
+        <img src="{% static "source.gif" %}" alt="My image">
+    </div>
+    <div class="login-choice">
+        <div style="display: flex;">
+          <a style="padding: 1rem; height: 4rem; font-size: medium;" class="btn blue" href="{% url 'volunteer_signup' %}">Sign up as a Volunteer</a>
+          <a style="padding: 1rem; height: 4rem; font-size: medium;" class="btn blue" href="{% url 'signup' %}">Sign up as a Customer</a>
+      </div>
+    </div>
   </div>
-  <div>
-    <a href="{% url 'signup' %}">I am Customer</a>
-  </div>
-</div>
 
 {% endblock %}

@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
+
 {% block content %}
+<h2 style="text-align: center;">
+  Review and Checkout
+</h2>
 {% if user_group == "customer" %}
 {% for item in cart %}
 <div style="margin-top: 3rem;">
@@ -11,7 +15,6 @@
         <th style="flex-grow: 2">Price</th>
         <th style="flex-grow: 1">Qty</th>
         <th style="flex-grow: 1">Total</th>
-        <th style="flex-grow: 1">Delete</th>
       </tr>
     </thead>
   </table>
@@ -33,12 +36,6 @@
           <td>${{product.unit_price | stringformat:".2f"}}/{{product.get_unit_measurement_display}}</td>
           <td>{{product.count_ref}}</td>
           <td>${{ product.line_total | stringformat:".2f" }} </td>
-          <td>
-            <form action="{% url 'disassoc_item' user.id product.id %}" method="post">
-              {% csrf_token%}
-              <button class="delete-item white-text btn" type="submit">&times;</button>
-            </form>
-          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -46,12 +43,15 @@
   </div>
 </div>
 <div class="cart-modal-footer right" style="margin-bottom: 2rem;">
-  <div>
+  <div style="display: flex; flex-direction: column;">
     <h5>Subtotal: ${{ product_total }}</h5>
+    <small>Tax: 6%</small>
+    <small>Admin. Fee $2.00 😊 Thank you!</small>
+    <h5>Total: ${{total | stringformat:".2f" }}</h5>
   </div>
   <div>
 
-    <a class="btn modal-button" href="{% url 'select_delivery' %}">Checkout</a>
+    <a class="btn modal-button" href="{% url 'checkout' user.id %}"> Complete Your Checkout</a>
   </div>
 
   {% else %}
