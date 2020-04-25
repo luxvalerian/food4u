@@ -34,6 +34,9 @@ body {
       margin-right: 1rem;
       font-size: 2.25rem;
     }
+    .right {
+      top: 3.5rem !important;
+    }
     li,
     li a {
       font-size: 1.2rem;
@@ -99,7 +102,11 @@ body {
     width: 50%;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
-  }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 }
 
 .button-container {
