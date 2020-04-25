@@ -126,6 +126,14 @@ class Cart(models.Model):
             return f"{self.user.first_name}'s cart has {self.items.count()} items"
 
 
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Photo for user_id: {self.user_id} @{self.url}"
+
+
 class LineItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField()

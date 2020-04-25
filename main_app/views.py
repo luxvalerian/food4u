@@ -11,9 +11,15 @@ from datetime import date
 
 from .scraper import logo_img, walmart_fruit, produce_dict
 from . forms import CustomerSignUpForm, VolunteerSignUpForm, CustomerUpdateForm, UserUpdateForm
-
-from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store
+from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store, Photo
 from .decorators import allowed_users
+
+import uuid
+import boto3
+
+
+S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
+BUCKET = 'foodle'
 
 
 def signup(request):
@@ -33,7 +39,8 @@ def signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('profile')
+            user_id = user.id
+            return redirect('index')
         else:
             error_message = 'Invalid sign up - try again'
     form = CustomerSignUpForm()
@@ -59,7 +66,8 @@ def volunteer_signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('profile')
+            user_id = user.id
+            return redirect('profile', user_id=user_id)
         else:
             error_message = 'Invalid sign up - try again'
     form = VolunteerSignUpForm()
@@ -98,14 +106,19 @@ def about(request):
 
 
 @login_required
-def profile(request):
-    customer = Customer.objects.filter(user=request.user).first()
-    volunteer = Volunteer.objects.filter(user=request.user).first()
-    vol_timeslot = Timeslot.objects.filter(volunteer=volunteer)
-    cus_timeslot = Timeslot.objects.filter(customer=customer)
+def profile(request, user_id, *kwargs):
+    customer = Customer.objects.filter(user=request.user)
+    volunteer = Volunteer.objects.all()
+    photo = Photo.objects.filter(user=request.user)
+    vol = None
+    for person in volunteer:
+        vol = person
 
-    context = {'customer': customer, 'volunteer': volunteer,
-               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot}
+    vol_timeslot = Timeslot.objects.filter(volunteer__in=volunteer)
+    cus_timeslot = Timeslot.objects.filter(customer__in=customer)
+
+    context = {'user_id': user_id, 'customer': customer, 'volunteer': volunteer,
+               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
     return render(request, 'account/profile.html', context)
 
 
@@ -249,6 +262,25 @@ class CustomerUpdate(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self, *args, **kwargs):
         return reverse("profile")
+
+
+def add_photo(request, user_id):
+    photo_file = request.FILES.get('photo-file', None)
+    print(photo_file, 'photo file')
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + \
+            photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            photo = Photo(url=url, user=request.user)
+            print(photo, 'volunteer photo')
+            photo.save()
+        except Exception as e:
+            print(e)
+            print('An error occurred while uploading a file to S3')
+    return redirect('profile', user_id=user_id)
 
 
 class VolunteerUpdate(LoginRequiredMixin, UpdateView):
