@@ -12,7 +12,6 @@
   {% block css %}
   <!-- Compiled and minified CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/css/materialize.min.css"
     integrity="sha256-qj3p6P1fJIV+Ndv7RW1ovZI2UhOuboj9GcODzcNFIN8=" crossorigin="anonymous" />
@@ -38,64 +37,54 @@
         $(`#id_delivery_time_${i}`).formSelect();
       }
 
-      });
-      $(document).ready(function () {
-        // Initialize materialize data picker
-        $("#id_availability_date").datepicker({ format: "yyyy-mm-dd" });
-        $("select").formSelect();
-        $('div.browser-default').removeClass('browser-default')
-        // $("#id_delivery_time").formSelect();
-      });
-    </script>
-    {% endblock javascript %}
-    <header class="navbar-fixed">
-      <nav>
-        <div class="nav-wrapper navbar">
-          <ul>
-            <li>
-              <a href="/">
-                <img
-                  class="foodle-logo"
-                  src="{% static 'images/foodle_logo.svg'%}"
-                  alt="logo"
-                />
-              </a>
-            </li>
+    });
+    $(document).ready(function () {
+      // Initialize materialize data picker
+      $("#id_availability_date").datepicker({ format: "yyyy-mm-dd" });
+      $("select").formSelect();
+      $('div.browser-default').removeClass('browser-default')
+      // $("#id_delivery_time").formSelect();
+    });
+  </script>
+  {% endblock javascript %}
+  <header class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper navbar">
+        <ul>
+          <li>
+            <a href="/">
+              <img class="foodle-logo" src="{% static 'images/foodle_logo.svg'%}" alt="logo" />
+            </a>
+          </li>
+        </ul>
+        <ul class="right">
+          {% if user.is_authenticated %}
+          <ul id="dropdown1" class="dropdown-content" style="margin-top: 2.5rem;">
+            <li><a href="{% url 'profile' user.id %}">Profile</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
           </ul>
-          <ul class="right">
-            {% if user.is_authenticated %}
-            <ul
-              id="dropdown1"
-              class="dropdown-content"
-              style="margin-top: 2.5rem;"
-            >
-              <li><a href="{% url 'profile' %}">Profile</a></li>
-              <li><a href="/about">About</a></li>
-              <li><a href="{% url 'logout' %}">Log Out</a></li>
-            </ul>
-            <!-- <li><a href="{% url 'cart' user.id %}" class="large material-icons">add_shopping_cart</a></li> -->
-            <!-- <li><a href="{% url 'checkout' user.id %}">Checkout</a></li> -->
-            <li>
-              <a class="dropdown-trigger" href="#" data-target="dropdown1"
-                >Welcome {{user.first_name}}</a
-              >
-            </li>
-            <li><a href="{% url 'index' %}">Stores</a></li>
-            <li><a href="{% url 'cart' user.id %}"><i class="large material-icons" id="openModal">shopping_cart</i></a></li>
-            <!-- Let's talk about this -->
-            <li>
-              <!-- <i class="large material-icons" id="openModal">shopping_cart</i> -->
-            </li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Log In</a></li>
-            <li><a href="{% url 'signup' %}">Sign Up</a></li>
-            {% endif %}
-          </ul>
-        </div>
-      </nav>
-    </header>
-    <main class="main-container container">
-      <!-- <div id="cartModal" class="cart-modal">
+          <!-- <li><a href="{% url 'checkout' user.id %}">Checkout</a></li> -->
+          <li>
+            <a class="dropdown-trigger" href="#" data-target="dropdown1">Welcome, &nbsp;{{user.first_name}}!</a>
+          </li>
+          <li><a href="{% url 'index' %}">Stores</a></li>
+          <li><a href="{% url 'cart' user.id %}"><i class="large material-icons" id="openModal">shopping_cart</i></a>
+          </li>
+          <!-- Let's talk about this -->
+          <li>
+            <!-- <i class="large material-icons" id="openModal">shopping_cart</i> -->
+          </li>
+          {% else %}
+          <li><a href="{% url 'login' %}">Log In</a></li>
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main class="main-container container">
+    <!-- <div id="cartModal" class="cart-modal">
       <div class="cart-modal-content">
         <span class="close">&times;</span>
         <table>

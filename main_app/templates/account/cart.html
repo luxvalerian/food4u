@@ -4,25 +4,25 @@
 {% for item in cart %}
 {% load l10n %}
 
-  <!-- <div id="cartModal" class="cart-modal">
+<!-- <div id="cartModal" class="cart-modal">
     <div class="cart-modal-content">
       <span class="close">&times;</span> -->
-      <div style="margin-top: 3rem;">
-        {% if item.items.all.count > 0 %}
-          <table>
-            <thead>
-              <tr style="display: flex;">
-                <th style="flex-grow: 40">Product</th>
-                <th style="flex-grow: 2">Price</th>
-                <th style="flex-grow: 1">Qty</th>
-                <th style="flex-grow: 1">Total</th>
-                <th style="flex-grow: 1">Delete</th>
-              </tr>
-            </thead>
-          </table>
-      <div style="margin-bottom: 3rem; max-height: 60vh; overflow: scroll;">
-      <table class="highlight responsive-table">
-        <!-- <thead>
+<div style="margin-top: 3rem;">
+  {% if item.items.all.count > 0 %}
+  <table>
+    <thead>
+      <tr style="display: flex;">
+        <th style="flex-grow: 40">Product</th>
+        <th style="flex-grow: 2">Price</th>
+        <th style="flex-grow: 1">Qty</th>
+        <th style="flex-grow: 1">Total</th>
+        <th style="flex-grow: 1">Delete</th>
+      </tr>
+    </thead>
+  </table>
+  <div style="margin-bottom: 3rem; max-height: 60vh; overflow: scroll;">
+    <table class="highlight responsive-table">
+      <!-- <thead>
           <tr>
             <th>Product</th>
             <th>Price</th>
@@ -31,53 +31,53 @@
             <th>Delete</th>
           </tr>
         </thead> -->
-        <tbody>
-          {% for product in item.items.all %}
-          <tr>
-            <td>{{product.name}}</td>
-            <td>${{product.unit_price | stringformat:".2f"}}/{{product.get_unit_measurement_display}}</td>
-            <td>{{product.count_ref}}</td>
-            <td>${% widthratio product.unit_price 1 product.count_ref %} </td>
-            <td>
-              <form action="{% url 'disassoc_item' user.id product.id %}" method="post">
-                {% csrf_token%}
-                <button class="delete-item white-text btn" type="submit">&times;</button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    </div>
-      <div class="cart-modal-footer right" style="margin-bottom: 2rem;">
-        <div>
-          <h5>Subtotal: ${{ product_total }}</h5>
-        </div>
-        <div>
-          <a class="btn modal-button" href="{% url 'checkout' user.id %}">Checkout</a>
-        </div>
-        
-        {% else %}
-        <div class="card" style="display: flex; justify-content: center; align-items: center; min-height: 10rem;">
-          <h4>
-            No Items in Cart
-          </h4>
-        </div>
+      <tbody>
+        {% for product in item.items.all %}
+        <tr>
+          <td>{{product.name}}</td>
+          <td>${{product.unit_price | stringformat:".2f"}}/{{product.get_unit_measurement_display}}</td>
+          <td>{{product.count_ref}}</td>
+          <td>${{ product.line_total | stringformat:".2f" }} </td>
+          <td>
+            <form action="{% url 'disassoc_item' user.id product.id %}" method="post">
+              {% csrf_token%}
+              <button class="delete-item white-text btn" type="submit">&times;</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="cart-modal-footer right" style="margin-bottom: 2rem;">
+  <div>
+    <h5>Subtotal: ${{ product_total }}</h5>
+  </div>
+  <div>
+    <a class="btn modal-button" href="{% url 'checkout' user.id %}">Checkout</a>
+  </div>
 
-        {% endif %}
-      </div>
-    <!-- </div>
+  {% else %}
+  <div class="card" style="display: flex; justify-content: center; align-items: center; min-height: 10rem;">
+    <h4>
+      No Items in Cart
+    </h4>
+  </div>
+
+  {% endif %}
+</div>
+<!-- </div>
 
   </div> -->
 {% endfor %}
 
-  
-  
-  {% else %}
-  <h1>{{user}} is a {{user_group}}</h1>
-  
-  
-  
-  {% endif %}
-  {% endblock %}
+
+
+{% else %}
+<h1>{{user}} is a {{user_group}}</h1>
+
+
+
+{% endif %}
+{% endblock %}
