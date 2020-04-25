@@ -167,7 +167,7 @@ def checkout(request, user_id):
                 cart.save()
                 context = {'customer': customer, 'timeslot': timeslot,
                'error': error_message, 'vol_time': volunteer}
-                return redirect('/checkout/thankyou.html')
+                return redirect('/checkout/thankyou')
         else:
             new_timeslot.save()
             active_customer_cart.delete()
@@ -175,7 +175,7 @@ def checkout(request, user_id):
             cart.save()
             context = {'customer': customer, 'timeslot': timeslot,
                'error': error_message, 'vol_time': volunteer}
-            return redirect('/checkout/thankyou.html')
+            return redirect('/checkout/thankyou')
     else:
         error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
         print(error_message)
