@@ -119,11 +119,24 @@ def stores_index(request):
 
 @login_required
 def stores_detail(request, store_name):
+    customer = Customer.objects.filter(user=request.user)
+    cart = Cart.objects.filter(user=request.user).all()
+    user_group = str(request.user.groups.all()[0])
+    product_total = 0
+    for obj in cart:
+        for product in obj.items.all():
+            item = Item.objects.filter(id=product.id)
+            piece = item.first()
+            store_item = piece.store.name
+            prices = round(piece.unit_price, 2)
+            product_total += piece.count_ref * prices
+
     stores = Store.objects.all()
     store = stores.filter(name=store_name).first()
     items = Item.objects.filter(store=store)
     context = {'product': produce_dict, 'logo': logo_img,
-               'items': items, 'store': store}
+               'items': items, 'store': store, 'user_group': user_group, 'customer': customer,
+               'cart': cart, 'product_total': round(product_total, 2), 'store_item': store_item}
     return render(request, 'stores/detail.html', context)
 
 
@@ -191,26 +204,18 @@ def checkout(request, user_id):
 @login_required
 def cart(request, user_id):
     customer = Customer.objects.filter(user=request.user)
-    # timeslot = Timeslot.objects.filter(customer=customer)
-    # timeslot_count = timeslot.count()
     cart = Cart.objects.filter(user=request.user).all()
-    # items_not_in_cart = Item.objects.exclude(id__in = cart.items.all().values_list('id'))
-    print(cart.all())
     user_group = str(request.user.groups.all()[0])
     product_total = 0
     for obj in cart:
         for product in obj.items.all():
             item = Item.objects.filter(id=product.id)
             piece = item.first()
-            print(piece)
+            store_item = piece.store.name
             prices = round(piece.unit_price, 2)
             product_total += piece.count_ref * prices
-            
-            print(product_total)
-
-            # product_price = (product.price * 2)
     context = {'user_group': user_group, 'customer': customer,
-               'cart': cart, 'product_total': round(product_total, 2)}
+               'cart': cart, 'product_total': round(product_total, 2), 'store_item': store_item}
     return render(request, 'account/cart.html', context)
 
 
