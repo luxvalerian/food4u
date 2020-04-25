@@ -264,7 +264,7 @@ def change_volunteer_password(request):
             update_session_auth_hash(request, form.user)
             return redirect('profile', user_id=user_id)
         else:
-            return redirect('/account/volunteer_password.html')
+            return redirect('/account/volunteer_password')
     else:
         form = PasswordChangeForm(user=request.user)
         context = {'form': form}
@@ -280,7 +280,7 @@ def change_password(request):
             update_session_auth_hash(request, form.user)
             return redirect('profile', user_id=user_id)
         else:
-            return redirect('/account/password.html')
+            return redirect('/account/password')
     else:
         form = PasswordChangeForm(user=request.user)
         context = {'form': form}
@@ -389,19 +389,3 @@ def add_delivery(request):
     customer = Customer.objects.filter(user=request.user)
     context = {'customer': customer}
     return render(request, 'checkout/complete_order.html', context)
-
-# def edit_volunteer_profile(request):
-#     user_id=request.user.id
-#     if request.method == 'POST':
-#         form = EditVolunteerForm(request.POST, instance=request.user)
-#         profile_form = EditVolunteerAvailablityForm(request.POST, instance=request.user.volunteer)
-#         # print(form.availability_date)
-#         # print(form.availability)
-#         if form.is_valid() and profile_form.is_valid():
-#             form.save()
-#             profile_form.save()
-#             return redirect('profile', user_id=user_id)
-#     else:
-#         form = EditVolunteerForm(instance=request.user)
-#         context = {'form': form}
-#         return render(request, 'account/edit_volunteer.html', context)
