@@ -74,12 +74,14 @@ def volunteer_signup(request):
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup_volunteer.html', context)
 
+
 def home(request):
     return render(request, 'home.html')
 
 
 def about(request):
     return render(request, 'about.html')
+
 
 @login_required
 @allowed_users(allowed_roles=['customer'])
@@ -127,7 +129,8 @@ def checkout(request, user_id):
     customer = Customer.objects.filter(user=request.user)
     active_customer = customer.first()
     active_customer_cart = Cart.objects.filter(user=request.user).first()
-    active_customer_delivery = CustomerDelivery.objects.filter(customer=active_customer).first()
+    active_customer_delivery = CustomerDelivery.objects.filter(
+        customer=active_customer).first()
     customer_delivery_time = active_customer_delivery.delivery_time
     customer_delivery_date = date.today()
     timeslot = None
@@ -166,7 +169,7 @@ def checkout(request, user_id):
                 cart = Cart(user=request.user)
                 cart.save()
                 context = {'customer': customer, 'timeslot': timeslot,
-               'error': error_message, 'vol_time': volunteer}
+                           'error': error_message, 'vol_time': volunteer}
                 return redirect('/checkout/thankyou')
         else:
             new_timeslot.save()
@@ -174,7 +177,7 @@ def checkout(request, user_id):
             cart = Cart(user=request.user)
             cart.save()
             context = {'customer': customer, 'timeslot': timeslot,
-               'error': error_message, 'vol_time': volunteer}
+                       'error': error_message, 'vol_time': volunteer}
             return redirect('/checkout/thankyou')
     else:
         error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
@@ -183,12 +186,14 @@ def checkout(request, user_id):
                'error': error_message, 'vol_time': volunteer}
     return render(request, 'checkout.html', context)
 
+
 @login_required
 def thank_you(request):
     customer = Customer.objects.filter(user=request.user)
     timeslot = Timeslot.objects.filter(customer=customer.first())
     context = {'customer': customer, 'timeslot': timeslot}
     return render(request, 'checkout/thankyou.html', context)
+
 
 @login_required
 @allowed_users(allowed_roles=['customer'])
@@ -209,6 +214,7 @@ def cart(request, user_id):
                'cart': cart, 'product_total': round(product_total, 2), 'store_item': store_item}
     return render(request, 'account/cart.html', context)
 
+
 def view_profile(request, user_id, *kwargs):
     customer = Customer.objects.filter(user=request.user)
     volunteer = Volunteer.objects.all()
@@ -224,9 +230,10 @@ def view_profile(request, user_id, *kwargs):
                'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
     return render(request, 'account/profile.html', context)
 
+
 @login_required
 def edit_profile(request):
-    user_id=request.user.id
+    user_id = request.user.id
     if request.method == 'POST':
         form = EditCustomerForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -237,12 +244,14 @@ def edit_profile(request):
         context = {'form': form}
         return render(request, 'account/edit_customer.html', context)
 
+
 @login_required
 def edit_volunteer_profile(request):
-    user_id=request.user.id
+    user_id = request.user.id
     if request.method == 'POST':
         form = EditVolunteerForm(request.POST, instance=request.user)
-        profile_form = EditVolunteerAvailablityForm(request.POST, instance=request.user.volunteer)
+        profile_form = EditVolunteerAvailablityForm(
+            request.POST, instance=request.user.volunteer)
         # print(form.availability_date)
         # print(form.availability)
         if form.is_valid() and profile_form.is_valid():
@@ -254,9 +263,10 @@ def edit_volunteer_profile(request):
         context = {'form': form}
         return render(request, 'account/edit_volunteer.html', context)
 
+
 @login_required
 def change_volunteer_password(request):
-    user_id=request.user.id
+    user_id = request.user.id
     if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
         if form.is_valid():
@@ -270,9 +280,10 @@ def change_volunteer_password(request):
         context = {'form': form}
         return render(request, 'account/volunteer_password.html', context)
 
+
 @login_required
 def change_password(request):
-    user_id=request.user.id
+    user_id = request.user.id
     if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
         if form.is_valid():
@@ -305,8 +316,6 @@ def add_photo(request, user_id):
             print(e)
             print('An error occurred while uploading a file to S3')
     return redirect('profile', user_id=user_id)
-
-
 
 
 @login_required
@@ -345,6 +354,7 @@ def disassoc_item(request, user_id, item_id):
                     user=request.user).items.remove(item_id)
     return redirect('cart', user_id=user_id)
 
+
 @login_required
 @allowed_users(allowed_roles=['customer'])
 def disassoc_item_in_store(request, store_name, user_id, item_id):
@@ -363,12 +373,14 @@ def disassoc_item_in_store(request, store_name, user_id, item_id):
                     user=request.user).items.remove(item_id)
     return redirect('detail', store_name=store_name)
 
+
 def select_delivery(request):
     customer = Customer.objects.filter(user=request.user).first()
     delivery_instance = CustomerDelivery(customer=customer)
     delivery_instance.save()
     # deliver = None
     # for deliver in delivery_instance
+
     print(delivery_instance)
     error_message = ''
     print(request.method)
@@ -386,6 +398,7 @@ def select_delivery(request):
 
     context = {'form': form, 'error_message': error_message}
     return render(request, 'checkout/select_delivery_time.html', context)
+
 
 def add_delivery(request):
     user_id = request.user.id
@@ -406,22 +419,8 @@ def add_delivery(request):
     percent_total = product_total * tax
     total = str(product_total + percent_total + 2)
     customer = Customer.objects.filter(user=request.user)
+
     timeslot = Timeslot.objects.filter(customer=customer.first())
     context = {'customer': customer, 'cart': cart, 'user_group': user_group, 'product_total': round(product_total, 2), 'store_item': store_item, 'timeslot': timeslot, 'total': total}
     return render(request, 'checkout/complete_order.html', context)
 
-# def edit_volunteer_profile(request):
-#     user_id=request.user.id
-#     if request.method == 'POST':
-#         form = EditVolunteerForm(request.POST, instance=request.user)
-#         profile_form = EditVolunteerAvailablityForm(request.POST, instance=request.user.volunteer)
-#         # print(form.availability_date)
-#         # print(form.availability)
-#         if form.is_valid() and profile_form.is_valid():
-#             form.save()
-#             profile_form.save()
-#             return redirect('profile', user_id=user_id)
-#     else:
-#         form = EditVolunteerForm(instance=request.user)
-#         context = {'form': form}
-#         return render(request, 'account/edit_volunteer.html', context)
