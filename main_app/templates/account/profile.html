@@ -3,7 +3,6 @@
 {% now "F j, Y" as current_date%}
 <div class="profile-container">
   <h2>Profile Page</h2>
-  <div class="profile-photo-container">
   {{user.availability}}
   <h5>{{user.first_name}} {{user.last_name}}</h5>
 
@@ -21,20 +20,6 @@
 {% else %}
   <div class="card-panel teal-text center-align">No Photos Uploaded</div>
 {% endif %}
-
-
-    {% if photo.count < 1 %}
-    <div class="upload-form">
-        <form action="{% url 'add_photo' user.id %}" enctype="multipart/form-data" method="POST">
-          {% csrf_token %}
-            <input type="file" name="photo-file">
-          <div class="button-container ">
-            <input class="btn" type="submit" value="Upload Photo">
-          </div>
-        </form>
-    </div>
-    {% endif %}
-  </div>
 
 {% if photo.count < 1 %}
 <form action="{% url 'add_photo' user.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
@@ -61,37 +46,27 @@
 </ul>
 <a href="{% url 'edit_volunteer_profile' %}" class="btn">Edit Account</a>
 
-<!-- show user info address, saved payment info, last visited store -->
-
-<!-- if statement that says if user is in group customer show message "Hi 'user'! Where did you want to shop today?" -->
-<!-- else show the volunteer's profile page with their profile image, weekly slots to choose when they volunteer, see available customer
-orders they can pick to start working. -->
-<!-- {% elif user.id == customer.id %} -->
 </div>
-<!-- 
-<div class="card" style="display: flex; justify-content: center; align-items: center; min-height: 10rem;">
-  <h4>
-    No Order Information Available
-  </h4>
-</div> -->
 
 {% else %}
 <br/>
 <ul>
   <br />
   {% for cust in customer.all %}
-  {% for time in cus_timeslot.all %}
+  {% for time in cust_timeslot.all %}
   <li>Delivery Time: {{time.get_timeslot_display}}</li>
   <li>Delivery Date: {{time.date}}</li>
   <br />
   {% endfor %}
+  {% endfor %}
 </ul>
-</div>
-<a href="{% url 'customer_update' %}" class="btn">Edit Account</a>
-</div>
-{% endfor %}
 {% endif %}
 {% endfor %}
+<a href="{% url 'customer_update' %}" class="btn">Edit Account</a>
+</div>
+
+
+
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {

@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/css/materialize.min.css"
     integrity="sha256-qj3p6P1fJIV+Ndv7RW1ovZI2UhOuboj9GcODzcNFIN8=" crossorigin="anonymous" />
   {% endblock css %}
-
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   {{ form.media.css }}
@@ -59,24 +59,20 @@
         </ul>
         <ul class="right">
           {% if user.is_authenticated %}
-          <!-- <li><a href="{% url 'checkout' user.id %}">Checkout</a></li> -->
           <ul id="dropdown1" class="dropdown-content">
             <li style="background-color:#5085a5; color: #f7f9fb; max-width: 300px;"><a class="white-text" style="width: 300px; line-height: 50px;" href="#">Welcome, {{user.first_name}}!</a></li>
             <li><a href="{% url 'profile' user.id %}">Profile</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
           </ul>
           <li>
             <a class="dropdown-trigger" href="#" data-target="dropdown1">Welcome, {{user.first_name}}!</a>
           </li>
           {% if user.customer %}
           <li><a href="{% url 'index' %}">Stores</a></li>
-          
           <li><a href="{% url 'cart' user.id %}"><i class="large material-icons" id="openModal">shopping_cart</i></a>
           </li>
           {% endif %}
-          <!-- Let's talk about this -->
-          <li>
-            <!-- <i class="large material-icons" id="openModal">shopping_cart</i> -->
-          </li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>
           <li><a href="{% url 'signup' %}">Sign Up</a></li>
@@ -86,42 +82,6 @@
     </nav>
   </header>
   <main class="main-container container">
-    <!-- <div id="cartModal" class="cart-modal">
-      <div class="cart-modal-content">
-        <span class="close">&times;</span>
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Qty</th>
-              <th>Total</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Bananas</td>
-              <td>$1.00</td>
-              <td>1</td>
-              <td>$1.00</td>
-              <td>
-                <span class="delete-item">&times;</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="cart-modal-footer">
-          <div>
-            <h5>Total: $1.00</h5>
-          </div>
-          <div>
-            <button class="modal-button" type="button">Checkout</button>
-          </div>
-        </div>
-      </div>
-
-    </div> -->
 
     {% block content %} {% endblock %}
   </main>

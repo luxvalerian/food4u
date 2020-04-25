@@ -2,17 +2,18 @@
 
 {% block content %}
 
-<div class="login-signup-container">
+<div class="login-signup-container" style="height: inherit; margin-bottom: .5rem;">
   {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
-  <h2>Volunteer Sign Up</h2>
-  <form method="POST" action="{% url 'volunteer_signup' %}" class="browser-default">
+  <h3>Volunteer Sign Up</h3>
+  <form method="POST" action="{% url 'volunteer_signup' %}" class="browser-default" style="padding: 2rem; width: 100%;">
     {% csrf_token %}
     {{ form.as_p }}
   <div class="button-container">
-    <input type="submit" class="btn blue" value="signup">
+    <input type="submit" class="btn blue" value="signup" style="height: 4rem; width: 40%; font-size: large; border-radius: 7px;">
     <input type="hidden" name="next" value="{{ next }}">
   </div>
   </form>
+  <a href="{% url 'login' %}">Already registered? click here to login.</a>
 </div>
 
   <script>
