@@ -12,10 +12,10 @@
           <table>
             <thead>
               <tr style="display: flex;">
-                <th style="flex-grow: 40">Product</th>
-                <th style="flex-grow: 2">Price</th>
-                <th style="flex-grow: 1">Qty</th>
-                <th style="flex-grow: 1">Total</th>
+                <th style="flex-grow: 45">Product</th>
+                <th style="flex-grow: 3">Price</th>
+                <th style="flex-grow: 2">Qty</th>
+                <th style="flex-grow: 2">Total</th>
                 <th style="flex-grow: 1">Delete</th>
               </tr>
             </thead>
@@ -35,7 +35,7 @@
           {% for product in item.items.all %}
           <tr>
             <td>{{product.name}}</td>
-            <td>${{product.unit_price | stringformat:".2f"}}/{{product.get_unit_measurement_display}}</td>
+            <td>${{product.unit_price}}/{{product.get_unit_measurement_display}}</td>
             <td>{{product.count_ref}}</td>
             <td>${% widthratio product.unit_price 1 product.count_ref %} </td>
             <td>
