@@ -2,16 +2,16 @@
 
 {% block content %}
 
-<h3 style="text-align: center;">Edit Profile</h3>
-
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <div style="display: flex;">
-    <button class="btn" type="submit" style="margin-bottom: 2rem;  margin-right: 2rem;">Submit</button>
+<div class="login-signup-container">
+    <h2>Edit Profile</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <div class="button-container">
+            <input type="submit" class="btn blue" value="Submit">
+        </div>
+    </form>
     <a href="{% url 'profile' user.id %}" class="btn red">Cancel</a>
-  </div>
-</form>
-
+</div>
 
 {% endblock %}

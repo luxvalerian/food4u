@@ -99,14 +99,15 @@ body {
     border: $border;
     padding: 1rem;
     margin: 1rem;
-    width: 50%;
+    width: 40%;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
-    .button-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  }
+  .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .button-container {
@@ -126,9 +127,11 @@ body {
   flex-wrap: wrap;
   text-align: center;
   justify-content: center;
+
   .flip-forward,
   .flip-backward {
     cursor: pointer;
+    color: color(primary);
   }
   .flipped {
     transform: rotateY(180deg);
