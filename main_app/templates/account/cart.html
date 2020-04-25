@@ -2,11 +2,6 @@
 {% block content %}
 {% if user_group == "customer" %}
 {% for item in cart %}
-{% load l10n %}
-
-<!-- <div id="cartModal" class="cart-modal">
-    <div class="cart-modal-content">
-      <span class="close">&times;</span> -->
 <div style="margin-top: 3rem;">
   {% if item.items.all.count > 0 %}
   <table>
@@ -55,7 +50,8 @@
     <h5>Subtotal: ${{ product_total }}</h5>
   </div>
   <div>
-    <a class="btn modal-button" href="{% url 'checkout' user.id %}">Checkout</a>
+
+    <a class="btn modal-button" href="{% url 'select_delivery' %}">Checkout</a>
   </div>
 
   {% else %}

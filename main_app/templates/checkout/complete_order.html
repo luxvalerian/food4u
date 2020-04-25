@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="margin-top: 3rem;">
+Complete Your Delivery 
+{% for cust in customer.all %}
+  {{cust.id}}
+  {{cust.delivery_time}}
+{% endfor %}
+<a class="btn modal-button" href="{% url 'checkout' user.id %}">Checkout</a>
+</div>
+
+{% endblock %}

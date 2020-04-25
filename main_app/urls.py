@@ -27,6 +27,7 @@ urlpatterns = [
          views.assoc_item, name='assoc_item'),
     path('cart/<int:user_id>/disassoc_item/<int:item_id>/', views.disassoc_item, name='disassoc_item'),
     path('stores/<str:store_name>/detail/<int:user_id>/disassoc_item_in_store/<int:item_id>/', views.disassoc_item_in_store, name='disassoc_item_in_store'),
-    path('checkout/delivery/<int:user_id>/',views.select_delivery, name="select_delivery"),
-    path('checkout/delivery/<int:user_id>/<int:volunteer_id>/',views.add_delivery, name="add_delivery"),
+    path('checkout/delivery/',views.select_delivery, name="select_delivery"),
+    path('complete_order/',views.add_delivery, name="complete_order"),
+    path('checkout/thankyou/',views.thank_you, name="thankyou"),
 ]

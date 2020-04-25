@@ -10,8 +10,8 @@ from django.urls import reverse
 from datetime import date
 
 from .scraper import logo_img, walmart_fruit, produce_dict
-from . forms import CustomerSignUpForm, VolunteerSignUpForm, UserUpdateForm, EditCustomerForm, EditVolunteerForm, EditVolunteerAvailablityForm
-from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store, Photo
+from . forms import CustomerSignUpForm, VolunteerSignUpForm, UserUpdateForm, EditCustomerForm, EditVolunteerForm, EditVolunteerAvailablityForm, AddDeliveryTimeForm
+from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store, Photo, CustomerDelivery
 from .decorators import allowed_users
 
 import uuid
@@ -126,8 +126,10 @@ def checkout(request, user_id):
 
     customer = Customer.objects.filter(user=request.user)
     active_customer = customer.first()
-    customer_delivery_time = active_customer.delivery_time
-    customer_delivery_date = date(2020, 4, 29)  # date.today()
+    active_customer_cart = Cart.objects.filter(user=request.user).first()
+    active_customer_delivery = CustomerDelivery.objects.filter(customer=active_customer).first()
+    customer_delivery_time = active_customer_delivery.delivery_time
+    customer_delivery_date = date.today()
     timeslot = None
     customer_time = None
     customer_date = None
@@ -160,9 +162,20 @@ def checkout(request, user_id):
                 error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
             else:
                 new_timeslot.save()
+                active_customer_cart.delete()
+                cart = Cart(user=request.user)
+                cart.save()
+                context = {'customer': customer, 'timeslot': timeslot,
+               'error': error_message, 'vol_time': volunteer}
+                return redirect('/checkout/thankyou')
         else:
             new_timeslot.save()
-            # error_message = 'Return an Else'
+            active_customer_cart.delete()
+            cart = Cart(user=request.user)
+            cart.save()
+            context = {'customer': customer, 'timeslot': timeslot,
+               'error': error_message, 'vol_time': volunteer}
+            return redirect('/checkout/thankyou')
     else:
         error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
         print(error_message)
@@ -170,6 +183,12 @@ def checkout(request, user_id):
                'error': error_message, 'vol_time': volunteer}
     return render(request, 'checkout.html', context)
 
+@login_required
+def thank_you(request):
+    customer = Customer.objects.filter(user=request.user)
+    timeslot = Timeslot.objects.filter(customer=customer.first())
+    context = {'customer': customer, 'timeslot': timeslot}
+    return render(request, 'checkout/thankyou.html', context)
 
 @login_required
 @allowed_users(allowed_roles=['customer'])
@@ -344,8 +363,45 @@ def disassoc_item_in_store(request, store_name, user_id, item_id):
                     user=request.user).items.remove(item_id)
     return redirect('detail', store_name=store_name)
 
-def select_delivery(request, user_id):
-    pass
+def select_delivery(request):
+    customer = Customer.objects.filter(user=request.user).first()
+    delivery_instance = CustomerDelivery.objects.filter(customer=customer).first()
+    print(delivery_instance)
+    error_message = ''
+    print(request.method)
+    if request.method == 'POST':
+        print(request.method)
+        form = AddDeliveryTimeForm(request.POST, instance=delivery_instance)
+        if form.is_valid():
+            form.save()
+            print(form)
+            return redirect('complete_order')
+    else:
+        error_message = 'Invalid information entered'
+        print(error_message)
+    form = AddDeliveryTimeForm(request.POST, instance=delivery_instance)
 
-def add_delivery(request, user_id, volunteer_id):
-    pass
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'checkout/select_delivery_time.html', context)
+
+def add_delivery(request):
+    user_id = request.user.id
+    customer = Customer.objects.filter(user=request.user)
+    context = {'customer': customer}
+    return render(request, 'checkout/complete_order.html', context)
+
+# def edit_volunteer_profile(request):
+#     user_id=request.user.id
+#     if request.method == 'POST':
+#         form = EditVolunteerForm(request.POST, instance=request.user)
+#         profile_form = EditVolunteerAvailablityForm(request.POST, instance=request.user.volunteer)
+#         # print(form.availability_date)
+#         # print(form.availability)
+#         if form.is_valid() and profile_form.is_valid():
+#             form.save()
+#             profile_form.save()
+#             return redirect('profile', user_id=user_id)
+#     else:
+#         form = EditVolunteerForm(instance=request.user)
+#         context = {'form': form}
+#         return render(request, 'account/edit_volunteer.html', context)
