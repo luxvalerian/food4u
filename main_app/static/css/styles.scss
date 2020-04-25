@@ -1,5 +1,6 @@
 $border-radius: 1rem;
 $box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+$border: 1px solid #31708e;
 
 $colors: (
   primary: #5085a5,
@@ -92,19 +93,21 @@ body {
   justify-content: center;
   align-items: center;
   form {
-    border: 1px solid color(primary-dark);
+    border: $border;
     padding: 1rem;
     margin: 1rem;
     width: 50%;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
-    .button-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
 }
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 // stores - detail.html
 .store-logo {
   max-height: 5rem;
@@ -142,7 +145,7 @@ body {
   justify-content: center;
   align-items: center;
   .item-card-inner {
-    border: 1px solid color(primary-dark);
+    border: $border;
     box-shadow: $box-shadow;
     border-radius: $border-radius;
     position: relative;
@@ -186,7 +189,7 @@ body {
     padding: 20px;
     box-shadow: 0.25rem 0.25rem 0.5rem 0.1rem color(primary-dark);
     border-radius: $border-radius;
-    border: 1px solid color(primary-light);
+    border: $border;
     width: 50rem;
     th {
       font-size: 1.25rem;
@@ -240,5 +243,49 @@ body {
     height: 100px;
     margin: 0 auto;
     text-align: center;
+  }
+}
+
+// profile page
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    text-align: center;
+  }
+  .profile-photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 20rem;
+    margin: 1rem;
+
+    .profile-photo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1rem;
+      box-shadow: $box-shadow;
+      border-radius: 50%;
+      height: 15rem;
+      width: 15rem;
+    }
+
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 20rem;
+      form {
+        width: 12.5rem;
+      }
+      .button-container {
+        margin: 1rem;
+      }
+    }
   }
 }
