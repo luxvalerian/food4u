@@ -8,11 +8,13 @@
 <div style="flex-grow: 1;">
 
 {% if photo.all %}
-    <div class="valign-wrapper">
-      <div class="col s2" style="height: 7rem;">
+    <div class="valign-wrapper card" style="width: 30vw;">
+      <div class="col s2" style="height: 7rem; display: flex; align-items: center; justify-content: center; align-items: center; min-height: 10rem; padding: 2rem;">
         <img class="circle responsive-img" src="{{ photo.all.last.url }}" alt="{{user.first_name}}" style="height: 100%;"/> <!-- notice the "circle" class -->
-        <div>Full Name: {{user.first_name}} {{user.last_name}}</div>
-        <div>Join Date: {{user.date_joined |date:"F j, Y"}}</div>
+        <div style="flex-direction: column; margin-left: 2rem;">
+          <div>Full Name: {{user.first_name}} {{user.last_name}}</div>
+          <div style="margin-top: 1rem;">Join Date: {{user.date_joined |date:"F j, Y"}}</div>
+        </div>
       </div>
     </div>
 
@@ -30,12 +32,13 @@
 </form>
 {% endif %}
 
+{% for person in volunteer.all %}
 
-{% if user.id == volunteer.user.id %}
+{% if user.id == person.user.id %}
 <div>
 <ul>
-  <li>Available Date: {{volunteer.availability_date}}</li>
-  <li>Available Times: {{volunteer.availability}}</li>
+  <li>Available Date: {{person.availability_date}}</li>
+  <li>Available Times: {{person.availability}}</li>
   <br />
   {% for time in vol_timeslot.all %}
   <li>Requested Delivery Time: {{time.get_timeslot_display}}</li>
@@ -43,7 +46,7 @@
   <br />
   {% endfor %}
 </ul>
-<a href="{% url 'volunteer_update' %}" class="btn">Edit Account</a>
+<a href="{% url 'edit_volunteer_profile' %}" class="btn">Edit Account</a>
 
 <!-- show user info address, saved payment info, last visited store -->
 
@@ -58,10 +61,12 @@ orders they can pick to start working. -->
     No Order Information Available
   </h4>
 </div> -->
+
 {% else %}
 <br/>
 <ul>
   <br />
+  {% for cust in customer.all %}
   {% for time in cus_timeslot.all %}
   <li>Delivery Time: {{time.get_timeslot_display}}</li>
   <li>Delivery Date: {{time.date}}</li>
@@ -71,8 +76,9 @@ orders they can pick to start working. -->
 </div>
 <a href="{% url 'customer_update' %}" class="btn">Edit Account</a>
 </div>
+{% endfor %}
 {% endif %}
-
+{% endfor %}
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('.dropdown-trigger');

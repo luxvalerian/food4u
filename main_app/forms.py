@@ -13,7 +13,22 @@ class EditCustomerForm(UserChangeForm):
         fields = ('email', 'first_name', 'last_name', 'username')
         eclude = ('password')
 
+class EditVolunteerForm(UserChangeForm):
+    availability_date = forms.DateField()
+    availability = forms.MultipleChoiceField(choices=TIMESLOTS)
+    
+    class Meta:
+        model = User
 
+        fields = ('email', 'first_name', 'last_name', 'username', 'availability_date', 'availability')
+        eclude = ('password')
+
+class EditVolunteerAvailablityForm(UserChangeForm):
+    
+    class Meta:
+        model = Volunteer
+
+        fields = ('availability_date', 'availability')
 
 class CustomerUpdateForm(forms.ModelForm):
     first_name = forms.CharField(
