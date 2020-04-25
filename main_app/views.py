@@ -11,10 +11,15 @@ from datetime import date
 
 from .scraper import logo_img, walmart_fruit, produce_dict
 from . forms import CustomerSignUpForm, VolunteerSignUpForm, CustomerUpdateForm, UserUpdateForm
-
-from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store
+from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store, Photo
 from .decorators import allowed_users
-# from .scraper import produce_dict
+
+import uuid
+import boto3
+
+
+S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
+BUCKET = 'foodle'
 
 
 def signup(request):
@@ -34,7 +39,8 @@ def signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('profile')
+            user_id = user.id
+            return redirect('index')
         else:
             error_message = 'Invalid sign up - try again'
     form = CustomerSignUpForm()
@@ -60,7 +66,8 @@ def volunteer_signup(request):
             user.groups.add(group)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('profile')
+            user_id = user.id
+            return redirect('profile', user_id=user_id)
         else:
             error_message = 'Invalid sign up - try again'
     form = VolunteerSignUpForm()
@@ -99,14 +106,19 @@ def about(request):
 
 
 @login_required
-def profile(request):
-    customer = Customer.objects.filter(user=request.user).first()
-    volunteer = Volunteer.objects.filter(user=request.user).first()
-    vol_timeslot = Timeslot.objects.filter(volunteer=volunteer)
-    cus_timeslot = Timeslot.objects.filter(customer=customer)
+def profile(request, user_id, *kwargs):
+    customer = Customer.objects.filter(user=request.user)
+    volunteer = Volunteer.objects.all()
+    photo = Photo.objects.filter(user=request.user)
+    vol = None
+    for person in volunteer:
+        vol = person
 
-    context = {'customer': customer, 'volunteer': volunteer,
-               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot}
+    vol_timeslot = Timeslot.objects.filter(volunteer__in=volunteer)
+    cus_timeslot = Timeslot.objects.filter(customer__in=customer)
+
+    context = {'user_id': user_id, 'customer': customer, 'volunteer': volunteer,
+               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
     return render(request, 'account/profile.html', context)
 
 
@@ -205,7 +217,7 @@ def cart(request, user_id):
             print(piece)
             prices = round(piece.unit_price, 2)
             product_total += piece.count_ref * prices
-            
+
             print(product_total)
 
             # product_price = (product.price * 2)
@@ -218,13 +230,16 @@ class CustomerUpdate(LoginRequiredMixin, UpdateView):
     model = Customer
     form_class = CustomerUpdateForm
 #     # fields =  ['delivery_time']
+
     def get_object(self, *args, **kwargs):
         user = self.request.user
 
         if self.request.method == 'POST':
-            user_form = UserUpdateForm(self.request.POST)#, instance=self.request.user)
-            profile_form = CustomerUpdateForm(self.request.POST)#, self.request.FILES, instance=Customer.objects.get(user=self.request.user))
-            
+            # , instance=self.request.user)
+            user_form = UserUpdateForm(self.request.POST)
+            # , self.request.FILES, instance=Customer.objects.get(user=self.request.user))
+            profile_form = CustomerUpdateForm(self.request.POST)
+
             # print(profile_form)
             # We can also get user object using self.request.user  but that doesnt work
             # for other models.
@@ -233,20 +248,39 @@ class CustomerUpdate(LoginRequiredMixin, UpdateView):
                 user_form.save()
                 profile_form.save()
 
-                messages.success(self.request, f'Your account has been updated!')
+                messages.success(
+                    self.request, f'Your account has been updated!')
                 return reverse('profile')
 
             else:
                 user_form = UserUpdateForm(instance=self.request.user)
-                profile_form = CustomerUpdateForm(instance=Customer.objects.get(user=self.request.user))
+                profile_form = CustomerUpdateForm(
+                    instance=Customer.objects.get(user=self.request.user))
 
             print(user_form.is_valid() and profile_form.is_valid())
         return user
 
-
-
     def get_success_url(self, *args, **kwargs):
         return reverse("profile")
+
+
+def add_photo(request, user_id):
+    photo_file = request.FILES.get('photo-file', None)
+    print(photo_file, 'photo file')
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + \
+            photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            photo = Photo(url=url, user=request.user)
+            print(photo, 'volunteer photo')
+            photo.save()
+        except Exception as e:
+            print(e)
+            print('An error occurred while uploading a file to S3')
+    return redirect('profile', user_id=user_id)
 
 
 class VolunteerUpdate(LoginRequiredMixin, UpdateView):
@@ -265,36 +299,39 @@ class VolunteerUpdate(LoginRequiredMixin, UpdateView):
     def get_success_url(self, *args, **kwargs):
         return reverse("profile")
 
+
 @login_required
 def assoc_item(request, user_id, item_id):
     cart = Cart.objects.get(user=request.user).items
     for item in cart.all():
-        if item_id==item.id:
+        if item_id == item.id:
             count = item.item_count
             product = item
             product.item_count = count - 1
-            product.count_ref += 1 
+            product.count_ref += 1
             product.save()
             print(product.count_ref)
 
-    Cart.objects.get(user=request.user).items.add(item_id)    
+    Cart.objects.get(user=request.user).items.add(item_id)
     store_name = Item.objects.get(id=item_id).store.name
     return redirect('detail', store_name=store_name)
+
 
 @login_required
 def disassoc_item(request, user_id, item_id):
     cart = Cart.objects.get(user=request.user).items
     for item in cart.all():
-        if item_id==item.id:
+        if item_id == item.id:
             count = item.item_count
             product = item
             product.item_count = count + 1
             if product.count_ref > 0:
-                product.count_ref -= 1 
+                product.count_ref -= 1
             product.save()
             print(product.count_ref)
             if product.count_ref <= 0:
-                cart = Cart.objects.get(user=request.user).items.remove(item_id)
+                cart = Cart.objects.get(
+                    user=request.user).items.remove(item_id)
     return redirect('cart', user_id=user_id)
 
 
@@ -337,4 +374,3 @@ def disassoc_item(request, user_id, item_id):
     #     user = Customer.objects.get(pk=self.request.user.id)
 
     #     return user
-    
