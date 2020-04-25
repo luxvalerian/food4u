@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -10,7 +10,7 @@ from django.urls import reverse
 from datetime import date
 
 from .scraper import logo_img, walmart_fruit, produce_dict
-from . forms import CustomerSignUpForm, VolunteerSignUpForm, CustomerUpdateForm, UserUpdateForm
+from . forms import CustomerSignUpForm, VolunteerSignUpForm, UserUpdateForm, EditCustomerForm, EditVolunteerForm, EditVolunteerAvailablityForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store, Photo
 from .decorators import allowed_users
 
@@ -74,29 +74,6 @@ def volunteer_signup(request):
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup_volunteer.html', context)
 
-
-# def volunteer_login(request):
-#     error_message = ''
-#     if request.method == 'GET':
-#         form = VolunteerLogInForm(request.GET)
-#         # if form.is_valid():
-#         #     group = Group.objects.get(name='volunteer')
-#         #     # user = form.save()
-#         #     volunteer_profile = Volunteer(user=user)
-#         #     # volunteer_profile.save()
-#         #     username = form.cleaned_data.get('username')
-#         #     raw_password = form.cleaned_data.get('password1')
-#         #     # user.groups.add(group)
-#         user = authenticate(username=username, password=raw_password)
-#         login(request, user)
-#         return redirect('profile')
-#     else:
-#         error_message = 'Invalid sign up - try again'
-#     form = VolunteerLogInForm()
-#     context = {'form': form, 'error_message': error_message}
-#     return render(request, 'registration/login_volunteer.html', context)
-
-
 def home(request):
     return render(request, 'home.html')
 
@@ -104,25 +81,8 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
-
 @login_required
-def profile(request, user_id, *kwargs):
-    customer = Customer.objects.filter(user=request.user)
-    volunteer = Volunteer.objects.all()
-    photo = Photo.objects.filter(user=request.user)
-    vol = None
-    for person in volunteer:
-        vol = person
-
-    vol_timeslot = Timeslot.objects.filter(volunteer__in=volunteer)
-    cus_timeslot = Timeslot.objects.filter(customer__in=customer)
-
-    context = {'user_id': user_id, 'customer': customer, 'volunteer': volunteer,
-               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
-    return render(request, 'account/profile.html', context)
-
-
-@login_required
+@allowed_users(allowed_roles=['customer'])
 def stores_index(request):
     stores = Store.objects.all()
 
@@ -131,22 +91,33 @@ def stores_index(request):
 
 
 @login_required
+@allowed_users(allowed_roles=['customer'])
 def stores_detail(request, store_name):
+    customer = Customer.objects.filter(user=request.user)
+    cart = Cart.objects.filter(user=request.user).all()
+    user_group = str(request.user.groups.all()[0])
     stores = Store.objects.all()
     store = stores.filter(name=store_name).first()
     items = Item.objects.filter(store=store)
-    context = {'items': items, 'store': store}
+    product_total = 0
+    store_item = None
+    for obj in cart:
+        for product in obj.items.all():
+            item = Item.objects.filter(id=product.id)
+            piece = item.first()
+            store_item = piece.store.name
+            prices = round(piece.unit_price, 2)
+            if product.store == store:
+                product_total += piece.count_ref * prices
+
+    context = {'product': produce_dict, 'logo': logo_img,
+               'items': items, 'store': store, 'user_group': user_group, 'customer': customer,
+               'cart': cart, 'product_total': round(product_total, 2), 'store_item': store_item}
     return render(request, 'stores/detail.html', context)
 
 
 def logout(request):
     return render(request, 'home.html')
-
-
-@login_required
-@allowed_users(allowed_roles=['admin'])
-def remove_vol(request):
-    return redirect('customer/index.html')
 
 
 @login_required
@@ -201,69 +172,103 @@ def checkout(request, user_id):
 
 
 @login_required
+@allowed_users(allowed_roles=['customer'])
 def cart(request, user_id):
     customer = Customer.objects.filter(user=request.user)
-    # timeslot = Timeslot.objects.filter(customer=customer)
-    # timeslot_count = timeslot.count()
     cart = Cart.objects.filter(user=request.user).all()
-    # items_not_in_cart = Item.objects.exclude(id__in = cart.items.all().values_list('id'))
-    print(cart.all())
     user_group = str(request.user.groups.all()[0])
     product_total = 0
+    store_item = None
     for obj in cart:
         for product in obj.items.all():
             item = Item.objects.filter(id=product.id)
             piece = item.first()
-            print(piece)
+            store_item = piece.store.name
             prices = round(piece.unit_price, 2)
             product_total += piece.count_ref * prices
-
-            print(product_total)
-
-            # product_price = (product.price * 2)
     context = {'user_group': user_group, 'customer': customer,
-               'cart': cart, 'product_total': round(product_total, 2)}
+               'cart': cart, 'product_total': round(product_total, 2), 'store_item': store_item}
     return render(request, 'account/cart.html', context)
 
+def view_profile(request, user_id, *kwargs):
+    customer = Customer.objects.filter(user=request.user)
+    volunteer = Volunteer.objects.all()
+    photo = Photo.objects.filter(user=request.user)
+    vol = None
+    for person in volunteer:
+        vol = person
 
-class CustomerUpdate(LoginRequiredMixin, UpdateView):
-    model = Customer
-    form_class = CustomerUpdateForm
-#     # fields =  ['delivery_time']
+    vol_timeslot = Timeslot.objects.filter(volunteer__in=volunteer)
+    cus_timeslot = Timeslot.objects.filter(customer__in=customer)
 
-    def get_object(self, *args, **kwargs):
-        user = self.request.user
+    context = {'user_id': user_id, 'customer': customer, 'volunteer': volunteer,
+               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
+    return render(request, 'account/profile.html', context)
 
-        if self.request.method == 'POST':
-            # , instance=self.request.user)
-            user_form = UserUpdateForm(self.request.POST)
-            # , self.request.FILES, instance=Customer.objects.get(user=self.request.user))
-            profile_form = CustomerUpdateForm(self.request.POST)
+@login_required
+def edit_profile(request):
+    user_id=request.user.id
+    if request.method == 'POST':
+        form = EditCustomerForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', user_id=user_id)
+    else:
+        form = EditCustomerForm(instance=request.user)
+        context = {'form': form}
+        return render(request, 'account/edit_customer.html', context)
 
-            # print(profile_form)
-            # We can also get user object using self.request.user  but that doesnt work
-            # for other models.
+@login_required
+def edit_volunteer_profile(request):
+    user_id=request.user.id
+    if request.method == 'POST':
+        form = EditVolunteerForm(request.POST, instance=request.user)
+        profile_form = EditVolunteerAvailablityForm(request.POST, instance=request.user.volunteer)
+        # print(form.availability_date)
+        # print(form.availability)
+        if form.is_valid() and profile_form.is_valid():
+            form.save()
+            profile_form.save()
+            return redirect('profile', user_id=user_id)
+    else:
+        form = EditVolunteerForm(instance=request.user)
+        context = {'form': form}
+        return render(request, 'account/edit_volunteer.html', context)
 
-            if user_form.is_valid() and profile_form.is_valid():
-                user_form.save()
-                profile_form.save()
+@login_required
+def change_volunteer_password(request):
+    user_id=request.user.id
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('profile', user_id=user_id)
+        else:
+            return redirect('/account/volunteer_password.html')
+    else:
+        form = PasswordChangeForm(user=request.user)
+        context = {'form': form}
+        return render(request, 'account/volunteer_password.html', context)
 
-                messages.success(
-                    self.request, f'Your account has been updated!')
-                return reverse('profile')
+@login_required
+def change_password(request):
+    user_id=request.user.id
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('profile', user_id=user_id)
+        else:
+            return redirect('/account/password.html')
+    else:
+        form = PasswordChangeForm(user=request.user)
+        context = {'form': form}
+        return render(request, 'account/password.html', context)
 
-            else:
-                user_form = UserUpdateForm(instance=self.request.user)
-                profile_form = CustomerUpdateForm(
-                    instance=Customer.objects.get(user=self.request.user))
 
-            print(user_form.is_valid() and profile_form.is_valid())
-        return user
-
-    def get_success_url(self, *args, **kwargs):
-        return reverse("profile")
-
-
+@login_required
 def add_photo(request, user_id):
     photo_file = request.FILES.get('photo-file', None)
     print(photo_file, 'photo file')
@@ -283,24 +288,10 @@ def add_photo(request, user_id):
     return redirect('profile', user_id=user_id)
 
 
-class VolunteerUpdate(LoginRequiredMixin, UpdateView):
-    model = Volunteer
-    form_class = VolunteerSignUpForm
-#   fields =  ['availability_date', 'availability']
-
-    def get_object(self, *args, **kwargs):
-        user = self.request.user
-
-        # We can also get user object using self.request.user  but that doesnt work
-        # for other models.
-
-        return user
-
-    def get_success_url(self, *args, **kwargs):
-        return reverse("profile")
 
 
 @login_required
+@allowed_users(allowed_roles=['customer'])
 def assoc_item(request, user_id, item_id):
     cart = Cart.objects.get(user=request.user).items
     for item in cart.all():
@@ -318,6 +309,7 @@ def assoc_item(request, user_id, item_id):
 
 
 @login_required
+@allowed_users(allowed_roles=['customer'])
 def disassoc_item(request, user_id, item_id):
     cart = Cart.objects.get(user=request.user).items
     for item in cart.all():
@@ -334,43 +326,26 @@ def disassoc_item(request, user_id, item_id):
                     user=request.user).items.remove(item_id)
     return redirect('cart', user_id=user_id)
 
+@login_required
+@allowed_users(allowed_roles=['customer'])
+def disassoc_item_in_store(request, store_name, user_id, item_id):
+    cart = Cart.objects.get(user=request.user).items
+    for item in cart.all():
+        if item_id == item.id:
+            count = item.item_count
+            product = item
+            product.item_count = count + 1
+            if product.count_ref > 0:
+                product.count_ref -= 1
+            product.save()
+            print(product.count_ref)
+            if product.count_ref <= 0:
+                cart = Cart.objects.get(
+                    user=request.user).items.remove(item_id)
+    return redirect('detail', store_name=store_name)
 
-# @login_required
-# def update_profile(request, pk):
-#     cust = Customer.objects.get(user=request.user)
-#     pk = cust.pk
-#     if request.method == 'POST':
-#         user_form = UserUpdateForm(request.POST, instance=request.user)
-#         profile_form = CustomerUpdateForm(request.POST, request.FILES, instance=Customer.objects.get(user=request.user))
+def select_delivery(request, user_id):
+    pass
 
-    #     if user_form.is_valid() and profile_form.is_valid():
-    #         user_form.save()
-    #         profile_form.save()
-    #         messages.success(request, f'Your account has been updated!')
-    #         return redirect('customer_update')
-
-    # else:
-    #     user_form = UserUpdateForm(instance=request.user)
-    #     profile_form = CustomerUpdateForm(instance=Customer.objects.get(user=request.user))
-
-    # def get_success_url(self, *args, **kwargs):
-    #     return reverse("profile")
-
-    # context = {
-    #     'u_form': user_form,
-    #     'p_form': profile_form
-    # }
-
-    # return redirect(request, 'customer_update')
-
-
-# class CustomerUpdate(LoginRequiredMixin, UpdateView):
-#     model = Customer
-
-#     fields = '__all__'
-#     success_url = '/profile/'
-
-    # def get_object(self, *args, **kwargs):
-    #     user = Customer.objects.get(pk=self.request.user.id)
-
-    #     return user
+def add_delivery(request, user_id, volunteer_id):
+    pass
