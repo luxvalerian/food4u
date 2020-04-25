@@ -61,7 +61,8 @@
           {% if user.is_authenticated %}
           <!-- <li><a href="{% url 'checkout' user.id %}">Checkout</a></li> -->
           <ul id="dropdown1" class="dropdown-content">
-            <li style="background-color:#5085a5; color: #f7f9fb; max-width: 300px;"><a class="white-text" style="width: 300px; line-height: 50px;" href="#">Welcome, {{user.first_name}}!</a></li>
+            <li style="background-color:#5085a5; color: #f7f9fb; max-width: 300px;"><a class="white-text"
+                style="width: 300px; line-height: 50px;" href="#">Welcome, {{user.first_name}}!</a></li>
             <li><a href="{% url 'profile' user.id %}">Profile</a></li>
 
             <li><a href="/about">About</a></li>
@@ -73,7 +74,7 @@
           </li>
           {% if user.customer %}
           <li><a href="{% url 'index' %}">Stores</a></li>
-          
+
           <li><a href="{% url 'cart' user.id %}"><i class="large material-icons" id="openModal">shopping_cart</i></a>
           </li>
           {% endif %}
@@ -83,7 +84,7 @@
           </li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>
-          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+          <!-- <li><a href="{% url 'signup' %}">Sign Up</a></li> -->
           {% endif %}
         </ul>
       </div>
