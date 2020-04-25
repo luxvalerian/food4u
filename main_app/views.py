@@ -376,8 +376,11 @@ def disassoc_item_in_store(request, store_name, user_id, item_id):
 
 def select_delivery(request):
     customer = Customer.objects.filter(user=request.user).first()
-    delivery_instance = CustomerDelivery.objects.filter(
-        customer=customer).first()
+    delivery_instance = CustomerDelivery(customer=customer)
+    delivery_instance.save()
+    # deliver = None
+    # for deliver in delivery_instance
+
     print(delivery_instance)
     error_message = ''
     print(request.method)
@@ -399,6 +402,25 @@ def select_delivery(request):
 
 def add_delivery(request):
     user_id = request.user.id
+    cart = Cart.objects.filter(user=request.user).all()
+    user_group = str(request.user.groups.all()[0])
+    Total = None
+    percent_total = None
+    tax = 0.07
+    product_total = 0
+    store_item = None
+    for obj in cart:
+        for product in obj.items.all():
+            item = Item.objects.filter(id=product.id)
+            piece = item.first()
+            store_item = piece.store.name
+            prices = round(piece.unit_price, 2)
+            product_total += piece.count_ref * prices
+    percent_total = product_total * tax
+    total = str(product_total + percent_total + 2)
     customer = Customer.objects.filter(user=request.user)
-    context = {'customer': customer}
+
+    timeslot = Timeslot.objects.filter(customer=customer.first())
+    context = {'customer': customer, 'cart': cart, 'user_group': user_group, 'product_total': round(product_total, 2), 'store_item': store_item, 'timeslot': timeslot, 'total': total}
     return render(request, 'checkout/complete_order.html', context)
+

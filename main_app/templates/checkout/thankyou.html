@@ -2,9 +2,16 @@
 
 {% block content %}
 
-<div style="border: 2px solid #000; border-radius: 10px; background-color: rgb(161, 238, 138); width: 40rem; height: 30rem; color: #fff; margin: 10rem auto; display: flex; justify-content: center; align-items: center;">
+<div style="width:100%; border: 2px solid #000; border-radius: 10px; background-color: rgb(223, 255, 213); width: 40rem; height: 30rem; color: rgb(87, 87, 87); margin: 10rem auto; display: flex; justify-content: center; align-items: center; padding: 2rem;">
   <h3 style="text-align: center;">
     Thank you for your order {{user.first_name}}
+    <br/>
+    <br/>
+    <div style="font-size: 2rem;">
+      {% for time in timeslot %}{{time.volunteer}}{% endfor %}
+    </div>
+      <div style="font-size: medium;"> will be delivering your order on {% for time in timeslot %}{{time}}{% endfor %}
+    </div>
   </h3>
 </div>
 
