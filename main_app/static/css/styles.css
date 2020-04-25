@@ -183,13 +183,13 @@ body .footer {
 
 .products-container img {
   margin: auto;
-  max-height: 7rem;
-  max-width: 7rem;
+  max-height: 8rem;
+  max-width: 8rem;
 }
 
 .item-card {
-  height: 20rem;
-  width: 15rem;
+  height: 24rem;
+  width: 17rem;
   margin: 1rem;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
