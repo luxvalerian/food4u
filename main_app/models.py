@@ -103,6 +103,9 @@ class Item(models.Model):
     def __str__(self):
         return f"{self.name} at ${self.unit_price}/{self.get_unit_measurement_display()}"
 
+    def line_total(self):
+        return (self.count_ref * self.unit_price)
+
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -129,3 +132,11 @@ class Photo(models.Model):
 
     def __str__(self):
         return f"Photo for user_id: {self.user_id} @{self.url}"
+
+
+class LineItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    price = models.DecimalField(
+        decimal_places=2,
+        max_digits=6)
