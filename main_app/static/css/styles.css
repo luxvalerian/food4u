@@ -30,6 +30,10 @@ body .navbar #openModal {
   font-size: 2.25rem;
 }
 
+body .navbar .right {
+  top: 3.5rem !important;
+}
+
 body .navbar li,
 body .navbar li a {
   font-size: 1.2rem;
@@ -135,6 +139,18 @@ body .footer {
   border-radius: 1rem;
   -webkit-box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
           box-shadow: 0rem 0.1rem 0.25rem 0rem #31708e;
+}
+
+.login-signup-container .button-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .button-container {

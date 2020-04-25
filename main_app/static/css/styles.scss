@@ -102,11 +102,12 @@ body {
     width: 50%;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
-    .button-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  }
+  .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .button-container {
