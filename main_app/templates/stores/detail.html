@@ -31,7 +31,10 @@
                     <button class="delete-item white-text btn" type="submit" value="upload" disabled>Out of
                         Stock</button>
                     {% else %}
-                    <button class="delete-item white-text btn" type="submit" value="upload" enable>Add Item</button>
+                    <div style="max-width: 5rem; display: flex;">
+                      <input type="number" value="" /> <p style="display: inline-block;">{{item.count_ref}}</p>
+                    </div>
+                    <button class="delete-item white-text btn" type="submit" enable>Add Item</button>
                     {% endif %}
                 </form>
                 <p class="flip-backward">Details</p>

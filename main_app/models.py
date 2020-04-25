@@ -35,8 +35,8 @@ TIMESLOTS = (
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    delivery_time = MultiSelectField(
-        max_length=100, null=True, choices=TIMESLOTS, max_choices=3)
+
+        # MultiSelectField(max_length=100, null=True, choices=TIMESLOTS, max_choices=3)
 
     def get_absolute_url(self):
         return reverse('checkout', kwargs={'customer_id': self.id})
@@ -47,6 +47,20 @@ class Customer(models.Model):
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
 
+class CustomerDelivery(models.Model):
+  date = models.DateField('Delivery date')
+  delivery_time = models.CharField(
+        max_length=1,
+        choices=TIMESLOTS,
+        default=TIMESLOTS[0][0]) 
+  
+  customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return f"{self.get_delivery_time_display()} on {self.date}"
+
+  class Meta:
+    ordering = ['date']
 
 class Volunteer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
