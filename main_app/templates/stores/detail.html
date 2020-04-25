@@ -27,8 +27,10 @@
                         Stock</button>
                     <p style="pointer-events:none; font-style:italic; text-decoration:line-through; color:lightgray">Change Quantity</p>
                     {% else %}
-                    <button class="delete-item white-text btn" type="submit" value="upload" enable>Add Item</button>
-                    <p class="flip-forward">Change Quantity</p>
+                    <div style="max-width: 5rem; display: flex;">
+                      <input type="number" value="" /> <p style="display: inline-block;">{{item.count_ref}}</p>
+                    </div>
+                    <button class="delete-item white-text btn" type="submit" enable>Add Item</button>
                     {% endif %}
                 </form>
             </div>
