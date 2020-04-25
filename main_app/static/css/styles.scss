@@ -119,9 +119,11 @@ body {
   flex-wrap: wrap;
   text-align: center;
   justify-content: center;
+
   .flip-forward,
   .flip-backward {
     cursor: pointer;
+    color: color(primary);
   }
   .flipped {
     transform: rotateY(180deg);

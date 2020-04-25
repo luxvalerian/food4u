@@ -169,6 +169,7 @@ body .footer {
 .products-container .flip-forward,
 .products-container .flip-backward {
   cursor: pointer;
+  color: #5085a5;
 }
 
 .products-container .flipped {
