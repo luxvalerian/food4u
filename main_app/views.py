@@ -96,6 +96,9 @@ def stores_detail(request, store_name):
     customer = Customer.objects.filter(user=request.user)
     cart = Cart.objects.filter(user=request.user).all()
     user_group = str(request.user.groups.all()[0])
+    stores = Store.objects.all()
+    store = stores.filter(name=store_name).first()
+    items = Item.objects.filter(store=store)
     product_total = 0
     store_item = None
     for obj in cart:
@@ -104,11 +107,9 @@ def stores_detail(request, store_name):
             piece = item.first()
             store_item = piece.store.name
             prices = round(piece.unit_price, 2)
-            product_total += piece.count_ref * prices
+            if product.store == store:
+                product_total += piece.count_ref * prices
 
-    stores = Store.objects.all()
-    store = stores.filter(name=store_name).first()
-    items = Item.objects.filter(store=store)
     context = {'product': produce_dict, 'logo': logo_img,
                'items': items, 'store': store, 'user_group': user_group, 'customer': customer,
                'cart': cart, 'product_total': round(product_total, 2), 'store_item': store_item}
@@ -325,3 +326,26 @@ def disassoc_item(request, user_id, item_id):
                     user=request.user).items.remove(item_id)
     return redirect('cart', user_id=user_id)
 
+@login_required
+@allowed_users(allowed_roles=['customer'])
+def disassoc_item_in_store(request, store_name, user_id, item_id):
+    cart = Cart.objects.get(user=request.user).items
+    for item in cart.all():
+        if item_id == item.id:
+            count = item.item_count
+            product = item
+            product.item_count = count + 1
+            if product.count_ref > 0:
+                product.count_ref -= 1
+            product.save()
+            print(product.count_ref)
+            if product.count_ref <= 0:
+                cart = Cart.objects.get(
+                    user=request.user).items.remove(item_id)
+    return redirect('detail', store_name=store_name)
+
+def select_delivery(request, user_id):
+    pass
+
+def add_delivery(request, user_id, volunteer_id):
+    pass
