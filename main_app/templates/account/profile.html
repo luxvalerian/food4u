@@ -5,71 +5,59 @@
   <h2>Profile Page</h2>
   {{user.availability}}
   <h5>{{user.first_name}} {{user.last_name}}</h5>
-
-    {% if photo.all %}
-    <div class="valign-wrapper card" style="width: 30vw;">
-      <div class="col s2"
-        style="height: 7rem; display: flex; align-items: center; justify-content: center; align-items: center; min-height: 10rem; padding: 2rem;">
-        <img class="circle responsive-img" src="{{ photo.all.last.url }}" alt="{{user.first_name}}"
-          style="height: 100%;" /> <!-- notice the "circle" class -->
-        <div style="flex-direction: column; margin-left: 2rem;">
-          <div>Full Name: {{user.first_name}} {{user.last_name}}</div>
-          <div style="margin-top: 1rem;">Join Date: {{user.date_joined |date:"F j, Y"}}</div>
-        </div>
+  {% if photo.all %}
+  <div class="valign-wrapper card" style="width: 30vw;">
+    <div class="col s2"
+      style="height: 7rem; display: flex; align-items: center; justify-content: center; align-items: center; min-height: 10rem; padding: 2rem;">
+      <img class="circle responsive-img" src="{{ photo.all.last.url }}" alt="{{user.first_name}}"
+        style="height: 100%;" /> <!-- notice the "circle" class -->
+      <div style="flex-direction: column; margin-left: 2rem;">
+        <div>Full Name: {{user.first_name}} {{user.last_name}}</div>
+        <div style="margin-top: 1rem;">Join Date: {{user.date_joined |date:"F j, Y"}}</div>
       </div>
     </div>
-
-{% else %}
+  </div>
+  {% else %}
   <div class="card-panel teal-text center-align">No Photos Uploaded</div>
-{% endif %}
-
-{% if photo.count < 1 %}
-<form action="{% url 'add_photo' user.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
-  {% csrf_token %}
-  <input type="file" name="photo-file">
-  <br><br>
-  <input type="submit" class="btn" value="Upload Photo">
-</form>
-{% endif %}
-
-    {% if user.id == person.user.id %}
-    <div>
-      <ul>
-        <li>Available Date: {{person.availability_date}}</li>
-        <li>Available Times: {{person.availability}}</li>
-        <br />
-        {% for time in vol_timeslot.all %}
-        <li>Requested Delivery Time: {{time.get_timeslot_display}}</li>
-        <li>Requested Delivery Date: {{time.date}}</li>
-        <br />
-        {% endfor %}
-      </ul>
-      <a href="{% url 'edit_volunteer_profile' %}" class="btn">Edit Account</a>
-
-      <!-- show user info address, saved payment info, last visited store -->
-
-</div>
-
-{% else %}
-<br/>
-<ul>
+  {% endif %}
+  {% if photo.count < 1 %}
+  <form action="{% url 'add_photo' user.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+    {% csrf_token %}
+    <input type="file" name="photo-file">
+    <br><br>
+    <input type="submit" class="btn" value="Upload Photo">
+  </form>
+  {% endif %}
+  {% if user.id == person.user.id %}
+  <div>
+    <ul>
+      <li>Available Date: {{person.availability_date}}</li>
+      <li>Available Times: {{person.availability}}</li>
+      <br />
+      {% for time in vol_timeslot.all %}
+      <li>Requested Delivery Time: {{time.get_timeslot_display}}</li>
+      <li>Requested Delivery Date: {{time.date}}</li>
+      <br />
+      {% endfor %}
+    </ul>
+    <a href="{% url 'edit_volunteer_profile' %}" class="btn">Edit Account</a>
+    <!-- show user info address, saved payment info, last visited store -->
+  </div>
+  {% else %}
   <br />
-  {% for cust in customer.all %}
-  {% for time in cust_timeslot.all %}
-  <li>Delivery Time: {{time.get_timeslot_display}}</li>
-  <li>Delivery Date: {{time.date}}</li>
-  <br />
-  {% endfor %}
-  {% endfor %}
-</ul>
-{% endif %}
-{% endfor %}
-<a href="{% url 'customer_update' %}" class="btn">Edit Account</a>
+  <ul>
+    <br />
+    {% for cust in customer.all %}
+    {% for time in cust_timeslot.all %}
+    <li>Delivery Time: {{time.get_timeslot_display}}</li>
+    <li>Delivery Date: {{time.date}}</li>
+    <br />
+    {% endfor %}
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <a href="{% url 'customer_update' %}" class="btn">Edit Account</a>
 </div>
-
-
-
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('.dropdown-trigger');
