@@ -3,14 +3,15 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django_select2 import forms as s2forms
 from multiselectfield import MultiSelectField
-from . models import Customer, Volunteer, TIMESLOTS
+from . models import Customer, Volunteer, Timeslot, TIMESLOTS, CustomerDelivery
 
 class EditCustomerForm(UserChangeForm):
-    
+    delivery_time = forms.ChoiceField(choices=TIMESLOTS)
+
     class Meta:
         model = User
 
-        fields = ('email', 'first_name', 'last_name', 'username')
+        fields = ('email', 'first_name', 'last_name', 'username', 'delivery_time',)
         eclude = ('password')
 
 class EditVolunteerForm(UserChangeForm):
@@ -83,3 +84,12 @@ class VolunteerSignUpForm(UserCreationForm):
         model = User
         fields = ('first_name', 'last_name', 'username', 'email',
                   'password1', 'password2', 'availability_date', 'availability')
+
+
+class AddDeliveryTimeForm(UserChangeForm):
+    delivery_time = forms.ChoiceField(choices=TIMESLOTS)
+
+    class Meta:
+        model = CustomerDelivery
+
+        fields = ('delivery_time',)
