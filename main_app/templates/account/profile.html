@@ -6,13 +6,6 @@
   <div class="profile-photo-container">
   {{user.availability}}
   <h5>{{user.first_name}} {{user.last_name}}</h5>
-  {% if photo.all %}
-    <img class="profile-photo" src="{{ photo.all.last.url }}" alt="{{user.first_name}}" />
-
-
-<h2 style="text-align: center;">Profile</h2>
-<div style="display: flex; flex-direction: column;">
-<div style="flex-grow: 1;">
 
 {% if photo.all %}
     <div class="valign-wrapper card" style="width: 30vw;">
