@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -10,7 +10,7 @@ from django.urls import reverse
 from datetime import date
 
 from .scraper import logo_img, walmart_fruit, produce_dict
-from . forms import CustomerSignUpForm, VolunteerSignUpForm, CustomerUpdateForm, UserUpdateForm
+from . forms import CustomerSignUpForm, VolunteerSignUpForm, UserUpdateForm, EditCustomerForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store, Photo
 from .decorators import allowed_users
 
@@ -105,21 +105,21 @@ def about(request):
     return render(request, 'about.html')
 
 
-@login_required
-def profile(request, user_id, *kwargs):
-    customer = Customer.objects.filter(user=request.user)
-    volunteer = Volunteer.objects.all()
-    photo = Photo.objects.filter(user=request.user)
-    vol = None
-    for person in volunteer:
-        vol = person
+# @login_required
+# def profile(request, user_id, *kwargs):
+#     customer = Customer.objects.filter(user=request.user)
+#     volunteer = Volunteer.objects.all()
+#     photo = Photo.objects.filter(user=request.user)
+#     vol = None
+#     for person in volunteer:
+#         vol = person
 
-    vol_timeslot = Timeslot.objects.filter(volunteer__in=volunteer)
-    cus_timeslot = Timeslot.objects.filter(customer__in=customer)
+#     vol_timeslot = Timeslot.objects.filter(volunteer__in=volunteer)
+#     cus_timeslot = Timeslot.objects.filter(customer__in=customer)
 
-    context = {'user_id': user_id, 'customer': customer, 'volunteer': volunteer,
-               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
-    return render(request, 'account/profile.html', context)
+#     context = {'user_id': user_id, 'customer': customer, 'volunteer': volunteer,
+#                'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
+#     return render(request, 'account/profile.html', context)
 
 
 @login_required
@@ -220,6 +220,7 @@ def cart(request, user_id):
     cart = Cart.objects.filter(user=request.user).all()
     user_group = str(request.user.groups.all()[0])
     product_total = 0
+    store_item = None
     for obj in cart:
         for product in obj.items.all():
             item = Item.objects.filter(id=product.id)
@@ -231,45 +232,53 @@ def cart(request, user_id):
                'cart': cart, 'product_total': round(product_total, 2), 'store_item': store_item}
     return render(request, 'account/cart.html', context)
 
+def view_profile(request, user_id, *kwargs):
+    customer = Customer.objects.filter(user=request.user)
+    volunteer = Volunteer.objects.all()
+    photo = Photo.objects.filter(user=request.user)
+    vol = None
+    for person in volunteer:
+        vol = person
 
-class CustomerUpdate(LoginRequiredMixin, UpdateView):
-    model = Customer
-    form_class = CustomerUpdateForm
-#     # fields =  ['delivery_time']
+    vol_timeslot = Timeslot.objects.filter(volunteer__in=volunteer)
+    cus_timeslot = Timeslot.objects.filter(customer__in=customer)
 
-    def get_object(self, *args, **kwargs):
-        user = self.request.user
+    context = {'user_id': user_id, 'customer': customer, 'volunteer': volunteer,
+               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
+    return render(request, 'account/profile.html', context)
 
-        if self.request.method == 'POST':
-            # , instance=self.request.user)
-            user_form = UserUpdateForm(self.request.POST)
-            # , self.request.FILES, instance=Customer.objects.get(user=self.request.user))
-            profile_form = CustomerUpdateForm(self.request.POST)
-
-            # print(profile_form)
-            # We can also get user object using self.request.user  but that doesnt work
-            # for other models.
-
-            if user_form.is_valid() and profile_form.is_valid():
-                user_form.save()
-                profile_form.save()
-
-                messages.success(
-                    self.request, f'Your account has been updated!')
-                return reverse('profile')
-
-            else:
-                user_form = UserUpdateForm(instance=self.request.user)
-                profile_form = CustomerUpdateForm(
-                    instance=Customer.objects.get(user=self.request.user))
-
-            print(user_form.is_valid() and profile_form.is_valid())
-        return user
-
-    def get_success_url(self, *args, **kwargs):
-        return reverse("profile")
+@login_required
+def edit_profile(request):
+    user_id=request.user.id
+    if request.method == 'POST':
+        form = EditCustomerForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', user_id=user_id)
+    else:
+        form = EditCustomerForm(instance=request.user)
+        context = {'form': form}
+        return render(request, 'account/edit_customer.html', context)
 
 
+@login_required
+def change_password(request):
+    user_id=request.user.id
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('profile', user_id=user_id)
+        else:
+            return redirect('/account/password.html')
+    else:
+        form = PasswordChangeForm(user=request.user)
+        context = {'form': form}
+        return render(request, 'account/password.html', context)
+
+
+@login_required
 def add_photo(request, user_id):
     photo_file = request.FILES.get('photo-file', None)
     print(photo_file, 'photo file')
@@ -289,21 +298,6 @@ def add_photo(request, user_id):
     return redirect('profile', user_id=user_id)
 
 
-class VolunteerUpdate(LoginRequiredMixin, UpdateView):
-    model = Volunteer
-    form_class = VolunteerSignUpForm
-#   fields =  ['availability_date', 'availability']
-
-    def get_object(self, *args, **kwargs):
-        user = self.request.user
-
-        # We can also get user object using self.request.user  but that doesnt work
-        # for other models.
-
-        return user
-
-    def get_success_url(self, *args, **kwargs):
-        return reverse("profile")
 
 
 @login_required
@@ -340,43 +334,3 @@ def disassoc_item(request, user_id, item_id):
                     user=request.user).items.remove(item_id)
     return redirect('cart', user_id=user_id)
 
-
-# @login_required
-# def update_profile(request, pk):
-#     cust = Customer.objects.get(user=request.user)
-#     pk = cust.pk
-#     if request.method == 'POST':
-#         user_form = UserUpdateForm(request.POST, instance=request.user)
-#         profile_form = CustomerUpdateForm(request.POST, request.FILES, instance=Customer.objects.get(user=request.user))
-
-    #     if user_form.is_valid() and profile_form.is_valid():
-    #         user_form.save()
-    #         profile_form.save()
-    #         messages.success(request, f'Your account has been updated!')
-    #         return redirect('customer_update')
-
-    # else:
-    #     user_form = UserUpdateForm(instance=request.user)
-    #     profile_form = CustomerUpdateForm(instance=Customer.objects.get(user=request.user))
-
-    # def get_success_url(self, *args, **kwargs):
-    #     return reverse("profile")
-
-    # context = {
-    #     'u_form': user_form,
-    #     'p_form': profile_form
-    # }
-
-    # return redirect(request, 'customer_update')
-
-
-# class CustomerUpdate(LoginRequiredMixin, UpdateView):
-#     model = Customer
-
-#     fields = '__all__'
-#     success_url = '/profile/'
-
-    # def get_object(self, *args, **kwargs):
-    #     user = Customer.objects.get(pk=self.request.user.id)
-
-    #     return user

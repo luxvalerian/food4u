@@ -3,30 +3,37 @@
 {% now "F j, Y" as current_date%}
 <br/>
 
+<h2 style="text-align: center;">Profile</h2>
+<div style="display: flex; flex-direction: column;">
+<div style="flex-grow: 1;">
 
 {% if photo.all %}
-  <img class="responsive-img card-panel" src="{{ photo.all.last.url }}" alt="{{user.first_name}}" />
+    <div class="valign-wrapper">
+      <div class="col s2" style="height: 7rem;">
+        <img class="circle responsive-img" src="{{ photo.all.last.url }}" alt="{{user.first_name}}" style="height: 100%;"/> <!-- notice the "circle" class -->
+        <div>Full Name: {{user.first_name}} {{user.last_name}}</div>
+        <div>Join Date: {{user.date_joined |date:"F j, Y"}}</div>
+      </div>
+    </div>
+
 {% else %}
   <div class="card-panel teal-text center-align">No Photos Uploaded</div>
 {% endif %}
 
 
-{% comment %} {% if photo.count < 1 %} {% endcomment %}
+{% if photo.count < 1 %}
 <form action="{% url 'add_photo' user.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
   {% csrf_token %}
   <input type="file" name="photo-file">
   <br><br>
   <input type="submit" class="btn" value="Upload Photo">
 </form>
-{% comment %} {% endif %} {% endcomment %}
+{% endif %}
 
 
 {% if user.id == volunteer.user.id %}
-
-
-<h2>Profile</h2>
+<div>
 <ul>
-  <li>Name: {{volunteer.user.first_name}} {{volunteer.user.last_name}}</li>
   <li>Available Date: {{volunteer.availability_date}}</li>
   <li>Available Times: {{volunteer.availability}}</li>
   <br />
@@ -36,18 +43,24 @@
   <br />
   {% endfor %}
 </ul>
-<a href="{% url 'volunteer_update' user.id %}" class="btn">Edit Account</a>
+<a href="{% url 'volunteer_update' %}" class="btn">Edit Account</a>
+
 <!-- show user info address, saved payment info, last visited store -->
 
 <!-- if statement that says if user is in group customer show message "Hi 'user'! Where did you want to shop today?" -->
 <!-- else show the volunteer's profile page with their profile image, weekly slots to choose when they volunteer, see available customer
 orders they can pick to start working. -->
 <!-- {% elif user.id == customer.id %} -->
+</div>
+<!-- 
+<div class="card" style="display: flex; justify-content: center; align-items: center; min-height: 10rem;">
+  <h4>
+    No Order Information Available
+  </h4>
+</div> -->
 {% else %}
-<h1>Profile</h1>
+<br/>
 <ul>
-  <li>Name: {{customer.user.first_name}} {{customer.user.last_name}}</li>
-  <li>Selected Delivery Times: {{customer.delivery_time}}</li>
   <br />
   {% for time in cus_timeslot.all %}
   <li>Delivery Time: {{time.get_timeslot_display}}</li>
@@ -55,7 +68,9 @@ orders they can pick to start working. -->
   <br />
   {% endfor %}
 </ul>
-<a href="{% url 'customer_update' user.id %}" class="btn">Edit Account</a>
+</div>
+<a href="{% url 'customer_update' %}" class="btn">Edit Account</a>
+</div>
 {% endif %}
 
 <script>
