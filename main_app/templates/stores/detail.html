@@ -23,14 +23,11 @@
                 <form action="{% url 'assoc_item' user.id item.id %}" method="post">
                     {% csrf_token%}
                     {% if item.item_count == 0 %}
-                    <button class="flip-forward delete-item white-text btn" type="submit" value="upload" disabled>Out of
-                        Stock</button>
-                    <p style="pointer-events:none; font-style:italic; text-decoration:line-through; color:lightgray">Change Quantity</p>
+                    <button class="delete-item white-text btn flip-backward" type="submit" value="upload" disabled>Out of Stock</button>
+                    <p style="pointer-events:none; font-style:italic; text-decoration:line-through; color:lightgray">Details</p>
                     {% else %}
-                    <div style="max-width: 5rem; display: flex;">
-                      <input type="number" value="" /> <p style="display: inline-block;">{{item.count_ref}}</p>
-                    </div>
                     <button class="delete-item white-text btn" type="submit" enable>Add Item</button>
+                    <p class="flip-forward">Change Quantity</p>
                     {% endif %}
                 </form>
             </div>
@@ -52,7 +49,7 @@
 </div>
 
 
-<div class="left" style="width: 100%; margin-left: 1rem; margin-right: -1rem;">
+<div class="left" style="width: 40rem; margin-left: 1rem; margin-right: -1rem;">
     <div style="position: fixed; bottom: 4rem; top: 4rem;">
     {% if user_group == "customer" %}
     {% for item in cart %}
@@ -90,9 +87,7 @@
                 {% if product.store == store %}<td>
                <form action="{% url 'disassoc_item_in_store' store.name user.id product.id %}" method="post">
                   {% csrf_token%}
-                  <div class="delete-button">
-                    <button class="delete-item white-text btn-small" type="submit">&times;</button>
-                  </div>
+                  <button class="delete-item white-text btn" type="submit">&times;</button>
                 </form>
               </td>{% endif %}
             </tr>
