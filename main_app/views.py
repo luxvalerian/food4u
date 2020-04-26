@@ -129,8 +129,7 @@ def checkout(request, user_id):
     customer = Customer.objects.filter(user=request.user)
     active_customer = customer.first()
     active_customer_cart = Cart.objects.filter(user=request.user).first()
-    active_customer_delivery = CustomerDelivery.objects.filter(
-        customer=active_customer).first()
+    active_customer_delivery = CustomerDelivery.objects.filter(customer=active_customer).first()
     customer_delivery_time = active_customer_delivery.delivery_time
     customer_delivery_date = date.today()
     timeslot = None
@@ -150,8 +149,12 @@ def checkout(request, user_id):
             for time in customer_delivery_time:
                 if time == help_time and customer_delivery_date == helper.availability_date:
                     available = time
-                    helpers = helper
                     available_date = helper.availability_date
+                    helpers = helper
+                elif helper == None:
+                    error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
+                    context = {error: 'error_message'}
+                    return render(request, 'checkout.html', context)
     error_message = ''
 
     if available in customer_delivery_time and customer_delivery_date == available_date:
@@ -216,18 +219,20 @@ def cart(request, user_id):
 
 
 def view_profile(request, user_id, *kwargs):
-    customer = Customer.objects.filter(user=request.user)
-    volunteer = Volunteer.objects.all()
+    all_customer = Customer.objects.all()
+    one_customer = Customer.objects.filter(user=request.user)
+    one_volunteer = Volunteer.objects.filter(user=request.user)
+    all_volunteer = Volunteer.objects.all()
+    print(one_customer, one_volunteer)
     photo = Photo.objects.filter(user=request.user)
     vol = None
-    for person in volunteer:
+    for person in all_volunteer:
         vol = person
 
-    vol_timeslot = Timeslot.objects.filter(volunteer__in=volunteer)
-    cus_timeslot = Timeslot.objects.filter(customer__in=customer)
+    vol_timeslot = Timeslot.objects.filter(volunteer__in=all_volunteer)
+    cus_timeslot = Timeslot.objects.filter(customer__in=one_customer)
 
-    context = {'user_id': user_id, 'customer': customer, 'volunteer': volunteer,
-               'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
+    context = {'user_id': user_id, 'one_customer': one_customer, 'one_volunteer': one_volunteer, 'all_customer': all_customer, 'all_volunteer': all_volunteer,'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
     return render(request, 'account/profile.html', context)
 
 
@@ -375,27 +380,27 @@ def disassoc_item_in_store(request, store_name, user_id, item_id):
 
 
 def select_delivery(request):
-    customer = Customer.objects.filter(user=request.user).first()
-    delivery_instance = CustomerDelivery(customer=customer)
+    customer = Customer.objects.filter(user=request.user)[:1].get()
+    volunteer = Volunteer.objects.all()
+    customer_date = date.today()
+    delivery_instance = CustomerDelivery(date=customer_date, customer=customer)
     delivery_instance.save()
     # deliver = None
     # for deliver in delivery_instance
-    print(delivery_instance)
     error_message = ''
-    print(request.method)
+
     if request.method == 'POST':
-        print(request.method)
+
+        error_message = 'Invalid information entered'
         form = AddDeliveryTimeForm(request.POST, instance=delivery_instance)
         if form.is_valid():
             form.save()
             print(form)
             return redirect('complete_order')
     else:
-        error_message = 'Invalid information entered'
-        print(error_message)
-    form = AddDeliveryTimeForm(request.POST, instance=delivery_instance)
+        form = AddDeliveryTimeForm(request.POST, instance=delivery_instance)
 
-    context = {'form': form, 'error_message': error_message}
+    context = {'form': form, 'error_message': error_message, 'volunteer': volunteer}
     return render(request, 'checkout/select_delivery_time.html', context)
 
 
@@ -416,9 +421,9 @@ def add_delivery(request):
             prices = round(piece.unit_price, 2)
             product_total += piece.count_ref * prices
     percent_total = product_total * tax
-    total = str(product_total + percent_total + 2)
+    total = (product_total + percent_total + 2)
     customer = Customer.objects.filter(user=request.user)
-    timeslot = Timeslot.objects.filter(customer=customer.first())
+    timeslot = Timeslot.objects.filter(customer__in=customer)
     context = {'customer': customer, 'cart': cart, 'user_group': user_group, 'product_total': round(product_total, 2), 'store_item': store_item, 'timeslot': timeslot, 'total': total}
     return render(request, 'checkout/complete_order.html', context)
 
