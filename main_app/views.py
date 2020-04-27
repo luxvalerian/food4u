@@ -28,7 +28,7 @@ def signup(request):
         form = CustomerSignUpForm(request.POST)
         if form.is_valid():
             group = Group.objects.get(name='customer')
-
+            print(group)
             user = form.save()
             customer_profile = Customer(user=user)
             cart = Cart(user=user)
