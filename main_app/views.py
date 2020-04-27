@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 from django.urls import reverse
 from datetime import date
 
-# from .scraper import logo_img, walmart_fruit, produce_dict
+from .scraper import logo_img, walmart_fruit, produce_dict
 from . forms import CustomerSignUpForm, VolunteerSignUpForm, UserUpdateForm, EditCustomerForm, EditVolunteerForm, EditVolunteerAvailablityForm, AddDeliveryTimeForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store, Photo, CustomerDelivery
 from .decorators import allowed_users
