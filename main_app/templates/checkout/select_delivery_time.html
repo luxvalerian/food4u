@@ -2,7 +2,22 @@
 
 <div style="margin-top: 3rem;">
   <h3 style="text-align: center;">Select Delivery Time for {% now "F j, Y" %}</h3>
-  <div>
+  <div style="margin-bottom: 3rem;">
+  <div style="border: 1px solid #000; padding: 2rem;">
+    <div class="center">
+      <h4>Available Volunteers and Times</h4>
+      {% for person in volunteer.all %}
+      <h5>
+        {{person}}
+      </h5> 
+      <ul>
+        <li>
+          {{ person.availability }}
+        </li>
+      </ul>
+      {% endfor %}
+    </div>
+    </div>
     <p class="red-text">{{error_message}}</p>
     <form method="post">
       {% csrf_token %}
