@@ -125,7 +125,7 @@ def logout(request):
 @login_required
 @allowed_users(allowed_roles=['customer'])
 def checkout(request, user_id):
-
+    error_message = ''
     customer = Customer.objects.filter(user=request.user)
     active_customer = customer.first()
     active_customer_cart = Cart.objects.filter(user=request.user).first()
@@ -145,19 +145,18 @@ def checkout(request, user_id):
     available_date = None
     helpers = None
     volunteer = Volunteer.objects.all()
-    for helper in volunteer:
-        for help_time in helper.availability:
-            for time in customer_delivery_time:
-                if time == help_time and customer_delivery_date == helper.availability_date:
-                    available = time
-                    available_date = helper.availability_date
-                elif helper == None:
-                    error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
-                    context = {error: 'error_message'}
-                    return render(request, 'checkout.html', context)
-                else:
-                    helpers = helper
-    error_message = ''
+    if volunteer == None:
+        error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
+        context = {error: 'error_message'}
+        return render(request, 'checkout.html', context)
+    else:
+        for helper in volunteer:
+            for help_time in helper.availability:
+                for time in customer_delivery_time:
+                    if time == help_time and customer_delivery_date == helper.availability_date:
+                        available = time
+                        available_date = helper.availability_date
+                        helpers = helper
 
     if available in customer_delivery_time and customer_delivery_date == available_date:
         new_timeslot = Timeslot(date=customer_delivery_date,
