@@ -9,9 +9,9 @@
         {{ form }}
         <div class="button-container">
             <input type="submit" class="btn blue" value="Submit">
+            <a style="margin-left: 1rem;" href="{% url 'profile' user.id %}" class="btn red">Cancel</a>
         </div>
     </form>
-    <a href="{% url 'profile' user.id %}" class="btn red">Cancel</a>
 </div>
 
 {% endblock %}

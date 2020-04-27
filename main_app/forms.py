@@ -61,7 +61,7 @@ class CustomerSignUpForm(UserCreationForm):
         max_length=30, required=False, help_text='Optional.')
     email = forms.EmailField(
         max_length=254, help_text='Required. Inform a valid email address.')
-    # delivery_time = forms.MultipleChoiceField(choices=TIMESLOTS, widget=s2forms.Select2MultipleWidget)
+    delivery_time = forms.MultipleChoiceField(choices=TIMESLOTS, widget=s2forms.Select2MultipleWidget)
 
     class Meta:
         model = User
@@ -78,7 +78,6 @@ class VolunteerSignUpForm(UserCreationForm):
         max_length=254, help_text='Required. Inform a valid email address.')
     availability_date = forms.DateField()
     availability = forms.MultipleChoiceField(choices=TIMESLOTS)
-    # availability = forms.MultipleChoiceField(choices=TIMESLOTS, widget=s2forms.Select2MultipleWidget)
 
     class Meta:
         model = User

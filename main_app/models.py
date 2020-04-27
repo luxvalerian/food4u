@@ -49,7 +49,7 @@ class Customer(models.Model):
         return f"{self.user.first_name} {self.user.last_name}"
 
 class CustomerDelivery(models.Model):
-  date = models.DateField(verbose_name='Delivery date', default=date.today())
+  date = models.DateField(verbose_name='Delivery date')
   delivery_time = models.CharField(
         max_length=1,
         choices=TIMESLOTS,
