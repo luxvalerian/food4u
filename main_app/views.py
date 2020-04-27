@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 from django.urls import reverse
 from datetime import date
 
-from .scraper import logo_img, walmart_fruit, produce_dict
+# from .scraper import logo_img, walmart_fruit, produce_dict
 from . forms import CustomerSignUpForm, VolunteerSignUpForm, UserUpdateForm, EditCustomerForm, EditVolunteerForm, EditVolunteerAvailablityForm, AddDeliveryTimeForm
 from .models import Item, Cart, Timeslot, Customer, Volunteer, User, Store, Photo, CustomerDelivery
 from .decorators import allowed_users
@@ -129,7 +129,8 @@ def checkout(request, user_id):
     customer = Customer.objects.filter(user=request.user)
     active_customer = customer.first()
     active_customer_cart = Cart.objects.filter(user=request.user).first()
-    active_customer_delivery = CustomerDelivery.objects.filter(customer=active_customer).first()
+    active_customer_delivery = CustomerDelivery.objects.filter(
+        customer=active_customer).first()
     customer_delivery_time = active_customer_delivery.delivery_time
     customer_delivery_date = date.today()
     timeslot = None
@@ -232,7 +233,8 @@ def view_profile(request, user_id, *kwargs):
     vol_timeslot = Timeslot.objects.filter(volunteer__in=all_volunteer)
     cus_timeslot = Timeslot.objects.filter(customer__in=one_customer)
 
-    context = {'user_id': user_id, 'one_customer': one_customer, 'one_volunteer': one_volunteer, 'all_customer': all_customer, 'all_volunteer': all_volunteer,'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
+    context = {'user_id': user_id, 'one_customer': one_customer, 'one_volunteer': one_volunteer, 'all_customer': all_customer,
+               'all_volunteer': all_volunteer, 'vol_timeslot': vol_timeslot, 'cus_timeslot': cus_timeslot, 'photo': photo}
     return render(request, 'account/profile.html', context)
 
 
@@ -400,7 +402,8 @@ def select_delivery(request):
     else:
         form = AddDeliveryTimeForm(request.POST, instance=delivery_instance)
 
-    context = {'form': form, 'error_message': error_message, 'volunteer': volunteer}
+    context = {'form': form, 'error_message': error_message,
+               'volunteer': volunteer}
     return render(request, 'checkout/select_delivery_time.html', context)
 
 
@@ -424,6 +427,6 @@ def add_delivery(request):
     total = (product_total + percent_total + 2)
     customer = Customer.objects.filter(user=request.user)
     timeslot = Timeslot.objects.filter(customer__in=customer)
-    context = {'customer': customer, 'cart': cart, 'user_group': user_group, 'product_total': round(product_total, 2), 'store_item': store_item, 'timeslot': timeslot, 'total': total}
+    context = {'customer': customer, 'cart': cart, 'user_group': user_group, 'product_total': round(
+        product_total, 2), 'store_item': store_item, 'timeslot': timeslot, 'total': total}
     return render(request, 'checkout/complete_order.html', context)
-
