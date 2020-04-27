@@ -151,11 +151,12 @@ def checkout(request, user_id):
                 if time == help_time and customer_delivery_date == helper.availability_date:
                     available = time
                     available_date = helper.availability_date
-                    helpers = helper
                 elif helper == None:
                     error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
                     context = {error: 'error_message'}
                     return render(request, 'checkout.html', context)
+                else:
+                    helpers = helper
     error_message = ''
 
     if available in customer_delivery_time and customer_delivery_date == available_date:
