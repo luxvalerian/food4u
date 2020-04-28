@@ -8,9 +8,9 @@
     <br/>
     <br/>
     <div style="font-size: 2rem;">
-      {% for time in timeslot %}{{time.volunteer}}{% endfor %}
+      {{timeslot.last.volunteer}}
     </div>
-      <div style="font-size: medium;"> will be delivering your order on {% for time in timeslot %}{{time}}{% endfor %}
+      <div style="font-size: medium;"> will be delivering your order on {{timeslot.last.date }} {{timeslot.last.get_timeslot_display }}
     </div>
   </h3>
 </div>
