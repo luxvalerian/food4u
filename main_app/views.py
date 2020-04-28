@@ -29,7 +29,7 @@ def signup(request):
         form = CustomerSignUpForm(request.POST)
         if form.is_valid():
             group = Group.objects.get(name='customer')
-
+            print(group)
             user = form.save()
             customer_profile = Customer(user=user)
             cart = Cart(user=user)
@@ -170,6 +170,7 @@ def checkout(request, user_id):
                     cart.save()
                     context = {'customer': customer, 'timeslot': current_timeslot, 'vol_time': volunteer}
                     return redirect('/checkout/thankyou')
+
     else:
         error_message = 'Sorry No Volunteers Are Available To Deliver At This Time'
         print(error_message)
