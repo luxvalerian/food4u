@@ -63,11 +63,9 @@
           <ul id="dropdown1" class="dropdown-content" style="overflow:hidden;">
             <li style="background-color:#5085a5; color: #f7f9fb; max-width: 300px;"><a class="white-text"
                 style="width: 300px; line-height: 50px;" href="#">Welcome, {{user.first_name}}!</a></li>
-
             <li><a href="/about">About</a></li>
             <li><a href="{% url 'profile' user.id %}">Profile</a></li>
             <li><a href="{% url 'logout' %}">Log Out</a></li>
-
           </ul>
           <li>
             <a class="dropdown-trigger" href="#" data-target="dropdown1">Welcome, {{user.first_name}}!</a>

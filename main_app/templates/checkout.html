@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if error %}
+{% if error%}
 <h1 class="center">Checkout Page</h1>
-<div style="border: 2px solid #000; border-radius: 10px; background-color: rgb(238, 138, 138); width: 40rem; height: 30rem; color: #fff; margin: 10rem auto; display: flex; justify-content: center; align-items: center;">
+<div style="border: 2px solid #000; border-radius: 10px; background-color: rgb(238, 138, 138); width: 40rem; height: 30rem; color: #fff; margin: 10rem 10rem 1rem 10rem; display: flex; justify-content: center; align-items: center;">
   <h3 style="text-align: center;">
-    {{error}}
+    {{ error}}
   </h3>
 </div>
-<a class="btn" href="{% url 'select_delivery' %}">Select a Different Time</a>
+<a class="btn" href="{% url 'select_delivery' %}" style="margin-bottom: 3rem; display: flex; justify-content: center;">Select a Different Time</a>
 {% endif %}
 
 {% endblock %}
