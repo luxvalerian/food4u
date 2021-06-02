@@ -3,6 +3,6 @@ datefinder==0.7.0
 requests==2.22.0
 django-multiselectfield==0.1.12
 django-select2==7.2.3
-urllib3==1.25.7
+urllib3==1.26.5
 boto3==1.12.46
 uuid==1.30
